@@ -1,0 +1,142 @@
+@CHARSET "UTF-8";
+
+body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#head {
+	width: 1000px;
+	height: 84px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#logo {
+	width: 300px;
+	height: 84px;
+	float: left;
+	background: url("../images/logo.png") no-repeat;
+	cursor: pointer;
+	position: relative;
+}
+
+#person {
+	height: 84px;
+	line-height: 84px;
+	float: right;
+	position: relative;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
+}
+
+#person * {
+	vertical-align: middle;
+}
+
+.user-head {
+	width: 25px;
+	height: 25px;
+	background: #ccc;
+}
+
+#person div {
+	padding: 0 20px;
+	height: 84px;
+	line-height: 84px;
+	cursor: pointer;
+	text-decoration: none;
+	color: #ccc;
+	font-size: 20px;
+	float: left;
+	-moz-transition: all 0.2s ease-in;
+	-ms-transition: all 0.2s ease-in;
+	-o-transition: all 0.5s ease-in;
+	transition: all 0.5s ease-in;
+}
+
+#person div:hover {
+	color: #25BD2B;
+	background: #e0e0e0;
+}
+
+#SplitLine {
+	margin: 0px 2px;
+	color: #ccc;
+	font-size: 12px;
+	font-weight: lighter;
+}
+
+#personCenter {
+	color: #25BD2B !important;
+	font-weight: bold;
+	text-decoration: underline;
+	border-left: 1px solid #eee;
+	border-right: 1px solid #eee;
+}
+
+.personMenu {
+	display: none;
+	width: 80px;
+	z-index: 1000;
+	float: right;
+	right: 0px;
+	top: 58px;
+	position: absolute;
+	padding: 0px;
+}
+
+.personMenu ul {
+	width: 100%;
+	padding: 0px;
+	list-style-type: none;
+	margin: 0px;
+	margin-top: 7px;
+	border: 1px solid #bbb;
+	background: #FFF;
+}
+
+.personMenu ul li {
+	cursor: pointer;
+	padding: 7px 5px;
+	color: #25BD2B;
+	font-size: 12px;
+}
+
+.personMenu ul li:HOVER {
+	background: #ebebeb;
+}
+
+.personMenu ul li#exit {
+	border-top: 1px solid #ebebeb;
+}
+
+div.show {
+	display: block;
+}
+
+#personCenter .badge {
+	display: inline-block;
+	min-width: 10px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 1;
+	color: #ffffff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	background-color: #25BD2B ;
+	border-radius: 10px;
+	margin-top: 10px
+}
+
+#personCenter  .pull-right {
+	float: right !important;
+}
+
+#personCenter .badge:empty {
+	display: none;
+}
+#onlineCountDiv .number {
+font-size: 30px;
+}

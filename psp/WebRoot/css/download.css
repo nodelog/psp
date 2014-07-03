@@ -1,0 +1,25 @@
+#download a.list-group-item.active-title,#download a.list-group-item.active-title:hover,#download a.list-group-item.active-title:focus
+	{
+	background-color: #5cb85c;
+	border-color: #5cb85c;
+	color: #fff;
+}
+#download .currentResource{
+	background: #dff0d8;
+	border-color: #dff0d8;
+}
+#download .row{
+	margin-left: 0px!important;
+	margin-right: 0px!important;
+}
+
+#rightColumn,#leftColumn{
+	float: left;	
+}
+#leftColumn{
+	width: 200px;
+}
+#rightColumn{
+	float:right;
+	width: 780px;
+}

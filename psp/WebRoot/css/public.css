@@ -1,0 +1,117 @@
+div div.foucs_view {
+	width: 1000px;
+	height: 300px;
+	margin: 0 auto;
+	position: relative;
+}
+
+div div.foucs_view div.fouce_pic,.paging_list {
+	width: 660px;
+	position: relative;
+	float: left;
+	border-right: 1px solid #ddd;
+}
+
+div div.foucs_view div.fouce_rank,.paging_news {
+	width: 320px;
+	height: 100%;
+	border: 1px solid #25BD2B;
+	position: relative;
+	display: inline;
+	float: right;
+	background: url("../images/mather.png");
+}
+
+div.pub_content div.paging {
+	width: 1000px;
+	margin: 0 auto;
+	position: relative;
+}
+
+.paging_list {
+	padding-top: 5px;
+	height: 80%;
+	background: none;
+	height: 80%;
+	margin-bottom: 10px;
+}
+
+.paging_content {
+	width: 638px;
+	border-bottom: 1px solid #ddd;
+	margin-top: 10px;
+}
+
+.paging_news {
+	border: none;
+	height: 100%;
+	background: none;
+	margin-top: 10px;
+}
+
+.paging_content div.rows {
+	width: 638px;
+	display: block;
+	border-top: 1px solid #ddd;
+	padding-bottom: 10px;
+	background: repeat-x;
+	-webkit-transition: all .2s linear;
+	-moz-transition: all .2s linear;
+	-ms-transition: all .2s linear;
+	transition: all .2s linear;
+}
+
+.paging_content div.rows:HOVER {
+	background: #F9FAFD;
+}
+
+.rows div.title {
+	width: 618px;
+	float: left;
+	margin: 5px 0px;
+	padding: 10px;
+	font-size: 22px;
+	cursor: pointer;
+	height: 30px;
+	color: #333;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis -webkit-transition:  all .2s linear;
+	-moz-transition: all .2s linear;
+	-ms-transition: all .2s linear;
+	transition: all .2s linear;
+}
+
+.rows div.title:hover {
+	color: #FFF;
+	background: #19A31E;
+}
+
+.rows div.pub_content {
+	width: 100%;
+	display: block;
+	overflow: hidden;
+	padding-bottom: 10px;
+}
+
+.pub_content .img {
+	max-width: 200px;
+	max-height: 150px;
+	margin-right: 10px;
+	float: left;
+	cursor: pointer;
+}
+
+.pub_content p {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	color: #666;
+	font: 12px "宋体", "Arial Narrow", HELVETICA;
+	line-height: 22px;
+}
+
+.pub_content div.time {
+	margin-top: 10px;
+	color: #999;
+	font: 12px "宋体", "Arial Narrow", HELVETICA;
+}

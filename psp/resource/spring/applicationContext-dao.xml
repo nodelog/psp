@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+	<bean id="userDao" class="com.psp.dao.impl.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="levelDao" ref="levelDao" />
+		
+	</bean>
+	<bean id="publicInterestDao" class="com.psp.dao.impl.PublicInterestDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="problemDao" class="com.psp.dao.impl.ProblemDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="answerDao" class="com.psp.dao.impl.AnswerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="fileDao" class="com.psp.dao.impl.FileDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="categoryDao" class="com.psp.dao.impl.CategoryDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="mediaDao" class="com.psp.dao.impl.MediaDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="downloadDao" class="com.psp.dao.impl.DownloadDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="documentDao" class="com.psp.dao.impl.DocumentDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="softwareDao" class="com.psp.dao.impl.SoftwareDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="skillDao" class="com.psp.dao.impl.SkillDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="levelDao" class="com.psp.dao.impl.LevelDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="messageDao" class="com.psp.dao.impl.MessageDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="adminDao" class="com.psp.dao.impl.AdminDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>

@@ -1,0 +1,5 @@
+.minus,.plus,.delete{
+	cursor: pointer;
+	width: 22px;
+	height: 22px;
+}

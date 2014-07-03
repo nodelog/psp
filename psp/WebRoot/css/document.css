@@ -1,0 +1,45 @@
+#documentBtn {
+	margin-bottom: 10px;
+}
+
+#addDocumentDiv .form-control {
+	width: 530px !important;
+}
+#addDocumentDiv #documentCategory {
+	width: 556px!important;
+}
+
+.xubox_title {
+	margin: 0px !important;
+}
+
+#addDocumentDiv {
+	margin: 20px 5px;
+}
+
+cite {
+	padding: 0 5px;
+	border-right: 1px solid #ccc;
+}
+
+cite:last-child {
+	border: none;
+}
+
+.document-title {
+	cursor: pointer;
+}
+
+.document-title:HOVER {
+	text-decoration: underline;
+}
+
+.col-md-11 {
+	width: 96% !important;
+}
+ol.successList{
+	margin-left: 20px;
+}
+ol.successList li{
+	border-bottom: 1px dotted #ddd;
+}

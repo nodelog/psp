@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<!-- 开发时属性配置 dev-true,cache-false，发布时属性值要改为相反值dev-false,cache-ture。 -->
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.serve.static.browserCache" value="true" />
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true"></constant>
+	<constant name="struts.multipart.maxSize" value="107374182400" />
+	<constant name="struts.action.extension" value="action"></constant>
+	<constant name="struts.objectFactory" value="spring"></constant>
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+	<!-- 国际化 -->
+	<!-- <constant name="sturts.locale" value="zh_CN" /> <constant name="struts.custom.i18n.resources" 
+		value="message"></constant> -->
+
+	<package name="default" extends="struts-default" namespace="/common">
+		<default-action-ref name="error" />
+		<global-results>
+			<result name="error">/404.jsp</result>
+			<result name="notFound">/404.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="error"
+				exception="java.lang.Exception">
+			</exception-mapping>
+		</global-exception-mappings>
+		<action name="error">
+			<result>/404.jsp</result>
+		</action>
+		<action name="admin" class="admin">
+			<result name="success">/admin/success.jsp</result>
+			<result name="input">/admin/input.jsp</result>
+		</action>
+		<action name="jsp" class="jsp">
+			<result name="success">${url}</result>
+		</action>
+		<action name="register.*" class="register" method="{1}">
+			<result name="success"></result>
+		</action>
+
+	</package>
+
+	<!--引入其他的struts2的配置文件 -->
+	<include file="struts/struts-json.xml" />
+	<include file="struts/struts-user.xml" />
+</struts>

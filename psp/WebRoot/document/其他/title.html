@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>给网站换个漂亮的title提示框</title>
+<style>
+.titleShow{
+	max-width:266px;
+	position:absolute;
+	font:15px/1.5 "微软雅黑" bold;
+	color:#fff;
+	border-radius:10px;
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	-o-box-shadow:2px 1px 7px rgba(0,0,0,.3);
+	-moz-box-shadow:2px 1px 7px rgba(0,0,0,.3);
+	-webkit-box-shadow:2px 1px 7px rgba(0,0,0,.3);
+	padding:7px;
+	background:#222 url(http://ww2.sinaimg.cn/mw690/70f52a24gw1e9w0u9cti1j205a04djri.jpg) 0 0 repeat;
+	word-break:break-word;
+}
+</style>
+</head>
+
+<body>
+<p><span title="a标签带">a标签带有title则会有漂亮的title提示框出现</span></p>
+<p><a href="#">a标签木有title则没有漂亮的title提示框出现</a></p>
+</body>
+</html>
+<script>
+titleShow()
+function titleShow() {
+	var oTitle=null;
+	var sTitle=null;
+	var aA=document.getElementsByTagName('span');
+	for(var i=0;i<aA.length;i++) {
+		if(aA[i].title) {
+			aA[i].onmouseover=function(ev) {
+				sTitle=this.title;
+				this.title='';
+				oTitle=document.createElement('div');
+				oTitle.className='titleShow';
+				oTitle.innerHTML=sTitle;
+				document.body.appendChild(oTitle);
+			};
+			aA[i].onmousemove=function(ev) {
+				var ev=ev || window.event;
+				oTitle.style.left=ev.clientX+10+'px';
+				oTitle.style.top=ev.clientY+10+'px';
+			}
+			aA[i].onmouseout=function() {
+				this.title=sTitle;
+				document.body.removeChild(oTitle);
+			}
+		}
+	}
+}
+</script>

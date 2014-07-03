@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.psp.web.domain">
+   	<class name="Document" table="psp_doc">
+		<id name="id" type="int" column="id">
+			<generator class="identity" />
+		</id>
+		<many-to-one name="user" class="User" column="user_id" lazy="proxy"></many-to-one>
+		<property name="name" column="doc_name"></property>
+		<property name="url" column="doc_url"></property>
+		<property name="uploadTime" column="doc_time"></property>
+		<property name="size" column="doc_size"></property>
+		<property name="grade" column="doc_grade"></property>
+		<property name="status" column="doc_status"></property>
+		<property name="viewCount" column="doc_view"></property>
+		<many-to-one name="category" class="Category" column="category_id" lazy="proxy"></many-to-one>
+		<list name="documentLog" lazy="true">
+			<key column="doc_id"></key>
+			<index column="id"></index>
+			<one-to-many class="DocumentLog"/>
+		</list>
+	</class>
+</hibernate-mapping>
