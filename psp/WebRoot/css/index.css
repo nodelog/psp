@@ -1,0 +1,52 @@
+body {
+	margin: 0 auto;
+}
+
+div.content {
+	width: 1000px;
+	margin: 0 auto;
+	margin-bottom: 10px;
+	position: relative;
+	zoom: 1;
+	background: #F9F9F9;
+	border-bottom: 1px solid #ddd;
+}
+
+div.content:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+#myBack {
+	width: 60px;
+	height: 60px;
+	background: #eaeaea url(../images/top.gif) no-repeat -51px 0;
+	text-indent: -999em;
+	border: none;
+	cursor: pointer;
+	position: fixed;
+	right: 50px;
+	display: none;
+}
+
+#myBack:hover {
+	background-position: -113px 0
+}
+
+.clear {
+	clear: both;
+	height: 1px;
+	margin-top: -1px;
+	overflow: hidden;
+}
+
+.number {
+	font-weight: 700;
+	font-size: 30px;
+	font-style: italic;
+	font-family: Constantia, Georgia;
+	color: #25BD2B;
+}

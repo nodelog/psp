@@ -1,0 +1,116 @@
+body {
+	margin: 0 auto;
+}
+
+#logo {
+	margin: 2% auto 0 auto;
+	height: 170px;
+	background: url('../images/logo.png') center no-repeat;
+}
+
+#login_panel {
+	width: 600px;
+	min-height: 300px;
+	margin: 0 auto;
+	background-color: #fff;
+	border: 1px solid #98E396;
+	/* -moz-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.75);
+	-webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.75);
+	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.75); */
+}
+
+#login_panel .panel_head {
+	min-height: 70px;
+	background-color: #98E396;
+	position: relative;
+}
+
+#login_panel .panel_head h2 {
+	margin: 0 0 0 20px;
+	padding: 0;
+	line-height: 70px;
+	color: #fff;
+	text-shadow: 1px 1px 1px #eee;
+}
+
+#login_panel .panel_content {
+	width: 600px;
+	margin-top: 20px;
+}
+
+#login_panel .panel_content div {
+	width: 300px;
+	margin: 0 auto;
+}
+
+#login_panel .panel_content div.name,#login_panel .panel_content div.password
+	{
+	border: 1px solid #ddd;
+	width: 280px;
+	height: 30px;
+	padding: 10px;
+}
+
+#login_panel .panel_content div.password {
+	border-top: none;
+}
+
+#login_panel .panel_content div input[type="text"],#login_panel .panel_content div input[type="password"]
+	{
+	width: 280px;
+	height: 30px;
+	line-height: 30px;
+	-webkit-appearance: none;
+	outline: medium;
+	background: transparent;
+	border: none;
+	font-size: 16px;
+}
+
+#login_panel div.panel_content div.option {
+	margin: 10px auto;
+	margin-bottom: 15px;
+}
+
+#login_panel div.panel_content div.option * {
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+#login_panel div.panel_content div.option label {
+	font-size: 14px;
+	color: #333;
+}
+
+#login_panel div.panel_content div.option a {
+	float: right;
+	font-size: 14px;
+	color: #333;
+}
+
+#login_panel div.login,#login_panel div.register {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+
+#login_panel div.login a {
+	vertical-align: middle;
+	float: left;
+	background: #25BD2B;
+	color: #fff;
+	text-decoration: none;
+	width: 300px;
+	text-align: center;
+	font-size: 20px;
+}
+#login_panel div.register a{
+	vertical-align: middle;
+	color: #333;
+	font-size: 14px;
+}
+table {
+	position: absolute;
+	bottom: 0;
+	position: fixed;
+}

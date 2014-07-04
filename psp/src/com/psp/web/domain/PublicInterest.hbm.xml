@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.psp.web.domain">
+   	<class name="PublicInterest" table="psp_public">
+		<id name="id" type="int" column="id">
+			<generator class="identity" />
+		</id>
+		<property name="title" column="public_title"></property>
+		<property name="content" column="public_content"></property>
+		<property name="startTime" column="start_time"></property>
+		<property name="endTime" column="end_time"></property>
+		<property name="applyTime" column="apply_time"></property>
+		<property name="score" column="public_score"></property>
+		<property name="status" column="public_status"></property>
+		<list name="publicInterestLog" lazy="true">
+			<key column="public_id"></key>
+			<index column="id"></index>
+			<one-to-many class="PublicInterestLog"/>
+		</list>
+	</class>
+</hibernate-mapping>

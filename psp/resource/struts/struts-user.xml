@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<package name="user" namespace="/user" extends="default">
+		<action name="problem.*" class="problem" method="{1}">
+            <result name="success">/user/problem/${target}.jsp</result>
+        </action>
+		<action name="media.*" class="media" method="{1}">
+            <result name="success">/user/media/${target}.jsp</result>
+            <result name="common">/user/common/${target}.jsp</result>
+        </action>
+		<action name="download.*" class="download" method="{1}">
+            <result name="success">/user/download/${target}.jsp</result>
+            <result name="common">/user/common/${target}.jsp</result>
+        </action>
+		<action name="software.*" class="software" method="{1}">
+            <result name="success">/user/software/${target}.jsp</result>
+            <result name="common">/user/common/${target}.jsp</result>
+        </action>
+		<action name="skill.*" class="skill" method="{1}">
+            <result name="success">/user/skill/${target}.jsp</result>
+            <result name="common">/user/common/${target}.jsp</result>
+        </action>
+		<action name="user.*" class="user" method="{1}">
+            <result name="success">/user/person/${target}.jsp</result>
+            <result name="common">/user/common/${target}.jsp</result>
+        </action>
+		<action name="document.*" class="document" method="{1}">
+            <result name="success">/user/document/${target}.jsp</result>
+            <result name="common">/user/common/${target}.jsp</result>
+        </action>
+		<action name="message.*" class="message" method="{1}">
+            <result name="success">/user/person/${target}.jsp</result>
+            <result name="common">/user/common/${target}.jsp</result>
+        </action>
+	</package>
+</struts>

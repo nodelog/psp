@@ -1,0 +1,32 @@
+#adminTitle{
+	font-size: 25px;
+	line-height: 41px;
+}
+.navbar-inverse{
+	background: #428bca;
+}
+.login-screen {
+background-color: #0F538D;
+}
+.navbar-right{
+	margin: 0px!important;
+}
+.row{
+	margin-left: 0px!important; 
+	margin-right: 0px!important; 
+}
+#leftColumn,#rightColumn{
+	padding-top: 80px;
+	margin-bottom: 0px!important;
+	border-right: 1px solid #ddd;
+}
+#rightColumn{
+	background: #fff;
+}
+#leftNav .panel{
+	border: none;
+	background: none;
+}
+#leftNav .panel-heading,#leftNav .panel-body{
+	padding: 0px;
+}

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.psp.web.domain">
+	<class name="User" table="psp_user">
+		<id name="id" type="int" column="id">
+			<generator class="identity" />
+		</id>
+		<property name="name" column="user_name"></property>
+		<property name="password" column="user_password"></property>
+		<property name="email" column="user_email"></property>
+		<property name="emailLogin" column="email_login"></property>
+		<property name="validationProblem" column="validation_problem"></property>
+		<property name="validationAnswer" column="validation_answer"></property>
+		<property name="status" column="user_status"></property>
+		<property name="sex" column="user_sex"></property>
+		<property name="registerTime" column="register_time"></property>
+		<many-to-one name="level" class="Level" column="level_id" unique="true"></many-to-one>
+		<list name="answers" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="Answer" />
+		</list>
+		<list name="problem" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="Problem" />
+		</list>
+		<list name="document" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="Document" />
+		</list>
+		<list name="documentLog" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="DocumentLog" />
+		</list>
+		<list name="replayDocumentLog" inverse="true" lazy="true">
+			<key column="replay_user" />
+			<index column="id"></index>
+			<one-to-many class="DocumentLog" />
+		</list>
+		<list name="download" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="Download" />
+		</list>
+		<list name="firstFriend" inverse="true" lazy="true">
+			<key column="first_user" />
+			<index column="id"></index>
+			<one-to-many class="Friend" />
+		</list>
+		<list name="secondFriend" inverse="true" lazy="true">
+			<key column="second_user" />
+			<index column="id"></index>
+			<one-to-many class="Friend" />
+		</list>
+		<list name="reciver" inverse="true" lazy="true">
+			<key column="receiver_user" />
+			<index column="id"></index>
+			<one-to-many class="Message" />
+		</list>
+		<list name="need" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="Need" />
+		</list>
+		<list name="publicInterestLog" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="PublicInterestLog" />
+		</list>
+		<list name="scoreLog" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="ScoreLog" />
+		</list>
+		<list name="skillTalk" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="SkillTalk" />
+		</list>
+		<list name="replaySkillTalk" inverse="true" lazy="true">
+			<key column="replay_user" />
+			<index column="id"></index>
+			<one-to-many class="SkillTalk" />
+		</list>
+		<list name="software" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="Software" />
+		</list>
+		<list name="softwareLog" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="SoftwareLog" />
+		</list>
+		<list name="replaySoftwareLog" inverse="true" lazy="true">
+			<key column="replay_user" />
+			<index column="id"></index>
+			<one-to-many class="SoftwareLog" />
+		</list>
+		<list name="solve" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="Solve" />
+		</list>
+		<list name="skill" inverse="true" lazy="true">
+			<key column="user_id" />
+			<index column="id"></index>
+			<one-to-many class="Skill" />
+		</list>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,101 @@
+#software a.list-group-item.active-title,#download a.list-group-item.active-title:hover,#download a.list-group-item.active-title:focus
+	{
+	background-color: #5cb85c;
+	border-color: #5cb85c;
+	color: #fff;
+}
+
+#software .currentActive {
+	background: #dff0d8;
+	border-color: #dff0d8;
+}
+
+#software .row {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+
+#rightColumn,#leftColumn {
+	float: left;
+}
+
+#leftColumn {
+	width: 250px;
+}
+
+#rightColumn,#paging {
+	float: right;
+	width: 700px;
+}
+
+.form-control {
+	width: 640px !important;
+}
+
+#upload-div {
+	display: none;
+	position: relative;
+	float: right;
+	width: 700px;
+	z-index: 10000;
+	margin-top: -433px;
+}
+
+.add-height {
+	min-height: 580px;
+}
+
+#paging {
+	display: none;
+}
+
+cite {
+	padding-right: 10px;
+}
+small{
+	margin-bottom: 10px;
+}
+
+.introduction {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	line-height: 20px;
+	font-size: 15px !important;
+}
+
+.show {
+	display: block;
+}
+
+.min-image {
+	width: 50px;
+	height: 50px;
+	border-radius: 10px;
+	float: left;
+	margin-right: 10px;
+}
+
+.software-title {
+	float: left;
+	line-height: 50px;
+}
+
+#software .number {
+	font-weight: 700;
+	font-size: 30px;
+	font-style: italic;
+	font-family: Constantia, Georgia;
+	color: #25BD2B;
+}
+ol.successList{
+	margin-left: 20px;
+}
+ol.successList li{
+	border-bottom: 1px dotted #ddd;
+}
+.software-detail:hover{
+	text-decoration: underline;
+}
+.software-detail{
+	cursor: pointer;
+}

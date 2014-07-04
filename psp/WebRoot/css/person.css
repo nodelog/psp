@@ -1,0 +1,57 @@
+#myTab {
+	margin: 50px;
+	margin-bottom: 0px;
+}
+
+#myTab li {
+	width: 300px;
+	text-align: center;
+}
+
+#myContent {
+	padding: 10px 50px;
+	background: #fff;
+}
+
+.caption {
+	text-align: center;
+}
+
+#headImage {
+	filter: alpha(opacity =   0);
+	-moz-opacity: 0;
+	-khtml-opacity: 0;
+	opacity: 0;
+	position: absolute;
+	cursor: pointer;
+	width: 204px;
+	height: 32px;
+}
+
+#editHead {
+	width: 150px;
+	height: 32px;
+}
+
+.form-control {
+	width: 97% !important;
+}
+
+label {
+	cursor: pointer;
+}
+
+.xubox_title {
+	margin: 0px !important;
+}
+
+#profile:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+a{
+	cursor: pointer;
+}

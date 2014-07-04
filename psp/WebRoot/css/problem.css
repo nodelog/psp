@@ -1,0 +1,733 @@
+#question_top {
+	width: 1000px;
+	height: auto;
+	margin: 0 auto;
+	zoom: 1;
+}
+
+#question_hot,#question_type {
+	width: 707px;
+	height: auto;
+	border-right: 1px solid #ddd;
+	float: left;
+	zoom: 1;
+}
+
+#hot_content {
+	width: 100%;
+	height: 200px;
+	top: 0px;
+}
+
+#hot_button {
+	width: 100%;
+	height: 50px;
+}
+
+#hot_button ul,.type_detail ul {
+	list-style: none;
+	height: 50px;
+	margin: 0;
+	padding: 0;
+}
+
+#hot_button ul li {
+	float: left;
+	width: 220px;
+	height: 50px;
+	line-height: 50px;
+	cursor: pointer;
+	padding-left: 10px;
+	color: #25BD2B;
+	background: #F5FAF1;
+	border: 1px solid #23bd2b;
+}
+
+#hot_button ul li:first-child {
+	border-right: none;
+}
+
+#hot_button ul li:last-child {
+	border-left: none;
+}
+
+#question_count,#question_news {
+	width: 280px;
+	height: 100%;
+	float: right;
+	/* border-left: 1px solid #ddd; */
+}
+
+#question_count img {
+	width: 280px;
+	height: 250px;
+}
+
+#question_bottom {
+	width: 1000px;
+	margin: 0 auto;
+	border-top: 1px solid #ddd;
+	height: auto;
+	margin-top: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	zoom: 1;
+	background: #fff;
+}
+
+#question_bottom:after,#question_type:after,#question_top:after,#addProblem:after,#problemDetial .qa_detail_content:after,#myProblem:after,#myProblem .my_paging:after
+	{
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+#type_name {
+	width: 150px;
+	height: auto;
+	float: left;
+}
+
+#type_name div.type_tip {
+	height: 40px;
+	line-height: 40px;
+	padding-left: 40px;
+	border-top: 2px solid #25BD2B;
+	background: url("../images/title_bg.png") repeat-x 0 -32px;
+	font-weight: bold;
+	color: #333;
+}
+
+#type_name .type_detail ul {
+	height: auto;
+}
+
+#type_name .type_detail ul li:hover,#type_name .type_detail ul li.type_current
+	{
+	background: #25BD2B;
+	color: #fff;
+}
+
+#hot_button li,.type_detail li {
+	-webkit-transition: all 0.5s ease-in;
+	-moz-transition: all 0.5s ease-in;
+	-ms-transition: all 0.5s ease-in;
+	transition: all 0.5s ease-in;
+}
+
+#type_name .type_detail ul li {
+	height: 40px;
+	padding-left: 25px;
+	border-bottom: 1px solid #25BD2B;
+	cursor: pointer;
+	font: 14px Arial;
+	line-height: 40px;
+	background: #F5FAF1;
+}
+
+#news_dynamic {
+	height: 250px;
+	border: 1px solid #ddd;
+	padding: 10px;
+	font: normal 14px Arial;
+	color: #666;
+}
+
+
+#news_dynamic .title {
+	font-weight: bold;
+}
+
+#news_dynamic div hr {
+	color: #ddd;
+	margin: 20px 0;
+}
+
+#news_rank {
+	width: 100%;
+	height: 500px;
+	border: 1px solid #ddd;
+}
+
+#hot_button ul li.hot_current {
+	background: #25BD2B;
+	color: #fff;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+#hot_content img.hotimg {
+	width: 250px;
+	height: 188px;
+	margin-right: 25px;
+	float: left;
+	cursor: pointer;
+	display: none;
+}
+
+#hot_content p.qa {
+	word-wrap: break-word;
+	color: #666;
+	font: 12px "宋体", "Arial Narrow", HELVETICA;
+	overflow: hidden;
+	padding: 10px;
+	margin: 0px;
+}
+
+#hot_content p.qa.answer {
+	padding-top: 0px;
+}
+
+#hot_content span.problem_ico,#hot_content span.answer_ico {
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+	line-height: 16px;
+	font-size: 12px;
+	margin-right: 7px;
+	margin-top: -5px;
+	display: -moz-inline-box;
+	-moz-box-orient: vertical;
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 2px;
+	color: #fff;
+	background: #63bd65;
+	text-align: center;
+}
+
+#hot_content span.answer_ico {
+	background: #70abea;
+	width: 14px;
+	padding-left: 1px;
+}
+
+#hot_content span.qa_problem,#hot_content span.qa_answer {
+	line-height: 22px;
+	color: #333;
+	font-size: 16px;
+	font-weight: 700;
+}
+
+#hot_content span.qa_user,#hot_content span.qa_time {
+	font-size: 12px;
+	color: #999;
+	font: 14px/24px arial, "\5b8b\4f53", sans-serif, "Microsoft YaHei",
+		tahoma;
+	padding: 0 10px;
+}
+
+#hot_content span.qa_answer {
+	color: #a5a6a4;
+	font-weight: 500;
+	font: 14px/24px arial, "\5b8b\4f53", sans-serif, "Microsoft YaHei",
+		tahoma;
+}
+
+#hot_content span.qa_problem a:hover {
+	color: #999;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#question_count div.leifeng {
+	height: 80px;
+	width: 280px;
+	display: block;
+	float: none;
+	color: #666;
+	font-weight: 500;
+	font-family: arial;
+	font-size: 12px;
+}
+
+#question_count div.leifeng div.leifeng_pic {
+	width: 80px;
+	height: 80px;
+	float: left;
+	margin-right: 40px;
+}
+
+#question_count div.leifeng div.leifeng_pic img {
+	width: 80px;
+	height: 80px;
+	border: 1px solid #ddd;
+}
+
+#question_count div.leifeng div.leifeng_text span {
+	line-height: 25px;
+}
+
+#question_count div.leifeng div.leifeng_text {
+	float: left;
+}
+
+#question_count div.leifeng div.leifeng_text p {
+	line-height: 25px;
+}
+
+#question_count div.resolved,#question_count div.un_resolved {
+	color: #666;
+	font-weight: 500;
+	font-family: arial;
+	font-size: 15px;
+}
+
+#question_count div.btn {
+	width: 100%;
+	height: 50px;
+	margin-top: 30px;
+}
+
+#question_count div.btn div.ask:hover,#question_count div.btn div.replay:hover
+	{
+	background: #25BD2B;
+	color: #fff;
+}
+
+#question_count div.btn div.ask,#question_count div.btn div.replay {
+	width: 138px;
+	float: left;
+	line-height: 50px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 18px;
+	border: 1px solid #ddd;
+	-webkit-transition: all 0.5s ease-in;
+	-moz-transition: all 0.5s ease-in;
+	-ms-transition: all 0.5s ease-in;
+	transition: all 0.5s ease-in;
+}
+
+#question_count div.btn div.ask.myask {
+	width: 276px;
+}
+
+#question_count div.btn div.replay {
+	border-left: none;
+}
+
+#question_count div.btn span {
+	width: 11px;
+	height: 15px;
+	display: inline-block;
+	background: url("../images/problem.png") no-repeat;
+	background-position: -226px -253px;
+	line-height: 50px;
+	vertical-align: middle;
+}
+
+#question_count div.btn div.replay span {
+	background-position: -186px -253px;
+}
+
+span.number {
+	font-weight: 700;
+	font-size: 30px;
+	font-style: italic;
+	font-family: Constantia, Georgia;
+	color: #25BD2B;
+}
+
+.leifeng_text span.number {
+	color: #a5a6a4;
+}
+
+#addProblem {
+	width: 500px;
+	height: auto;
+	margin: 0 auto;
+	zoom: 1;
+	padding: 10px 50px;
+}
+
+#addProblem div.qa_title,#problemDetial  .qa_title {
+	height: 30px;
+	font: 24px arial;
+	color: #333;
+}
+
+#addProblem div.qa_title * {
+	vertical-align: middle;
+	line-height: 30px;
+}
+
+#addProblem .qa_title i.qa_ico,#problemDetial  .qa_title i.qa_ico {
+	width: 25px;
+	height: 30px;
+	float: left;
+	margin-right: 8px;
+	background:
+		url(http://cdn.iknow.bdimg.com/static/new/pkg/ask_z_a3686af.png)
+		no-repeat 0px -229px;;
+}
+
+#addProblem .qa_title i.qa_count {
+	float: right;
+	font: italic 16px "微软雅黑";
+}
+
+#addProblem .qa_title_text,#addProblem .qa_detail_text {
+	padding: 10px;
+	border: 1px solid #ddd;
+	height: 30px;
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
+
+#addProblem .qa_title_text input,#addProblem .qa_detail_text textarea,#problemDetial .qa_detail_content textarea
+	{
+	border: none;
+	width: 100%;
+	height: 30px;
+	line-height: 28px;
+	-webkit-appearance: none;
+	outline: medium;
+	background: transparent;
+	font: 16px arial;
+}
+
+#addProblem .greenBorder {
+	border: 1px solid #50b30e;
+}
+
+#addProblem .qa_detail {
+	color: #333;
+}
+
+#addProblem .qa_detail_text {
+	height: 120px;
+}
+
+#addProblem .qa_detail_text textarea {
+	height: 100%;
+	resize: none;
+}
+
+#addProblem .qa_type {
+	height: 40px;
+	line-height: 40px;
+}
+
+#addProblem .qa_type * {
+	vertical-align: middle;
+}
+
+#addProblem .qa_type a,#problemDetial .answer_layer a {
+	float: right;
+	background: #25BD2B;
+	color: #fff;
+	text-decoration: none;
+	width: 100px;
+	text-align: center;
+}
+
+#addProblem .qa_type a:hover {
+	background: #19A31E;
+}
+
+#type_content {
+	width: 510px;
+	float: right;
+	padding: 0 20px;
+	zoom: 1;
+}
+
+#type_content .tab {
+	height: 40px;
+	line-height: 40px;
+}
+
+#type_content .tab a {
+	border: 1px solid #ddd;
+	width: 253px;
+	float: left;
+	text-align: center;
+	background: #F5FAF1;
+	color: #2d64b3;
+	cursor: pointer;
+}
+
+#type_content .tab a.new_view {
+	float: right;
+}
+
+#type_content .tab a:first-child {
+	border-right: none;
+}
+
+div#type_content div.tab a:hover {
+	text-decoration: underline;
+}
+
+#type_content .tab a.current_view {
+	background: #fff;
+	border-bottom: none;
+	text-decoration: none;
+}
+
+#type_content .qa_paging {
+	display: none;
+}
+
+#type_content div.paging_view {
+	display: block;
+}
+
+#type_content .new_tab dl {
+	border-bottom: 1px dashed #ebebeb;
+	height: 25px;
+	padding: 10px;
+	padding-bottom: 0px;
+	width: 490px;
+}
+
+#type_content .new_tab dl:hover {
+	background: #f6f6f6;
+}
+
+#type_content .new_tab dl .score {
+	width: 25px;
+	color: #d34f1f;
+	font-size: 12px;
+	padding-left: 17px;
+	margin-top: 2px;
+	height: 16px;
+	line-height: 18px;;
+	background: url("../images/qa_ico.png") -811px 0px;
+	display: inline-block;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+}
+
+#type_content .new_tab dl a.qa_title {
+	color: #2d64b3;
+	font-size: 14px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+#type_content .new_tab dl a.qa_title:hover {
+	text-decoration: underline;
+}
+
+#type_content .new_tab dl .answer_count {
+	float: right;
+	font-size: 12px;
+	color: #999;
+}
+
+div.qa_paging .gigantic.pagination a {
+	height: 60px;
+	width: 80px;
+	font-size: 22px;
+	line-height: 60px;
+}
+
+div.qa_paging .gigantic.pagination input {
+	width: 182px;
+	height: 60px;
+	font-size: 22px;
+	color: #25BD2B;
+}
+
+#problemDetial,#myProblem {
+	width: 700px;
+	margin: 20px auto;
+}
+
+div#problemDetial div.qa_title,div.qa_info {
+	margin: 20px 0;
+}
+
+div#problemDetial  div.qa_title span.unresolved {
+	color: #f00;
+}
+
+div#problemDetial  div.qa_title span.resolved {
+	color: #999;
+}
+
+div#problemDetial  div.qa_title  h2 {
+	font-size: 20px;
+}
+
+div#problemDetial  div.qa_info {
+	font-size: 14px;
+	color: #666;
+	margin-left: 10px;
+}
+
+div#problemDetial div.qa_detail_content,#problemDetial div.answer_list {
+	border: 1px solid #ddd;
+	padding: 10px;
+	margin-top: 10px;
+}
+
+div#problemDetial div.qa_detail_content img {
+	max-width: 678px;
+}
+
+div#problemDetial div.qa_detail_content .detial_text {
+	margin-bottom: 10px;
+}
+
+div#problemDetial div.qa_detail_content p {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	color: #666;
+	font: 12px "宋体", "Arial Narrow", HELVETICA;
+	line-height: 22px;
+}
+
+div#problemDetial div.qa_detail_content a.i_want_answer {
+	text-decoration: none;
+}
+
+div#problemDetial div.qa_detail_content a.i_want_answer:hover {
+	text-decoration: underline;
+}
+
+#problemDetial div.answer_box {
+	margin: 10px 0;
+	height: 120px;
+	padding: 10px;
+	border: 1px solid #ddd;
+}
+
+#problemDetial div.answer_box:hover {
+	border-color: #50b30e;
+}
+
+#problemDetial div.answer_box textarea {
+	height: 100%;
+	resize: none;
+	width: 100%;
+}
+
+#problemDetial .answer_layer {
+	display: none;
+}
+
+#problemDetial .answer_layer a {
+	height: 40px;
+	line-height: 40px;
+}
+
+#problemDetial .answer_layer a:hover {
+	background: #19A31E;
+	text-decoration: underline;
+}
+
+#problemDetial .qa_info span.score {
+	color: #f00;
+}
+
+#problemDetial .answer_list {
+	height: auto;
+}
+
+#problemDetial .answer_list span.count {
+	font: 700 18px/24px "Microsoft YaHei", SimHei, arial;
+	display: block;
+	margin-bottom: 10px;
+}
+
+#problemDetial .answer_list dl {
+	border-top: 1px dashed #ccc;
+	padding: 10px 0;
+}
+
+#problemDetial .answer_list dt {
+	line-height: 24px;
+}
+
+#problemDetial .answer_list dt.answerText {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	font: 16px arial;
+}
+
+#problemDetial .answer_list dt.auther {
+	padding-bottom: 10px;
+	font-size: 12px;
+	color: #999;
+}
+
+#problemDetial .answer_list dt.auther span {
+	float: right;
+	color: #fff;
+	background: #25BD2B;
+	padding: 0 10px;
+}
+
+#problemDetial .answer_list dt.auther span.to_best {
+	background: #bbb;
+	cursor: pointer;
+}
+
+#problemDetial .answer_list dt.auther span.to_best:hover {
+	text-decoration: underline;
+	background: #25BD2B;
+}
+
+#myProblem div.header {
+	background-color: #f7f9fa;
+	border: 1px solid #eee;
+	border-bottom: none; padding : 10px;
+	height: 30px;
+	line-height: 30px;
+	font: 20px/26px "Microsoft YaHei", SimHei, arial;
+	padding: 10px;
+}
+
+#myProblem div.problemList {
+	padding: 10px;
+	border: 1px solid #eee;
+	box-shadow: 0px 1px 1px #f2f2f2;
+}
+
+#myProblem div.my_paging {
+	margin: 0 auto;
+	height: auto;
+	zoom:1;
+}
+
+#myProblem div.problemList dl {
+	border-bottom: 1px dashed #ccc;
+	padding: 10px 0;
+}
+
+#myProblem div.problemList dl dt.info {
+	line-height: 25px;
+	font-size: 12px;
+	color: #999;
+	margin-bottom: 10px;
+}
+
+#myProblem div.problemList dl dt.info span {
+	float: right;
+	border: 1px solid #ddd;
+	padding: 0px 10px;
+	cursor: default;
+	color: #60a506;
+}
+
+#myProblem div.problemList dl dt.info span.status {
+	color: #adadad;
+	background: #e6e6e6 !important;
+	border-color: #e6e6e6 !important;
+}
+
+#myProblem div.problemList dl dt.title {
+	color: #2d64b3;
+	cursor: pointer;
+	line-height: 25px;
+}
+
+#myProblem div.problemList dl dt.title:hover {
+	text-decoration: underline;
+	background: #F5FAF1;
+}

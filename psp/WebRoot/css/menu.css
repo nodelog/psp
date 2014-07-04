@@ -1,0 +1,101 @@
+.menu * {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.menu ul {
+	padding-left: 15px;
+}
+a,img {
+	border: 0;
+}
+/* meun */
+.menu {
+	position: relative;
+	height: 68px;
+	width: 1000px;
+	padding-left: 0px;
+	/* background: url(../images/menu_bg.png) no-repeat 0 8px; */
+	background: #19A31E; 
+	overflow: hidden;
+	margin: 10px auto;
+	/* border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px; */
+}
+
+.menu_bg {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background: #FFF;
+	height: 4px;
+	width: 1000px;
+	overflow: hidden;
+}
+
+.menu li {
+	float: left;
+	margin-right: 1px;
+	width: 138px;
+}
+
+.menu li.back {
+	/* background: url(../images/menu_tab.png) no-repeat; */
+	background: #25BD2B; 
+	padding-left: 0px;
+	height: 68px;
+	overflow: hidden;
+	z-index: 8;
+	position: absolute;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.menu li.back .left {
+	/* background: url(../images/menu_tab.png) no-repeat right 0; */
+	background: #ff0000 right 0; 
+	height: 68px;
+	float: right;
+	width: 0px;
+}
+
+.menu li.back .arrow {
+	float: left;
+	width: 100%;
+	height: 68px;
+	position: relative;
+}
+
+.menu li.back .arrow .icon {
+	position: absolute;
+	top: 50px;
+	left: 45%;
+	background: url(../images/arrow.png) no-repeat;
+	height: 16px;
+	width: 16px;
+	overflow: hidden;
+}
+
+.menu li a {
+	font-family: "微软雅黑", "黑体";
+	text-decoration: none;
+	color: #fff;
+	font-size: 18px;
+	z-index: 10;
+	display: block;
+	float: left;
+	position: relative;
+	overflow: hidden;
+	padding: 25px 26px 0;
+	height: 43px;
+}
+.menu li a:HOVER{
+	font-weight: bold;
+}
+
+.menu li a span {
+	cursor: pointer;
+}

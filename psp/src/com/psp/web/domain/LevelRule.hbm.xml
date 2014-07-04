@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.psp.web.domain">
+   	<class name="LevelRule" table="psp_level_rule">
+		<id name="id" type="int" column="id">
+			<generator class="identity" />
+		</id>
+		<property name="levelNumber" column="level_number"></property>
+		<property name="minScore" column="min_score"></property>
+		<property name="maxScore" column="max_score"></property>
+		<list name="level" lazy="true">
+			<key column="level_rule"></key>
+			<index column="id"></index>
+			<one-to-many class="Level"/>
+		</list>
+	</class>
+</hibernate-mapping>

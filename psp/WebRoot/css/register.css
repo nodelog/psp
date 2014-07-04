@@ -1,0 +1,366 @@
+body {
+	background-position: 0px 0px;
+	margin: 0px;
+	font-family: "微软雅黑", "黑体";
+}
+
+.regsiter {
+	position: relative;
+	width: 1000px;
+	height:350px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 40px;
+}
+#step {
+	position: relative;
+	width: 1000px;
+	height:40px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+}
+#step div{
+	width: 880px;
+	height:40px;
+	padding-left: 120px;
+	background: #25BD2B;
+}
+#step div span{
+	line-height: 40px;
+	color: #fff;
+}
+span#step-number{
+	font-style: italic;
+	font-size: 30px;
+	font-weight: bold;
+}
+span#step-text{
+	margin-left: 5px;
+}
+.form {
+	position: relative;
+	width: 700px;
+	float: left;
+}
+#email {
+	position: relative;
+	width: 700px;
+	float: left;
+	border: 1px solid #ddd;
+	padding-bottom:20px;
+	padding-top:20px;
+	display: none;
+	
+}
+#confirm {
+	position: relative;
+	width: 680px;
+	padding-left:20px;
+	padding-right:20px;
+	display: none;
+}
+#confirm span{
+	padding-bottom: 10px;
+	line-height: 25px;
+	color: #444;
+}
+
+.weixin{
+	position: relative;
+	width: 250px;
+	float: right;
+	height:250px;
+	border: 1px solid #ddd;
+	background: url("../images/weixin.png") no-repeat center -5px;
+}
+
+.content {
+	position: relative;
+	margin-bottom: 10px;
+	width: 700px;
+	height: 40px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.label {
+	width: 100px;
+	float: left;
+	padding: 10px;
+}
+
+.text {
+	float: left;
+	height: 16px;
+	width: 300px;
+	border: 1px solid #ddd;
+	padding: 10px;
+}
+.error {
+	float: left;
+	height: 16px;
+	width: 240px;
+	padding: 11px;
+	padding-right: 0px;
+    visibility: hidden;
+}
+.error-show{
+	visibility: visible;	
+}
+.error-ok{
+	background: url("../images/ok.png")  no-repeat;
+	-webkit-background-origin: content-box; /* Safari */
+    background-origin: content-box;
+}
+.error-error{
+	background: url("../images/error.png")  no-repeat;
+	-webkit-background-origin: content-box; /* Safari */
+    background-origin: content-box;
+}
+.error span.error-text{
+	color: #fc4343;
+	padding-left:20px;
+	font-size: 12px;
+}
+
+.text-border,.weixin:hover,.text:hover,.live-code:hover,#email:hover {
+	border-color: #25BD2B;
+}
+
+.error-border {
+	border-color: #fc4343;
+}
+
+.text.authCode {
+	width: 170px;
+}
+
+.text.submit {
+	border: none;
+	padding: 0px;
+}
+
+#authCode {
+	width: 150px;
+}
+
+.authImg {
+	cursor: pointer;
+	float: left;
+	margin-left: 10px;
+}
+
+label {
+	font-family: "微软雅黑", "黑体";
+	font-size: 14px;
+	color: #666;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+	float: right;
+}
+
+input.input,.live-code {
+	font-size: 14px;
+	border: none;
+	color: #666;
+	height: 16px;
+	line-height: 16px;
+	width: 280px;
+	-webkit-appearance: none;
+	outline: medium;
+	background: transparent;
+	float: left;
+}
+
+input[type="button"].input,.live-code-btn,.login-btn {
+	height: 50px;
+	border: none;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	transition: .3s;
+	-moz-transition: .3s;
+	-o-transition: .3s;
+	-webkit-transition: .3s;
+	background: #19A31E;
+	cursor: pointer;
+	color: #fff;
+	font-weight: bold;
+	font-size: 16px;
+	line-height: 32px;
+	width: 322px;
+}
+
+.padding-top {
+	padding-top: 5px;
+}
+
+input[type="button"].input:hover,.live-code-btn:hover,.login-btn:hover {
+	background: #25BD2B;
+}
+
+.delete {
+	display: none;
+	width: 16px;
+	height: 16px;
+	background: url("../images/tip.png") -32px -24px no-repeat;
+	cursor: pointer;
+	float: right;
+}
+
+.delete:hover {
+	background-position: -48px -24px;
+}
+
+.titleShow {
+	max-width: 266px;
+	position: absolute;
+	font: 15px/1.5 "Arial" bold;
+	color: #fff;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	-o-box-shadow: 2px 1px 7px rgba(0, 0, 0, .3);
+	-moz-box-shadow: 2px 1px 7px rgba(0, 0, 0, .3);
+	-webkit-box-shadow: 2px 1px 7px rgba(0, 0, 0, .3);
+	padding: 7px;
+	background: #19A31E;
+	word-break: break-word;
+}
+
+.head {
+	width: 1000px;
+	height: 84px;
+	padding-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
+
+.logo {
+	float: left;
+	width: 300px;
+	height: 84px;
+	background: url("../images/logo.png") no-repeat;
+	cursor: pointer;
+}
+
+.login {
+	float: right;
+	width: 700px;
+	height: 84px;
+}
+
+.login div.title {
+	float: left;
+}
+
+.login div.title span {
+	color: #666;
+	font-size: 18px;
+		font-family: "微软雅黑", "黑体";
+}
+
+.login div.login-link {
+	float: right;
+}
+
+.login div.login-link button {
+	font-weight: bold;
+	color: #666;
+	height: 32px;
+	width: 64px;
+	border: none;
+	background: url("../images/tip.png") no-repeat 0 -48px;
+	cursor: pointer;
+	outline: medium none;
+}
+
+.login div.login-link span {
+	color: #666;
+	font-size: 13px;
+		font-family: "微软雅黑", "黑体";
+}
+
+.login div span {
+	line-height: 84px;
+}
+
+.login div.title span {
+	background: url("../images/slip.png") no-repeat;
+	padding-left: 20px;
+}
+
+.slip {
+	height: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	background: url("../images/slip_line.png") no-repeat center top;
+}
+
+.foot{
+	margin-bottom: 0px;
+}
+
+.check-email{
+	position: relative;
+	font-size: 14px;
+	margin: 10px;
+	margin-top:0px;
+	height: 40px;
+}
+.live-code{
+	border: 1px solid #ddd;
+	height: 38px;
+	width: 100px;
+	line-height:25px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+.live-code-btn,.login-btn{
+	width: 200px;
+	height: 40px;
+	-webkit-appearance: none;
+	outline: medium;
+}
+input[type="button"]{
+	cursor: pointer;
+}
+
+.check-email div.label{
+	width: 100px;
+}
+.check-email div.live-code-div{
+	border: none;
+}
+.check-email div{
+	float: left;
+}
+.tip-email{
+	width: 350px;
+	overflow: hidden;
+	margin-left: 10px;
+}
+.tip-email a{
+	color: #ff0000;
+	text-decoration: none;
+}
+.tip-email span{
+	color: #19A31E;
+}
+.email-btn-div{
+	margin-left: 110px;
+}
+.step-one,.login-div,.email-btn-div{
+	margin-top:40px;
+	
+}
+table {
+	position: absolute;
+	bottom: 0;
+	position: fixed;
+}
+input:-webkit-autofill{
+	 -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
