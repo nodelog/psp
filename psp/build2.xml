@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="psp" default="war" basedir=".">
+    <property name="webapp.name" value="psp" />
+    <property name="classes" value="build/classes"/>
+    <property name="build" value="build"/>
+    <property name="webRoot.dir" value="${basedir}/webRoot" />
+    <property name="lib" value="${webRoot.dir}/WEB-INF/lib"/>
+    <property name="tomcat.home" value="C:/jack/software/apache-tomcat-6.0.18"/>
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+    <target name="compile" depends="clean">
+        <mkdir dir="${classes}"/>
+        <javac srcdir="src" destdir="${classes}"></javac>
+    </target>
+    <target name="war" depends="compile">
+        <war destfile="${build}/psp.war" webxml="${webRoot.dir}/WEB-INF/web.xml">
+            <fileset dir="WebRoot" includes="**/*.jsp"/>
+            <lib dir="${lib}"></lib>
+            <classes dir="${classes}"/>
+        </war>
+    </target>
+    <target name="deploy" depends="war">
+        <copy todir="${tomcat}/webapps" file="${build}/psp.war"></copy>
+    </target>
+    <target name="start-tomcat" depends="deploy">
+        <exec executable="${tomcat.home}/bin/startup.bat" spawn="true" vmlauncher="false">
+            <env key="CATALINE_HOME" value="${tomcat.home}"/>
+            <arg line="/c start ${tomcat.home}/bin/startup.bat"/>
+        </exec>
+    </target>
+    
+	<target name="tomcat.stop">  
+	<java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">  
+	<jvmarg value="-Dcatalina.home=${tomcat.home}"/>  
+	<arg line="stop"/>  
+	</java>  
+	<waitfor maxwait="5" maxwaitunit="second">  
+	      <available file="errors.log"/>  
+	</waitfor>  
+	  
+	</target>  
+</project>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<!-- admin -->
+	<bean id="admin" class="com.psp.web.action.admin.AdminAction"
+		scope="request">
+		<property name="logger" ref="logger" />
+		<property name="adminService" ref="adminService" />
+	</bean>
+	<!-- user -->
+	<bean id="user" class="com.psp.web.action.user.UserAction" scope="request">
+		<property name="userService" ref="userService" />
+		<property name="fileService" ref="fileService" />
+		<property name="ftpUpload" ref="ftpUpload" />
+	</bean>
+	<bean id="checkUser" class="com.psp.web.action.common.CheckUser"
+		scope="request">
+		<property name="userService" ref="userService" />
+		<property name="logger" ref="logger" />
+	</bean>
+
+	<bean id="login" class="com.psp.web.action.common.LoginAction"
+		scope="request">
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="register" class="com.psp.web.action.common.RegisterAction"
+		scope="request">
+		<property name="userService" ref="userService" />
+		<property name="logger" ref="logger" />
+		<property name="email" ref="email" />
+	</bean>
+	<bean id="publicInterest" class="com.psp.web.action.user.PublicInterestAction"
+		scope="request">
+		<property name="publicInterestService" ref="publicInterestService" />
+		<property name="fileService" ref="fileService" />
+	</bean>
+	<bean id="problem" class="com.psp.web.action.user.ProblemAction"
+		scope="request">
+		<property name="problemService" ref="problemService" />
+		<property name="fileService" ref="fileService" />
+		<property name="ftpUpload" ref="ftpUpload" />
+	</bean>
+	<bean id="category" class="com.psp.web.action.user.CategoryAction"
+		scope="request">
+		<property name="categoryService" ref="categoryService" />
+	</bean>
+	<bean id="media" class="com.psp.web.action.user.MediaAction"
+		scope="request">
+		<property name="mediaService" ref="mediaService" />
+		<property name="fileService" ref="fileService" />
+		<property name="ftpUpload" ref="ftpUpload" />
+	</bean>
+	<bean id="download" class="com.psp.web.action.user.DownloadAction"
+		scope="request">
+		<property name="downloadService" ref="downloadService" />
+	</bean>
+	<bean id="software" class="com.psp.web.action.user.SoftwareAction"
+		scope="request">
+		<property name="softwareService" ref="softwareService" />
+		<property name="ftpUpload" ref="ftpUpload" />
+		<property name="fileService" ref="fileService" />
+	</bean>
+	<bean id="skill" class="com.psp.web.action.user.SkillAction"
+		scope="request">
+		<property name="skillService" ref="skillService" />
+	</bean>
+	<bean id="document" class="com.psp.web.action.user.DocumentAction"
+		scope="request">
+		<property name="documentService" ref="documentService" />
+		<property name="ftpUpload" ref="ftpUpload" />
+	</bean>
+	<bean id="message" class="com.psp.web.action.user.MessageAction"
+		scope="request">
+		<property name="messageService" ref="messageService" />
+	</bean>
+</beans>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.psp.web.domain">
+	<class name="Problem" table="psp_problem">
+		<id name="id" type="int" column="id">
+			<generator class="identity" />
+		</id>
+		<many-to-one name="user" class="User" column="user_id" lazy="false"></many-to-one>
+		<property name="title" column="problem_title"></property>
+		<property name="content" column="problem_content"></property>
+		<property name="createTime" column="create_time"></property>
+		<property name="confirmTime" column="confirm_time"></property>
+		<many-to-one name="category" class="Category" column="category_id" lazy="proxy"></many-to-one>
+		<property name="status" column="problem_status"></property>
+		<property name="score" column="problem_score"></property>
+	</class>
+</hibernate-mapping>

@@ -5,7 +5,6 @@ import java.util.List;
 import com.psp.util.Page;
 import com.psp.web.domain.Category;
 import com.psp.web.domain.Skill;
-import com.psp.web.domain.Software;
 import com.psp.web.domain.User;
 
 public interface SkillService {

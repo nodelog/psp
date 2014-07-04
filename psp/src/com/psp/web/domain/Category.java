@@ -1,6 +1,5 @@
 package com.psp.web.domain;
 
-import java.util.List;
 
 /**
  * 类名称：Category 类描述：Category 创建人：王亚超 创建时间：2014-3-7 下午11:18:53

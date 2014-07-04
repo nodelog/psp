@@ -1,8 +1,5 @@
 package com.psp.web.listener;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.http.HttpSessionAttributeListener;
@@ -29,7 +26,7 @@ public class SessionListener implements ServletContextAttributeListener,
 	// 清除session时触发
 	public void attributeRemoved(HttpSessionBindingEvent arg0) {
 		if (arg0.getName().equals("user")) {
-			User user =(User) arg0.getValue();
+			arg0.getValue();
 //			arg0.getSession().getServletContext().getRequestDispatcher("").forward(arg0, arg1)
 //			this.
 		}

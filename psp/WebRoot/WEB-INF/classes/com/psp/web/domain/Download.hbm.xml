@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.psp.web.domain">
+   	<class name="Download" table="psp_download">
+		<id name="id" type="int" column="id">
+			<generator class="identity" />
+		</id>
+		<many-to-one name="user" column="user_id" class="User" lazy="proxy"></many-to-one>
+		<property name="type" column="resource_type"></property>
+		<property name="resource" column="resource_id"></property>
+		<property name="downloadTime" column="download_time"></property>
+		<property name="status" column="download_status"></property>
+	</class>
+</hibernate-mapping>

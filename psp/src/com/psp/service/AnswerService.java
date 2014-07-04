@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.psp.util.Page;
 import com.psp.web.domain.Answer;
-import com.psp.web.domain.Problem;
-import com.psp.web.domain.User;
 
 public interface AnswerService {
 	/**

@@ -37,351 +37,360 @@ import com.psp.web.domain.User;
  * @version V1.0
  */
 public class ProblemAction extends BaseAction implements ModelDriven<Problem> {
-	private static final long serialVersionUID = -7722179858401272003L;
-	private ProblemService problemService;
-	private FileService fileService;
-	private FtpUpload ftpUpload;
-	private Problem problem;
-	private Integer categoryId;
-	private Integer currentPage;
-	private java.io.File image;
-	private String filename;
-	private Integer imageId;
-	private String target;
-	private String answerText;
-	private Integer answerId;
-	private String requestType;
-	public void setFtpUpload(FtpUpload ftpUpload) {
-		this.ftpUpload = ftpUpload;
-	}
+    private static final long serialVersionUID = -7722179858401272003L;
+    private ProblemService problemService;
+    private FileService fileService;
+    private FtpUpload ftpUpload;
+    private Problem problem;
+    private Integer categoryId;
+    private Integer currentPage;
+    private java.io.File image;
+    private String filename;
+    private Integer imageId;
+    private String target;
+    private String answerText;
+    private Integer answerId;
+    private String requestType;
 
-	public void setFileService(FileService fileService) {
-		this.fileService = fileService;
-	}
+    public void setFtpUpload(FtpUpload ftpUpload) {
+        this.ftpUpload = ftpUpload;
+    }
 
-	public void setProblemService(ProblemService problemService) {
-		this.problemService = problemService;
-	}
+    public void setFileService(FileService fileService) {
+        this.fileService = fileService;
+    }
 
-	public String loadHotProblem() {
-		List<Problem> hotProblem = problemService.getHotProblem();
-		List<Problem> hotProblemList = new ArrayList<>();
-		for (Problem problem : hotProblem) {
-			Problem minproblem = new Problem();
-			minproblem.setId(problem.getId());
-			minproblem.setTitle(problem.getTitle());
-			List<Answer> answers = problemService.findAnswerList(problem);
-			for (Answer answer : answers) {
-				if (answer != null && answer.getStatus() == 2) {
-					Answer answerMin = new Answer();
-					answerMin.setContent(answer.getContent());
-					answerMin.setUser(new User(answer.getUser().getId(), answer
-							.getUser().getName()));
-					answerMin.setCreateTime(answer.getCreateTime());
-					List<Answer> answerList = new ArrayList<>();
-					answerList.add(answerMin);
-					minproblem.setAnswers(answerList);
-					break;
-				}
-			}
-			hotProblemList.add(minproblem);
-		}
-		dataMap.put("hotProblem", hotProblemList);
+    public void setProblemService(ProblemService problemService) {
+        this.problemService = problemService;
+    }
 
-		return SUCCESS;
+    public String loadHotProblem() {
+        List<Problem> hotProblem = problemService.getHotProblem();
+        List<Problem> hotProblemList = new ArrayList<Problem>();
+        for (Problem problem : hotProblem) {
+            Problem minproblem = new Problem();
+            minproblem.setId(problem.getId());
+            minproblem.setTitle(problem.getTitle());
+            List<Answer> answers = problemService.findAnswerList(problem);
+            for (Answer answer : answers) {
+                if (answer != null && answer.getStatus() == 2) {
+                    Answer answerMin = new Answer();
+                    answerMin.setContent(answer.getContent());
+                    answerMin.setUser(new User(answer.getUser().getId(), answer
+                            .getUser().getName()));
+                    answerMin.setCreateTime(answer.getCreateTime());
+                    List<Answer> answerList = new ArrayList<Answer>();
+                    answerList.add(answerMin);
+                    minproblem.setAnswers(answerList);
+                    break;
+                }
+            }
+            hotProblemList.add(minproblem);
+        }
+        dataMap.put("hotProblem", hotProblemList);
 
-	}
+        return SUCCESS;
 
-	public String loadHotPic() {
-		List<File> problemPicList = fileService
-				.getFileByApp(FinalUtil.PROBLEM_CODE);
-		dataMap.put("problemPicList", problemPicList);
-		return SUCCESS;
+    }
 
-	}
+    public String loadHotPic() {
+        List<File> problemPicList = fileService
+                .getFileByApp(FinalUtil.PROBLEM_CODE);
+        dataMap.put("problemPicList", problemPicList);
+        return SUCCESS;
 
-	/**
-	 * 统计出解决和未解决的问题数量
-	 * 
-	 * @author wangyachao
-	 * @return String   
-	 * @throws 
-	 */
-	public String countProblem() {
-		Map<String, Integer> countMap = problemService.countProblem();
-		dataMap.put("countProblem", countMap);
-		return SUCCESS;
+    }
 
-	}
+    /**
+     * 统计出解决和未解决的问题数量
+     * 
+     * @author wangyachao
+     * @return String   
+     * @throws 
+     */
+    public String countProblem() {
+        Map<String, Integer> countMap = problemService.countProblem();
+        dataMap.put("countProblem", countMap);
+        return SUCCESS;
 
-	public String countUserQA(){
-//		User user = (User) session.get("user");
-		Map<String, Integer> myProblemCount = problemService.countUserQA(getSessionUser());
-		dataMap.put("myProblemCount", myProblemCount);
-		return SUCCESS;
-	}
-	public String addProblem() {
-		problem.setCreateTime(new Timestamp(System.currentTimeMillis()));
-		problem.setStatus(FinalUtil.PROBLEM_UNRESOLVED);
-		problem.setUser((User) session.get("user"));
-		problem.setCategory(new Category(categoryId));
-		String title = problem.getTitle();
-		if(title.length()>32){
-			problem.setTitle(title.substring(0,32));
-		}
-		Integer id = problemService.addProblem(problem);
-		if(imageId!=null){
-			fileService.updateFileAppId(imageId, id);
-		}
-		dataMap.put("problemId", id);
-		return SUCCESS;
+    }
 
-	}
+    public String countUserQA() {
+        // User user = (User) session.get("user");
+        Map<String, Integer> myProblemCount = problemService
+                .countUserQA(getSessionUser());
+        dataMap.put("myProblemCount", myProblemCount);
+        return SUCCESS;
+    }
 
-	public String loadNewProblem() {
-		List<Problem> newProblem = problemService.getNewProblem();
-		List<Problem> minProblemList = minProblem(newProblem);
-		dataMap.put("newProblem", minProblemList);
-		return SUCCESS;
+    public String addProblem() {
+        problem.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        problem.setStatus(FinalUtil.PROBLEM_UNRESOLVED);
+        problem.setUser((User) session.get("user"));
+        problem.setCategory(new Category(categoryId));
+        String title = problem.getTitle();
+        if (title.length() > 32) {
+            problem.setTitle(title.substring(0, 32));
+        }
+        Integer id = problemService.addProblem(problem);
+        if (imageId != null) {
+            fileService.updateFileAppId(imageId, id);
+        }
+        dataMap.put("problemId", id);
+        return SUCCESS;
 
-	}
+    }
 
-	private List<Problem> minProblem(List<Problem> problems) {
-		List<Problem> minProblemList = new ArrayList<Problem>();
-		for (Problem problem : problems) {
-			Problem minProblem = new Problem();
-			minProblem.setId(problem.getId());
-			minProblem.setTitle(problem.getTitle());
-			minProblem.setScore(problem.getScore());
-			minProblem.setCreateTime(problem.getCreateTime());
-			List<Answer> answers = problemService.findAnswerList(problem);
-			List<Answer> minAnswerList = new ArrayList<Answer>();
-			for (Answer answer : answers) {
-				if (answer != null) {
-					Answer minAnswer = new Answer();
-					minAnswer.setId(answer.getId());
-					minAnswerList.add(minAnswer);
-				}
-			}
-			minProblem.setAnswers(minAnswerList);
-			minProblemList.add(minProblem);
-		}
-		return minProblemList;
-	}
+    public String loadNewProblem() {
+        List<Problem> newProblem = problemService.getNewProblem();
+        List<Problem> minProblemList = minProblem(newProblem);
+        dataMap.put("newProblem", minProblemList);
+        return SUCCESS;
 
-	public String loadProblemByType() {
-		Category category = new Category();
-		category.setId(categoryId);
-		Page page = new Page();
-		page.setCurrent(currentPage);
-		List<Problem> problems = problemService.findProblemByCategory(category,
-				page);
-		List<Problem> minProblemList = minProblem(problems);
-		dataMap.put("typeProblem", minProblemList);
-		return SUCCESS;
-	}
-	public String loadProblemByUser() {
-		User user = (User) session.get("user");
-		Page page = new Page();
-		page.setCurrent(currentPage);
-		List<Problem> problems = problemService.findProblemByUser(user, page);
-		List<Problem> minProblemList = minProblem(problems);
-		dataMap.put("myProblem", minProblemList);
-		request.put("myProblem", problems);
-		return render("myProblem");
-	}
-	public String loadProblemByAnswer() {
-		User user = (User) session.get("user");
-		Page page = new Page();
-		page.setCurrent(currentPage);
-		List<Problem> problems = problemService.findProblemByAnser(user, page);
-		List<Problem> minProblemList = minProblem(problems);
-		dataMap.put("myAnswer", minProblemList);
-		request.put("myAnswer", problems);
-		return render("myAnswer");
-	}
+    }
 
-	public String loadCountByType() {
-		Page page = new Page();
-		Integer pageTotal = problemService.getPageTotal(page, categoryId);
-		dataMap.put("pageTotal", pageTotal);
-		return SUCCESS;
-	}
-	public String loadCountByUser() {
-		Page page = new Page();
-		User user = (User) session.get("user");
-		Integer pageTotal = problemService.getPageTotal(page, user);
-		dataMap.put("pageTotal", pageTotal);
-		return SUCCESS;
-	}
-	public String loadCountByAnswer() {
-		Page page = new Page();
-		User user = (User) session.get("user");
-		Integer pageTotal = problemService.getPageTotalByUser(page, user);
-		dataMap.put("pageTotal", pageTotal);
-		return SUCCESS;
-	}
+    private List<Problem> minProblem(List<Problem> problems) {
+        List<Problem> minProblemList = new ArrayList<Problem>();
+        for (Problem problem : problems) {
+            Problem minProblem = new Problem();
+            minProblem.setId(problem.getId());
+            minProblem.setTitle(problem.getTitle());
+            minProblem.setScore(problem.getScore());
+            minProblem.setCreateTime(problem.getCreateTime());
+            List<Answer> answers = problemService.findAnswerList(problem);
+            List<Answer> minAnswerList = new ArrayList<Answer>();
+            for (Answer answer : answers) {
+                if (answer != null) {
+                    Answer minAnswer = new Answer();
+                    minAnswer.setId(answer.getId());
+                    minAnswerList.add(minAnswer);
+                }
+            }
+            minProblem.setAnswers(minAnswerList);
+            minProblemList.add(minProblem);
+        }
+        return minProblemList;
+    }
 
-	public String upload() {
-		String path = FinalUtil.FTP_SERVER_URL + FinalUtil.PROBLEM_DIR;
-		File imageFile = new File();
-		imageFile.setApp(FinalUtil.PROBLEM_CODE);
-		imageFile.setName(filename);
-		imageFile.setSize(getFileSize(image));
-		imageFile.setTime(new Timestamp(System.currentTimeMillis()));
-		imageFile.setStatus(FinalUtil.FILE_NORMAL);
-		filename=buildNewFileName(filename);
-		imageFile.setUrl(FinalUtil.PROBLEM_DIR+"/"+filename);
-		File uploadFile = fileService.uploadFile(imageFile);
-		dataMap.put("imageFile", uploadFile);
-		ftpUpload.uploadFile(path, filename, image,FTPClient.BINARY_FILE_TYPE);
-		return SUCCESS;
-	}
-	
-	public String findProblemById(){
-		Problem problemDetial = problemService.findProblemById(problem.getId());
-		if(problemDetial==null){
-			return render("404");
-		}
-		List<Answer> answers =  problemService.findAnswerList(problem);
-		problemDetial.setAnswers(answers);
-		List<File> problemImage = fileService.getFileByApp(FinalUtil.PROBLEM_CODE, problemDetial.getId());
-		request.put("problemDetial", problemDetial);
-		if(problemImage!=null&&problemImage.size()>0){
-			request.put("problemImage", problemImage.get(0));
-		}
-		if(FinalUtil.JSON.equals(requestType)){
-			dataMap.put("problemTitle", problemDetial.getTitle());
-			return SUCCESS;
-		}
-		return render("problemDetial");
-	}
+    public String loadProblemByType() {
+        Category category = new Category();
+        category.setId(categoryId);
+        Page page = new Page();
+        page.setCurrent(currentPage);
+        List<Problem> problems = problemService.findProblemByCategory(category,
+                page);
+        List<Problem> minProblemList = minProblem(problems);
+        dataMap.put("typeProblem", minProblemList);
+        return SUCCESS;
+    }
 
-	public String addAnswer(){
-		if(answerText==null){
-			dataMap.put("result", FinalUtil.ERROR);
-			return SUCCESS;
-		}
-		Answer answer = new Answer();
-		answer.setProblem(problem);
-		User user = (User) session.get("user");
-		answer.setUser(user);
-		answer.setCreateTime(new Timestamp(System.currentTimeMillis()));
-		answer.setStatus(FinalUtil.ANSWER_UNBEST);
-		answer.setContent(answerText);
-		problemService.addAnswer(answer);
-		dataMap.put("result", FinalUtil.SUCCESS);
-		return SUCCESS;
-	}
-	
-	public String bestAnswer(){
-		if(answerId==null){
-			dataMap.put("result", FinalUtil.ERROR);
-			return SUCCESS;
-		}
-		Answer answer = new Answer();
-		answer.setId(answerId);
-		answer.setProblem(problem);
-		problemService.updateAnswer(answer);
-		dataMap.put("result", FinalUtil.SUCCESS);
-		return SUCCESS;
-	}
-	
-	public Problem getModel() {
-		if (problem == null) {
-			problem = new Problem();
-		}
-		return problem;
-	}
+    public String loadProblemByUser() {
+        User user = (User) session.get("user");
+        Page page = new Page();
+        page.setCurrent(currentPage);
+        List<Problem> problems = problemService.findProblemByUser(user, page);
+        List<Problem> minProblemList = minProblem(problems);
+        dataMap.put("myProblem", minProblemList);
+        request.put("myProblem", problems);
+        return render("myProblem");
+    }
 
-	public Integer getCategoryId() {
-		return categoryId;
-	}
+    public String loadProblemByAnswer() {
+        User user = (User) session.get("user");
+        Page page = new Page();
+        page.setCurrent(currentPage);
+        List<Problem> problems = problemService.findProblemByAnser(user, page);
+        List<Problem> minProblemList = minProblem(problems);
+        dataMap.put("myAnswer", minProblemList);
+        request.put("myAnswer", problems);
+        return render("myAnswer");
+    }
 
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
-	}
+    public String loadCountByType() {
+        Page page = new Page();
+        Integer pageTotal = problemService.getPageTotal(page, categoryId);
+        dataMap.put("pageTotal", pageTotal);
+        return SUCCESS;
+    }
 
-	public Integer getCurrentPage() {
-		return currentPage;
-	}
+    public String loadCountByUser() {
+        Page page = new Page();
+        User user = (User) session.get("user");
+        Integer pageTotal = problemService.getPageTotal(page, user);
+        dataMap.put("pageTotal", pageTotal);
+        return SUCCESS;
+    }
 
-	public void setCurrentPage(Integer currentPage) {
-		this.currentPage = currentPage;
-	}
+    public String loadCountByAnswer() {
+        Page page = new Page();
+        User user = (User) session.get("user");
+        Integer pageTotal = problemService.getPageTotalByUser(page, user);
+        dataMap.put("pageTotal", pageTotal);
+        return SUCCESS;
+    }
 
-	public Integer getImageId() {
-		return imageId;
-	}
+    public String upload() {
+        String path = FinalUtil.FTP_SERVER_URL + FinalUtil.PROBLEM_DIR;
+        File imageFile = new File();
+        imageFile.setApp(FinalUtil.PROBLEM_CODE);
+        imageFile.setName(filename);
+        imageFile.setSize(getFileSize(image));
+        imageFile.setTime(new Timestamp(System.currentTimeMillis()));
+        imageFile.setStatus(FinalUtil.FILE_NORMAL);
+        filename = buildNewFileName(filename);
+        imageFile.setUrl(FinalUtil.PROBLEM_DIR + "/" + filename);
+        File uploadFile = fileService.uploadFile(imageFile);
+        dataMap.put("imageFile", uploadFile);
+        ftpUpload.uploadFile(path, filename, image, FTPClient.BINARY_FILE_TYPE);
+        return SUCCESS;
+    }
 
-	public void setImageId(Integer imageId) {
-		this.imageId = imageId;
-	}
+    public String findProblemById() {
+        Problem problemDetial = problemService.findProblemById(problem.getId());
+        if (problemDetial == null) {
+            return render("404");
+        }
+        List<Answer> answers = problemService.findAnswerList(problem);
+        problemDetial.setAnswers(answers);
+        List<File> problemImage = fileService.getFileByApp(
+                FinalUtil.PROBLEM_CODE, problemDetial.getId());
+        request.put("problemDetial", problemDetial);
+        if (problemImage != null && problemImage.size() > 0) {
+            request.put("problemImage", problemImage.get(0));
+        }
+        if (FinalUtil.JSON.equals(requestType)) {
+            dataMap.put("problemTitle", problemDetial.getTitle());
+            return SUCCESS;
+        }
+        return render("problemDetial");
+    }
 
-	public java.io.File getImage() {
-		return image;
-	}
+    public String addAnswer() {
+        if (answerText == null) {
+            dataMap.put("result", FinalUtil.ERROR);
+            return SUCCESS;
+        }
+        Answer answer = new Answer();
+        answer.setProblem(problem);
+        User user = (User) session.get("user");
+        answer.setUser(user);
+        answer.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        answer.setStatus(FinalUtil.ANSWER_UNBEST);
+        answer.setContent(answerText);
+        problemService.addAnswer(answer);
+        dataMap.put("result", FinalUtil.SUCCESS);
+        return SUCCESS;
+    }
 
-	public void setImage(java.io.File image) {
-		this.image = image;
-	}
+    public String bestAnswer() {
+        if (answerId == null) {
+            dataMap.put("result", FinalUtil.ERROR);
+            return SUCCESS;
+        }
+        Answer answer = new Answer();
+        answer.setId(answerId);
+        answer.setProblem(problem);
+        problemService.updateAnswer(answer);
+        dataMap.put("result", FinalUtil.SUCCESS);
+        return SUCCESS;
+    }
 
-	public String getFilename() {
-		return filename;
-	}
+    public Problem getModel() {
+        if (problem == null) {
+            problem = new Problem();
+        }
+        return problem;
+    }
 
-	public void setFilename(String filename) {
-		
-		this.filename = filename;
-	}
-//	public String buildNewFileName(String filename){
-//		int index = filename.indexOf('.');
-//		StringBuffer stringBuffer = new StringBuffer();
-//		stringBuffer.append(filename.substring(0, index));
-//		stringBuffer.append(FinalUtil.DELIMITER);
-//		stringBuffer.append(System.currentTimeMillis());
-//		stringBuffer.append(filename.substring(index));
-//		return stringBuffer.toString();
-//	}
+    public Integer getCategoryId() {
+        return categoryId;
+    }
 
-	public String render(String target){
-		this.target = target;
-		if("404".equals(target)){
-			return FinalUtil.NOT_FOUND;
-		}
-		return SUCCESS;
-	}
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	public String getTarget() {
-		return target;
-	}
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
 
-	public void setTarget(String target) {
-		this.target = target;
-	}
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
 
-	public String getAnswerText() {
-		return answerText;
-	}
+    public Integer getImageId() {
+        return imageId;
+    }
 
-	public void setAnswerText(String answerText) {
-		this.answerText = answerText;
-	}
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
+    }
 
-	public Integer getAnswerId() {
-		return answerId;
-	}
+    public java.io.File getImage() {
+        return image;
+    }
 
-	public void setAnswerId(Integer answerId) {
-		this.answerId = answerId;
-	}
+    public void setImage(java.io.File image) {
+        this.image = image;
+    }
 
-	public String getRequestType() {
-		return requestType;
-	}
+    public String getFilename() {
+        return filename;
+    }
 
-	public void setRequestType(String requestType) {
-		this.requestType = requestType;
-	}
-	
+    public void setFilename(String filename) {
+
+        this.filename = filename;
+    }
+
+    // public String buildNewFileName(String filename){
+    // int index = filename.indexOf('.');
+    // StringBuffer stringBuffer = new StringBuffer();
+    // stringBuffer.append(filename.substring(0, index));
+    // stringBuffer.append(FinalUtil.DELIMITER);
+    // stringBuffer.append(System.currentTimeMillis());
+    // stringBuffer.append(filename.substring(index));
+    // return stringBuffer.toString();
+    // }
+
+    public String render(String target) {
+        this.target = target;
+        if ("404".equals(target)) {
+            return FinalUtil.NOT_FOUND;
+        }
+        return SUCCESS;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getAnswerText() {
+        return answerText;
+    }
+
+    public void setAnswerText(String answerText) {
+        this.answerText = answerText;
+    }
+
+    public Integer getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(Integer answerId) {
+        this.answerId = answerId;
+    }
+
+    public String getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
+    }
+
 }

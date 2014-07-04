@@ -3,7 +3,6 @@ package com.psp.web.action.admin;
 import com.opensymphony.xwork2.ModelDriven;
 import com.psp.service.AdminService;
 import com.psp.util.FinalUtil;
-import com.psp.util.Logger;
 import com.psp.web.action.BaseAction;
 import com.psp.web.domain.Admin;
 
@@ -13,41 +12,36 @@ import com.psp.web.domain.Admin;
  * @version 1.0
  */
 public class AdminAction extends BaseAction implements ModelDriven<Admin> {
-	private static final long serialVersionUID = -1507177504969949207L;
-	private Admin admin;
-	private Logger logger;
-	private AdminService adminService;
-	public void setAdminService(AdminService adminService) {
-		this.adminService = adminService;
-	}
-	public void setLogger(Logger logger) {
-		this.logger = logger;
-	}
-	
-	public String login() throws Exception {
-		admin = adminService.login(admin);
-		if(admin !=null){
-			session.put("admin", admin);
-			dataMap.put("result", FinalUtil.SUCCESS);
-		}else{
-			session.put("admin", null);
-			dataMap.put("result", FinalUtil.ERROR);
-		}
+    private static final long serialVersionUID = -1507177504969949207L;
+    private Admin admin;
+    private AdminService adminService;
+
+    public void setAdminService(AdminService adminService) {
+        this.adminService = adminService;
+    }
+
+    public String login() throws Exception {
+        admin = adminService.login(admin);
+        if (admin != null) {
+            session.put("admin", admin);
+            dataMap.put("result", FinalUtil.SUCCESS);
+        } else {
+            session.put("admin", null);
+            dataMap.put("result", FinalUtil.ERROR);
+        }
         return SUCCESS;
     }
-	public String exit(){
-		session.put("admin", null);
-		return SUCCESS;
-	}
-	public Admin getModel() {
-		if (admin == null) {
-			admin = new Admin();
-		}
-		return admin;
-	}
-	
-	
-	
-	
-	
+
+    public String exit() {
+        session.put("admin", null);
+        return SUCCESS;
+    }
+
+    public Admin getModel() {
+        if (admin == null) {
+            admin = new Admin();
+        }
+        return admin;
+    }
+
 }
