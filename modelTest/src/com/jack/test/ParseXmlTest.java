@@ -1,9 +1,12 @@
 package com.jack.test;
 
+import java.io.File;
+
 public class ParseXmlTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         XmlDocumentImpl xmlParser = new XmlDocumentImpl();
         String xmlFile = "src/service-model.xml";
-        xmlParser.parserXml(xmlFile);
+        File tableFile = new File("src/table.txt");
+        xmlParser.parserXml(xmlFile,tableFile);
     }
 }
