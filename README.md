@@ -1,12 +1,8 @@
 psp
 ===
 
-this is a free javaee project
+这是一个javaEE系统平台。
 
-psp means is public service platform.
+psp意思是public service platform,意思是公益平台。
 
-auther wangyachao
 
-email: wangyachao0991@sina.cn
-
-tel: 18914974271
