@@ -1,0 +1,30 @@
+Changelog Legend:
+
+[+] = Added
+[*] = Changed
+[^] = Moved
+[=] = No Changes
+[x] = Deleted
+[!] = Bugs
+
+----
+
+(25/06/2014) - Update - Version 1.0.3
+
+[*] Changed screenshot.png.
+
+----
+
+(21/06/2014) - Update - Version 1.0.2
+
+[!] Fixed "Undefined index" debug notices in widget-posts-list.php.
+
+----
+
+(21/06/2014) - Update - Version 1.0.1
+
+[!] Fixed "Undefined index" debug notices in widget-posts-list.php.
+
+----
+
+(04/06/2014) - The initial public release. - Version 1.0.0
