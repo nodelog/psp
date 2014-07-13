@@ -23,6 +23,6 @@
     app.get('/movie/add',movie.movieAdd);//增加
     app.post('/movie/add',movie.doMovieAdd);//提交
     app.get('/movie/:name',movie.movieAdd);//编辑查询
-//    app.get('/movie/json/:name',movie.movieJSON);//JSON数据
+    app.get('/movie/json/:name',movie.movieJSON);//JSON数据
 };
     exports.route=route;
