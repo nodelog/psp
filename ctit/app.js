@@ -6,42 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-//var user = require('./routes/user');
-//var users = require('./routes/users');
-//var mongoose = require('mongoose');
-//mongoose.connect('mongodb://localhost/ctit',function(err,res){
-//    if(!err){
-//        console.log("connect to mongodb success");
-//    } else{
-//        console.log("connect error");
-//        throw err;
-//    }
-//});
-//var Schema = mongoose.Schema
-//    , ObjectId = Schema.ObjectId;
-//
-//
-//var User = new Schema({
-//    name  :  String
-//    , age   :  String
-//});
-//
-//
-//
-//
-//
-//mongoose.model('success', User,"user");
-//var p = mongoose.model('success');
-//
-//p.find({}, function (err,docs) {
-//    if(!err){
-//        console.log("docs:"+docs);
-//    }else{
-//        console.log("find err:"+err);
-//    }
-//});
-//
-
 
 var app = express();
 // view engine setup
