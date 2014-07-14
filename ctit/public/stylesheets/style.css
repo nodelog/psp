@@ -1,0 +1,60 @@
+.bg-gray{
+    background: #e5e5e5;
+}
+.bg-white{
+    background: #ffffff;
+}
+.bg-blue{
+    background: #357ebd;
+}
+.l-top-bottom{
+    margin-top:60px ;
+    margin-bottom: 10px;
+}
+.bottom-border{
+    border-bottom: 1px solid #eee;
+}
+.color-gray{
+    color:#999;
+}
+.color-white{
+    color:#ffffff;
+}
+.clear-margin{
+    margin:0px;
+}
+.font-normal{
+    font-size: 15px!important;
+}
+.backtotop{
+    width: 24px;
+    color: gray;
+    padding: 12px 0 12px 5px;
+    display: none;
+    position: fixed;
+    cursor: pointer;
+    text-align: center;
+    z-index: 20;
+    background-color: #fff;
+    border-radius: 12px 0 0 12px;
+}
+.l-padding-full{
+    padding: 30px 15px;
+}
+.l-center{
+    margin:0 auto;
+}
+.l-width-full{
+    width: 100%;
+}
+.l-login-panel{
+    width: 420px;
+    padding: 40px 15px;
+}
+.l-register-panel{
+    width: 420px;
+    padding: 20px 15px;
+}
+.l-padding-horizontal{
+    padding:0 15px ;
+}
