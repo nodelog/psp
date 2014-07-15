@@ -19,5 +19,6 @@ var route = function (app) {
     });
     app.get('/manager/user',filter.authorize,filter.authorizeAdmin,user.findByPage);
     app.post('/manager/user/delete',filter.authorize,filter.authorizeAdmin,user.delete);
+    app.post('/manager/user/switch',filter.authorize,filter.authorizeAdmin,user.switch);
 };
 exports.route = route;

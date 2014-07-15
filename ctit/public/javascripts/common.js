@@ -159,9 +159,23 @@ $(function () {//my jquery code
 
     //user status
     $(".js-user-status").each(function(i,obj){
-        var type = $(this).attr("data-type");
-        $(this).prop('checked','true');
+        var status = $(this).attr("data-type");
+        if(status==0){
+            $(this).prop('checked',true);
+        }else{
+            $(this).prop('checked',false);
+        }
         $(this).bootstrapSwitch({size:'small',onColor:'success',offColor:'danger',onText:'启用',offText:'禁用'});
+    });
+    $(".js-user-status").on('switchChange.bootstrapSwitch', function(event, status){
+
+        var id = $(this).attr("data-id");
+        console.log(status);
+        $.post("/manager/user/switch", {
+            id:id,
+            status: status?0:1
+        }, function(data){
+        }, "json");
     });
 
     //page

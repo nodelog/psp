@@ -22,6 +22,15 @@ exports.findByPage = function (req, res) {
 }
 
 
+exports.switch = function (req, res) {
+    var id = req.body.id;
+    var status = req.body.status;
+    User.updateStatus(id,status,function(err){
+        if(err){
+           console.log(err.message);
+        }
+    });
+}
 exports.delete = function (req, res) {
     var id = req.body.id;
     User.delete(id,function(err){
@@ -100,6 +109,9 @@ exports.login = function (req, res) {
     } else {
         flag = true;
         findUserByName(userName, function (err, obj) {
+            if(obj.status==1){
+                obj=null;
+            }
             if (obj != null) {
                 if (obj.password == password) {//success
                     success = true;

@@ -28,8 +28,8 @@ $(function(){
         <td><%= docs[i].userName %></td>
         <td><%= docs[i].createTime %></td>
         <td><%= docs[i].modifyTime %></td>
-        <td data-id="<%=docs[i]._id%>">
-            <input type="checkbox" data-type="<%= docs[i].status%>" class="js-user-status"/></td>
+        <td>
+            <input type="checkbox" data-id="<%=docs[i]._id%>" data-type="<%= docs[i].status%>" class="js-user-status"/></td>
         <td><a href="javascript:void(0)" class="js-user-delete" data-id="<%=docs[i]._id%>">删除</a></td>
     </tr>
     <% }} %>

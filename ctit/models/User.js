@@ -27,6 +27,7 @@ UserDAO.prototype.findByName= function(name, callback) {
 };
 UserDAO.prototype.findByPage= function(page, callback) {
     var query = UserModel.find();
+    query.sort({'_id':-1});
     query.limit(10);
     query.skip((page-1)*10);
     query.exec(function(err,docs){
@@ -45,6 +46,11 @@ UserDAO.prototype.getCount=function(callback){
 };
 UserDAO.prototype.delete=function(id,callback){
     UserModel.remove({'_id':id}, function(err){
+        callback(err);
+    });
+};
+UserDAO.prototype.updateStatus=function(id,status,callback){
+    UserModel.update({'_id':id},{$set:{'status':status}}, function(err){
         callback(err);
     });
 };
