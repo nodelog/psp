@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
+    <link rel='stylesheet' href='/stylesheets/bootstrap-switch.min.css'/>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <script src="/javascripts/jquery-1.10.2.js"></script>
+</head>
+<body class="bg-gray js-body">
+<div class="navbar navbar-fixed-top bg-blue bottom-border">
+    <div class="container">
+        <div class="navbar-collapse">
+            <ul class="nav navbar-nav ">
+                <li ><a href="/manager" class="color-white" title="CMS SYSTEM MANAGER CENTER">
+                        <i class="glyphicon glyphicon-globe"></i>&nbsp;CMS SYSTEM MANAGER CENTER
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right js-user-bar">
+                <%if(session.user!=null){%>
+                    <li><a class="color-white js-user-center">
+                        <%=session.user.role==0?'System Administrator':'Normal User'%>
+                        :&nbsp;<%=session.user.userName%></a></li>
+                    <li><a href="/" class="color-white js-settings-btn">
+                            <i class="glyphicon glyphicon-home"></i>&nbsp;CMS HOME
+                        </a>
+                    </li>
+                    <li><a href="javascript:void(0)" class="color-white js-logout-btn" title="log out system">
+                            <i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout
+                        </a>
+                    </li>
+                <%}else{%>
+                <%}%>
+            </ul>
+            <div class="hide">
+                <div class="js-login-panel">
+                    <div class="js-error-panel"></div>
+                    <form action="javascript:void(0)" class="form-horizontal l-login-panel" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">UserName:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control js-login-username" value="jack" placeholder="UserName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">Password:</label>
+                            <div class="col-sm-9">
+                                <input type="password" class="form-control js-login-password" value="ddd" placeholder="Password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <button type="submit" class="btn btn-primary col-sm-12 js-signIn-btn">Sign in</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="l-top-bottom">
+<article class="l-padding-vertical l-padding-horizontal bg-white">
+    <div class="row">
+        <div class="col-sm-3 js-panel-menu">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a href="#">Content Management</a></h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a href="#">Category Management</a></h4>
+                    </div>
+                </div>
+                <div class="panel panel-default panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a href="#">Comments Management</a></h4>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a href="#">System Settings</a></h4>
+                    </div>
+                </div>
+                <%if(session.user.role==0){%>
+                <div class="panel panel-default js-user-manager">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a href="/manager/user?page=1">User Management</a></h4>
+                    </div>
+                </div>
+                <%}%>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="jumbotron clear-margin">

@@ -1,3 +1,4 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/ctit');
+var settings = require('../settings');
+mongoose.connect(settings.url);
 exports.mongoose = mongoose;

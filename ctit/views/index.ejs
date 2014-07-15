@@ -2,6 +2,14 @@
 
 <div class="jumbotron">
     <h1>Welcome to CMS System!</h1>
+
     <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p>
 </div>
 <%- include footer %>
+<% if(login){ %>
+<script>
+    $(function () {
+        $('.js-login-btn').click();
+    });
+</script>
+<% } %>

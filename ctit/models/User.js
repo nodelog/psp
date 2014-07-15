@@ -25,4 +25,27 @@ UserDAO.prototype.findByName= function(name, callback) {
         callback(err, obj);
     });
 };
+UserDAO.prototype.findByPage= function(page, callback) {
+    var query = UserModel.find();
+    query.limit(10);
+    query.skip((page-1)*10);
+    query.exec(function(err,docs){
+        callback(err,docs);
+    });
+};
+UserDAO.prototype.findAll= function(callback) {
+    UserModel.find({},function(err,docs){
+        callback(err,docs);
+    });
+};
+UserDAO.prototype.getCount=function(callback){
+    UserModel.count({}, function(err,total){
+        callback(err,total);
+    });
+};
+UserDAO.prototype.delete=function(id,callback){
+    UserModel.remove({'_id':id}, function(err){
+        callback(err);
+    });
+};
 module.exports = new UserDAO();

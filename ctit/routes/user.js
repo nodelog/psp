@@ -1,7 +1,50 @@
 var User = require('./../models/User.js');
 var util = require('./util.js');
+var getCount = function (callback) {
+    User.getCount(function (err, total) {
+        callback(err, total);
+    });
+};
+exports.findByPage = function (req, res) {
+    getCount(function (err, total) {
+        if(!err && total>0){
+            var page = req.query.page;
+            var totalPage =  Math.ceil(total/10);
+            page=page<1?1:page;
+            page=page>totalPage?totalPage:page;
+                User.findByPage(page,function(err, docs){
+                    res.render("manager/user",{docs:docs,title:"User List",page:page,totalPage:totalPage});
+                });
+        }else{
+            console.log("data error");
+        }
+    });
+}
 
-exports.addUser = function (req, res) {//register
+
+exports.delete = function (req, res) {
+    var id = req.body.id;
+    User.delete(id,function(err){
+        if(!err){
+            res.json({'success':true,'msg':"delete success"});
+        }else{
+            res.json({'success':false,'msg':"delete failure"});
+        }
+    });
+}
+exports.findAll = function (req, res) {
+    User.findAll(function(err,docs){
+        res.render("manager/user",{docs:docs,title:"User List"});
+    });
+}
+
+var findUserByName = function (userName, callback) {
+    User.findByName(userName, function (err, obj) {
+        callback(err, obj);
+    });
+};
+//register
+exports.addUser = function (req, res) {
     var userName = util.trim(req.body.userName);
     var password = util.trim(req.body.password);
     var password2 = util.trim(req.body.password2);
@@ -32,6 +75,7 @@ exports.addUser = function (req, res) {//register
                         console.log(err.message);
                         msg = "sign up error, please try agin";
                     }
+                    console.log("result:" + success);
                     res.json({'success': success, 'msg': msg});
                 });
             }
@@ -41,12 +85,8 @@ exports.addUser = function (req, res) {//register
         res.json({'success': success, 'msg': msg});
     }
 };
-var findUserByName = function (userName, callback) {//login
-    User.findByName(userName, function (err, obj) {
-        callback(err, obj);
-    });
-};
 
+//login
 exports.login = function (req, res) {
     var userName = util.trim(req.body.userName);
     var password = util.trim(req.body.password);
@@ -61,11 +101,13 @@ exports.login = function (req, res) {
         flag = true;
         findUserByName(userName, function (err, obj) {
             if (obj != null) {
-                if (obj.password == password) {
+                if (obj.password == password) {//success
                     success = true;
                     msg = "sign in success";
+                    var session = req.session;
+                    req.session.user = obj;
                 } else {
-                    msg="password is error";
+                    msg = "password is error";
                 }
             } else {
                 msg = "userName is not exists";
@@ -77,5 +119,9 @@ exports.login = function (req, res) {
     if (!flag) {// no callback
         res.json({'success': success, 'msg': msg});
     }
+};
+exports.logout = function (req, res) {
+    req.session.user = null;
+    res.redirect("/");
 };
 

@@ -56,5 +56,10 @@
     padding: 20px 15px;
 }
 .l-padding-horizontal{
-    padding:0 15px ;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.l-padding-vertical{
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
