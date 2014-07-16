@@ -7,9 +7,9 @@ var getCount = function (callback) {
 };
 exports.findByPage = function (req, res) {
     getCount(function (err, total) {
+        var page = req.query.page;
+        var totalPage =  Math.ceil(total/10);
         if(!err && total>0){
-            var page = req.query.page;
-            var totalPage =  Math.ceil(total/10);
             page=page<1?1:page;
             page=page>totalPage?totalPage:page;
                 User.findByPage(page,function(err, docs){
@@ -17,6 +17,7 @@ exports.findByPage = function (req, res) {
                 });
         }else{
             console.log("data error");
+            res.render("manager/user",{docs:{},title:"User List",page:page,totalPage:totalPage});
         }
     });
 }

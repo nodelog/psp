@@ -1,5 +1,6 @@
-var user = require('./user');
 var filter = require('./filter');
+var user = require('./user');
+var category = require('./category');
 var route = function (app) {
     app.get('/', function (req, res) {
         res.render('index', { title: 'CMS HOME', login: false});
@@ -20,5 +21,13 @@ var route = function (app) {
     app.get('/manager/user',filter.authorize,filter.authorizeAdmin,user.findByPage);
     app.post('/manager/user/delete',filter.authorize,filter.authorizeAdmin,user.delete);
     app.post('/manager/user/switch',filter.authorize,filter.authorizeAdmin,user.switch);
+    app.get('/manager/category',filter.authorize,filter.authorizeAdmin,category.findByPage);
+    app.post('/manager/category/add',filter.authorize,filter.authorizeAdmin,category.add);
+    app.post('/manager/category/modify',filter.authorize,filter.authorizeAdmin,category.update);
+    app.post('/manager/category/delete',filter.authorize,filter.authorizeAdmin,category.delete);
+    app.get('/category/all',filter.authorize,filter.authorizeAdmin,category.findAllEnable);
+    app.get('/editor',filter.authorize,function(req,res){
+        res.render('editor',{title:'CMS Content Editor'});
+    });
 };
 exports.route = route;

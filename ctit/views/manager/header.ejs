@@ -3,10 +3,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.css'/>
-    <link rel='stylesheet' href='/stylesheets/bootstrap-switch.min.css'/>
-    <link rel='stylesheet' href='/stylesheets/style.css'/>
-    <script src="/javascripts/jquery-1.10.2.js"></script>
+    <link rel='stylesheet' href='/css/bootstrap.css'/>
+    <link rel='stylesheet' href='/css/bootstrap-switch.min.css'/>
+    <link rel='stylesheet' href='/css/style.css'/>
 </head>
 <body class="bg-gray js-body">
 <div class="navbar navbar-fixed-top bg-blue bottom-border">
@@ -34,46 +33,23 @@
                 <%}else{%>
                 <%}%>
             </ul>
-            <!--<div class="hide">-->
-                <!--<div class="js-login-panel">-->
-                    <!--<div class="js-error-panel"></div>-->
-                    <!--<form action="javascript:void(0)" class="form-horizontal l-login-panel" role="form">-->
-                        <!--<div class="form-group">-->
-                            <!--<label class="col-sm-3 control-label">UserName:</label>-->
-                            <!--<div class="col-sm-9">-->
-                                <!--<input type="text" class="form-control js-login-username" value="jack" placeholder="UserName">-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="form-group">-->
-                            <!--<label  class="col-sm-3 control-label">Password:</label>-->
-                            <!--<div class="col-sm-9">-->
-                                <!--<input type="password" class="form-control js-login-password" value="ddd" placeholder="Password">-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="form-group">-->
-                            <!--<div class="col-sm-offset-3 col-sm-9">-->
-                                <!--<button type="submit" class="btn btn-primary col-sm-12 js-signIn-btn">Sign in</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</form>-->
-                <!--</div>-->
-            <!--</div>-->
         </div>
     </div>
 </div>
-<div class="l-top-bottom">
-<article class="l-padding-vertical l-padding-horizontal bg-white">
-    <div class="row">
-        <div class="col-sm-3 js-panel-menu">
-            <div class="panel-group" id="accordion">
+<div class="l-top-bottom ">
+<article class="l-padding-vertical l-padding-horizontal bg-white ">
+    <div class="row js-panel-row">
+        <!--不要修改下面一行的class-->
+        <div class="col-sm-3 js-menu-panel">
+            <div class="panel-group l-top-bottom js-menu-bar" id="accordion">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title"><a href="#">Content Management</a></h4>
                     </div>
                 </div>
-                <div class="panel panel-default">
+                <div class="panel panel-default js-category-manager">
                     <div class="panel-heading">
-                        <h4 class="panel-title"><a href="#">Category Management</a></h4>
+                        <h4 class="panel-title"><a href="/manager/category?page=1">Category Management</a></h4>
                     </div>
                 </div>
                 <div class="panel panel-default panel-primary">

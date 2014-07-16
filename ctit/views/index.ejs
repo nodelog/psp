@@ -1,10 +1,23 @@
 <%- include header %>
+<div class="row js-panel-row">
+    <!--不要修改下面一行的class-->
+    <div class="col-sm-9 ">
+        <div class="bs-callout bs-callout-info">
+            <h4>修改视口的阈值，从而影响导航条的排列模式</h4>
+            <p>当浏览器视口（viewport）的宽度小于  <code>@grid-float-breakpoint</code> 值时，导航条内部的元素变为折叠排列，也就是变现为移动设备展现模式；当浏览器视口（viewport）的宽度大于  <code>@grid-float-breakpoint</code> 值时，导航条内部的元素变为水平排列，也就是变现为非移动设备展现模式。通过调整源码中的这个值，就可以控制导航条何时堆叠排列，何时水平排列。默认值是 <code>768px</code> （小屏幕 -- 或者说是平板 --的最小值，或者说是平板）。</p>
+        </div>
 
-<div class="jumbotron">
-    <h1>Welcome to CMS System!</h1>
-
-    <p><a class="btn btn-primary btn-lg" role="button">Post content</a></p>
+    </div>
+    <div class="col-sm-3">
+        <div class="jumbotron js-menu-bar">
+            <p><a href="/editor" class="btn btn-primary btn-lg" role="button">
+                    <i class="glyphicon glyphicon-pencil"></i>&nbsp;Post content
+                </a>
+            </p>
+        </div>
+    </div>
 </div>
+
 <%- include footer %>
 <% if(login){ %>
 <script>
