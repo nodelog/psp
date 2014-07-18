@@ -1,1 +1,4 @@
 ctit/.idea
+ctit/node_modules
+*.iml
+*.class
