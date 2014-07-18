@@ -1,0 +1,34 @@
+<%- include header %>
+
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li class="active">Post Content</li>
+</ol>
+
+<form role="form" action="javascript:void(0)">
+    <div class="form-group">
+        <label>Title</label>
+        <span class="pull-right text-primary h4">you can input <i class="h3 js-content-name-chars">50</i> charachters</span>
+        <input type="text" class="form-control js-add-content-name" placeholder="Content Title" autofocus maxlength="50"/>
+    </div>
+    <div class="form-group">
+        <label>Content</label>
+        <%- include editor %>
+    </div>
+    <div class="form-group">
+        <label>Category</label>
+        <select class="form-control js-category-value">
+            <% for(var i = 0;i < docs.length;i++){ %>
+                <option value="<%=docs[i].name%>" data-id="<%=docs[i]._id%>"><%=docs[i].name%></option>
+            <%}%>
+        </select>
+    </div>
+    <div class="form-group">
+        <div class="l-padding-vertical">
+            <button type="submit" class="btn btn-primary col-sm-12 js-save-content">Save New Content</button>
+        </div>
+    </div>
+</form>
+
+
+<%- include footer %>

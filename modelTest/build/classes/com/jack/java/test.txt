@@ -1,450 +1,111 @@
-package com.jack.java;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+package com.gamecloudstudios.basketball.v2.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gamecloudstudios.basketball.NoSuchUserProfileException;
-import com.gamecloudstudios.basketball.dao.LeagueBaseInfoDAOImpl;
-import com.gamecloudstudios.basketball.dao.LeagueMatchDAOImpl;
-import com.gamecloudstudios.basketball.dao.LeagueMatchStandingsDAOImpl;
-import com.gamecloudstudios.basketball.dao.LeagueMatchViewDrawDAOImpl;
-import com.gamecloudstudios.basketball.dao.LeaguePreconditionDAOImpl;
-import com.gamecloudstudios.basketball.dao.LeagueRewardDAOImpl;
-import com.gamecloudstudios.basketball.dao.NpcTeamPlayerDAOImpl;
-import com.gamecloudstudios.basketball.dao.PlayoffMatchStandingsDAOImpl;
-import com.gamecloudstudios.basketball.dao.UserCurrentLeagueInfoDAOImpl;
-import com.gamecloudstudios.basketball.dao.UserLeagueMapDAOImpl;
-import com.gamecloudstudios.basketball.dao.UserLeagueMatchRecordDAOImpl;
-import com.gamecloudstudios.basketball.dao.UserUpgradeDAOImpl;
-import com.gamecloudstudios.basketball.model.GearCard;
-import com.gamecloudstudios.basketball.model.LeagueBaseInfo;
-import com.gamecloudstudios.basketball.model.LeagueMatch;
-import com.gamecloudstudios.basketball.model.LeagueMatchStandings;
-import com.gamecloudstudios.basketball.model.LeagueMatchViewDraw;
-import com.gamecloudstudios.basketball.model.LeaguePrecondition;
-import com.gamecloudstudios.basketball.model.LeagueReward;
-import com.gamecloudstudios.basketball.model.LeagueTeamCardReward;
-import com.gamecloudstudios.basketball.model.NpcLeagueTeam;
-import com.gamecloudstudios.basketball.model.NpcTeamPlayer;
-import com.gamecloudstudios.basketball.model.PlayerCard;
-import com.gamecloudstudios.basketball.model.PlayoffMatchStandings;
-import com.gamecloudstudios.basketball.model.UserCurrentLeagueInfo;
-import com.gamecloudstudios.basketball.model.UserLeagueMap;
-import com.gamecloudstudios.basketball.model.UserLeagueMatchRecord;
-import com.gamecloudstudios.basketball.util.GameConstants;
-import com.gamecloudstudios.basketball.util.GameUtil;
-import com.gamecloudstudios.basketball.util.VoUtil;
-import com.gamecloudstudios.basketball.v2.util.ConvertVoUtil;
-import com.gamecloudstudios.basketball.v2.vo.LeagueChampionRewardVo;
-import com.gamecloudstudios.basketball.v2.vo.LeagueDetailInfoVo;
-import com.gamecloudstudios.basketball.v2.vo.LeagueInfoVo;
-import com.gamecloudstudios.basketball.v2.vo.LeagueMapVo;
-import com.gamecloudstudios.basketball.v2.vo.LeaguePreconditionVo;
-import com.gamecloudstudios.basketball.v2.vo.LeagueProgressVo;
-import com.gamecloudstudios.basketball.v2.vo.LeagueRewardCardVo;
-import com.gamecloudstudios.basketball.v2.vo.LeagueTeamRankVo;
-import com.gamecloudstudios.basketball.v2.vo.LeagueTeamVo;
-import com.gamecloudstudios.basketball.vo.PlayoffStandingsVo;
-import com.gamecloudstudios.basketball.vo.TeamVo;
-import com.gamecloudstudios.exception.BasketballAPIException;
-import com.gamecloudstudios.exception.ErrorCodeConstants;
+import com.gamecloudstudios.basketball.dao.UserProfileDAOImpl;
+import com.gamecloudstudios.basketball.model.UserProfile;
+import com.gamecloudstudios.basketball.server.AbstractBaseService;
+import com.gamecloudstudios.basketball.v2.server.wallet.WalletBaseService;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class LeagueServiceImplement implements LeagueService {
+public class WalletServiceImplement extends AbstractBaseService implements WalletService {
 
     @Autowired
-    private StaticDataMapService staticDataMapImplement;
+    private WalletBaseService walletBaseServiceImpl;
 
     @Autowired
-    private TeamService teamServiceImplement;
-
-    @Autowired
-    private WalletService walletServiceImplment;
-
-    @Autowired
-    private UserLeagueMapService userLeagueMapServiceImplement;
+    private UserUpgradeService userUpgradeServiceImplement;
 
     @Override
-    public NpcLeagueTeam getNpcLeagueTeam(Long teamId) {
-        return staticDataMapImplement.getNpcLeagueTeamMap().get(teamId);
+    public long createCashWallet(Long userId) {
+        return walletBaseServiceImpl.createCashWallet(userId);
     }
 
     @Override
-    public List<NpcTeamPlayer> getNpcPlayers(Long teamId) {
-        List<NpcTeamPlayer> playerList = NpcTeamPlayerDAOImpl.getDAO().findByTeamId(teamId);
-        return playerList;
+    public long createCoinWallet(Long userId) {
+        return walletBaseServiceImpl.createCoinWallet(userId);
     }
 
     @Override
-    public LeagueDetailInfoVo getUserLeagueInfo(long userId, long leagueId) {
-        LeagueDetailInfoVo leagueInfo = new LeagueDetailInfoVo();
-        LeagueInfoVo leagueInfoVo = UserLeagueMapDAOImpl.getDAO().getByUserIdAndLeagueId(userId, leagueId);
-        leagueInfo.setLeagueInfoVo(leagueInfoVo);
-
-        LeaguePreconditionVo leaguePrecondtionVo = LeaguePreconditionDAOImpl.getDAO().findByLeagueId(leagueId);
-        leagueInfo.setOpenConditionVo(leaguePrecondtionVo);
-
-        if (leagueInfoVo.getLeagueStatus() == GameConstants.CAN_JOIN_IN_CURRENT) {
-            long nextOpponentTeamId = this.getNextOpponentTeamId(userId, leagueInfoVo.getLeagueRound(),
-                    leagueInfoVo.getLeagueType());
-            leagueInfo.setNextOpponentTeamId(nextOpponentTeamId);
-        } else {
-            leagueInfo.setNextOpponentTeamId(0);
-        }
-
-        LeagueChampionRewardVo passRewardVo = new LeagueChampionRewardVo();
-        LeagueReward leagueReward = LeagueRewardDAOImpl.getDAO().fetchByLeagueId(leagueId);
-        passRewardVo.setBaseCoin(leagueReward.getChampionBaseCoins());
-        PlayerCard playerCard = staticDataMapImplement.getBasePlayerCardMap().get(leagueReward.getChampionBaseCardId());
-        LeagueRewardCardVo rewardCardVo = ConvertVoUtil.convert(playerCard);
-        passRewardVo.setRewardCardVo(rewardCardVo);
-        leagueInfo.setPassRewardVo(passRewardVo);
-
-        List<NpcLeagueTeam> npcLeagueTeam = staticDataMapImplement.getLeagueNpcTeamMap().get(leagueId);
-        for (int i = 0, length = npcLeagueTeam.size(); i < length; i++) {
-            LeagueTeamVo leagueTeamVo = ConvertVoUtil.convert(npcLeagueTeam.get(i));
-
-            if (leagueInfo.getNextOpponentTeamId() == leagueTeamVo.getTeamId()) {
-                LeagueTeamCardReward leagueTeamCardReward = staticDataMapImplement.getLeagueTeamCardRewardMap().get(
-                        leagueTeamVo.getTeamId());
-                if (leagueTeamCardReward.getCardType() == GameConstants.CARD_GEAR) {
-                    GearCard gearCard = staticDataMapImplement.getG1BaseGearCardMap().get(
-                            leagueTeamCardReward.getBaseCardId());
-                    leagueInfo.setMatchRewardCardVo(ConvertVoUtil.convert(gearCard));
-                } else if (leagueTeamCardReward.getCardType() == GameConstants.CARD_PLAYER) {
-                    PlayerCard rewardCard = staticDataMapImplement.getBasePlayerCardMap().get(
-                            leagueTeamCardReward.getBaseCardId());
-                    leagueInfo.setMatchRewardCardVo(ConvertVoUtil.convert(rewardCard));
-                }
-                leagueTeamCardReward.getBaseCardId();
-            }
-        }
-        return leagueInfo;
+    public void deductCoins(long userId, int coins) throws NoSuchUserProfileException {
+        deductCoins(userId, coins, "Deduct coins");
     }
 
     @Override
-    public LeagueRewardCardVo getLeagueCardVoByTeamCardReward(LeagueTeamCardReward leagueTeamCardReward) {
-        LeagueRewardCardVo leagueRewardCardVo = new LeagueRewardCardVo();
-        int cardType = leagueTeamCardReward.getCardType();
-        if (cardType == GameConstants.CARD_PLAYER) {
-            PlayerCard teamPlayerCard = staticDataMapImplement.getBasePlayerCardMap().get(
-                    leagueTeamCardReward.getBaseCardId());
-            leagueRewardCardVo = ConvertVoUtil.convert(teamPlayerCard);
-        } else {
-            leagueRewardCardVo.setBaseCardId(leagueTeamCardReward.getBaseCardId());
-            leagueRewardCardVo.setCardType(GameConstants.CARD_GEAR);
-        }
-        return leagueRewardCardVo;
-    }
-
-    private long getNextOpponentTeamId(long userId, int leagueRound, int leagueType) {
-        List<LeagueMatch> leagueMatchList = LeagueMatchDAOImpl.getDAO().findByUserId(userId);
-        if (leagueMatchList.isEmpty()) {
-            return 0;
-        } else {
-            LeagueMatch leagueMatch = leagueMatchList.get(0);
-            LeagueMatchViewDraw leagueMatchViewDraw = LeagueMatchViewDrawDAOImpl.getDAO()
-                    .fetchByLeagueMatchIdAndMatchRoundAndType(leagueMatch.getLeagueMatchId(), leagueRound, leagueType);
-            if (leagueMatchViewDraw == null) {
-                return 0;
-            }
-            int nextOpIdIndex = 0;
-            int userIdx = 0;
-            List<Long> drawViewList = GameUtil.splitToLongList(leagueMatchViewDraw.getViewDraw());
-            for (long teamId : drawViewList) {
-                if (0 == teamId) {
-                    break;
-                } else {
-                    userIdx += 1;
-                }
-            }
-            nextOpIdIndex = (((userIdx % 2) == 0) ? (1 + userIdx) : (userIdx - 1));
-            long nextOpId = drawViewList.get(nextOpIdIndex);
-            return nextOpId;
-        }
+    public void addCoins(long userId, int coins) throws NoSuchUserProfileException {
+        addCoins(userId, coins, "Add coins");
     }
 
     @Override
-    public LeagueProgressVo getLeagueProgress(long userId, long leagueId) {
-        return this.getLeagueProgressVo(userId, leagueId);
+    public void consumeDiamond(long userId, int diamond, String description) throws NoSuchUserProfileException {
+        assertUserExist(userId);
+        UserProfile userProfile = UserProfileDAOImpl.getDAO().fetchById(userId);
+        long cashWalletId = userProfile.getCashWalletId();
+        //walletEngineProxy.deductCash(accountId, cashWalletId, description, diamond);
+        walletBaseServiceImpl.consumeDiamonds(userId, cashWalletId, description, diamond);
     }
 
     @Override
-    public LeagueProgressVo getLeaguePlayOffProgress(long userId, long leagueId) {
-        LeagueProgressVo leagueProgressVo = this.getLeagueProgressVo(userId, leagueId);
-        leagueProgressVo.setPlayoffStandingsVos(this.getPlayoffStandingVos(userId));
-        return leagueProgressVo;
-    }
-
-    private LeagueProgressVo getLeagueProgressVo(long userId, long leagueId) {
-        LeagueProgressVo leagueProgressVo = new LeagueProgressVo();
-        LeagueInfoVo leagueInfoVo = UserLeagueMapDAOImpl.getDAO().getByUserIdAndLeagueId(userId, leagueId);
-        leagueProgressVo.setLeagueInfoVo(leagueInfoVo);
-
-        List<LeagueTeamRankVo> leagueTeamRankVos = new ArrayList<LeagueTeamRankVo>();
-
-        int star = 0;
-        LeagueMatch lm = LeagueMatchDAOImpl.getDAO().findByUserId(userId).get(0);
-        List<LeagueMatchStandings> leagueMatchStandingsList = LeagueMatchStandingsDAOImpl.getDAO()
-                .findByLeagueMatchIdOrderByWin(lm.getLeagueMatchId());
-
-        for (int i = 0, length = leagueMatchStandingsList.size(); i < length; i++) {
-            long teamId = leagueMatchStandingsList.get(i).getTeamId();
-            TeamVo teamVo = teamServiceImplement.getTeamStandingsBaseInfo(teamId, lm);
-            LeagueTeamRankVo teamRank = ConvertVoUtil.convert(leagueMatchStandingsList.get(i), teamVo);
-            teamRank.setRank(i + 1);
-            if (teamId != 0) {
-                UserLeagueMatchRecord matchRecord = UserLeagueMatchRecordDAOImpl.getDAO().fetchByUserIdAndTeamId(
-                        userId, teamId);
-                if (matchRecord == null) {
-                    teamRank.setStar(0);
-                    teamRank.setVsTimes(0);
-                } else {
-                    int teamStar = matchRecord.getCurrRecord();
-                    star += teamStar;
-                    teamRank.setStar(teamStar);
-                    teamRank.setVsTimes(matchRecord.getVsTimes());
-                }
-            } else {
-                teamRank.setStar(0);
-            }
-            leagueTeamRankVos.add(teamRank);
-        }
-
-        leagueProgressVo.setStar(star);
-        leagueProgressVo.setLeagueTeamVos(leagueTeamRankVos);
-        return leagueProgressVo;
-    }
-
-    private List<PlayoffStandingsVo> getPlayoffStandingVos(long userId) {
-        List<PlayoffStandingsVo> playoffStandingsVos = new ArrayList<PlayoffStandingsVo>();
-        LeagueMatch lm = LeagueMatchDAOImpl.getDAO().findByUserId(userId).get(0);
-        List<PlayoffMatchStandings> playoffMatchStandingsList = PlayoffMatchStandingsDAOImpl.getDAO()
-                .findByLeagueMatchIdByHomeTeam(lm.getLeagueMatchId());
-
-        for (PlayoffMatchStandings playoffMatchStandings : playoffMatchStandingsList) {
-            TeamVo homeTeamVo = teamServiceImplement
-                    .getTeamStandingsBaseInfo(playoffMatchStandings.getHomeTeamId(), lm);
-            TeamVo awayTeamVo = teamServiceImplement
-                    .getTeamStandingsBaseInfo(playoffMatchStandings.getAwayTeamId(), lm);
-            playoffStandingsVos.add(VoUtil.convert(playoffMatchStandings, homeTeamVo, awayTeamVo));
-        }
-        return playoffStandingsVos;
-    }
-
-    private void canStartNewLeague(long userId, long leagueId) throws NoSuchUserProfileException {
-
-        UserLeagueMap userLeagueMap = UserLeagueMapDAOImpl.getDAO().fetchByUserIdAndLeagueId(userId, leagueId);
-        if (userLeagueMap.getStatus() == GameConstants.CAN_NOT_JOIN) {
-            throw new BasketballAPIException(ErrorCodeConstants.CAN_NOT_JOIN);
-        }
-
-        if (userLeagueMap.getStatus() != GameConstants.CAN_JOIN_NOT_CURRENT_NOT_OTHER) {
-            throw new BasketballAPIException(ErrorCodeConstants.IN_OTHER_LEAGUE);
-        }
-
-        LeagueBaseInfo leagueBaseInfo = LeagueBaseInfoDAOImpl.getDAO().fetchById(leagueId);
-        if (leagueBaseInfo.getLeagueLevel() >= GameConstants.NEW_LEAGUE_LEVEL) {
-            long userDiamond = walletServiceImplment.getDiamondByUserId(userId);
-            int rating = teamServiceImplement.getTeamRatingByUserId(userId);
-            LeaguePrecondition leaguePrecondition = staticDataMapImplement.getLeaguePreconditionMap().get(leagueId);
-            if (rating < leaguePrecondition.getRating()) {
-                throw new BasketballAPIException("not enough rating", ErrorCodeConstants.NOT_ENOUGH_RATING);
-            }
-            if (userDiamond < leaguePrecondition.getDiamondCost()) {
-                throw new BasketballAPIException("not enough diamond", ErrorCodeConstants.NOT_ENOUGH_DIAMOND);
-            }
-        }
-
+    public void buyDiamond(long userId, int diamond) throws NoSuchUserProfileException {
+        assertUserExist(userId);
+        UserProfile userProfile = UserProfileDAOImpl.getDAO().fetchById(userId);
+        long cashWalletId = userProfile.getCashWalletId();
+        //walletEngineProxy.addCash(accountId, cashWalletId, "buy diamond", diamond);
+        walletBaseServiceImpl.buyDiamonds(userId, cashWalletId, "buy diamond", diamond);
     }
 
     @Override
-    public int startLeague(long userId, long leagueId) throws NoSuchUserProfileException {
-        this.canStartNewLeague(userId, leagueId);
-        UserLeagueMapDAOImpl.getDAO().updateUserLeagueMapStatusWhenStart(leagueId, userId);
-        // League match table one user only one record
-        List<LeagueMatch> leagueMatchList = LeagueMatchDAOImpl.getDAO().findByUserId(userId);
-        if (leagueMatchList.size() > 0) {
-            removeOldMatchs(leagueMatchList.get(0).getLeagueMatchId());
-        }
-        long leagueMatchId = this.createNewLeagueMatch(userId, leagueId);
-        List<NpcLeagueTeam> npcLeagueTeamList = staticDataMapImplement.getLeagueNpcTeamMap().get(leagueId);
-        this.createLeagueViewDraw(userId, leagueMatchId, this.getLeagueTeamIds(userId, npcLeagueTeamList));
-        this.createNewUserLeagueInfo(leagueId, userId, leagueMatchId);
-        List<Long> leagueMatchTeamIds = getLeagueNpcTeamIds(npcLeagueTeamList);
-        this.createRegularLeagueMatchStandings(leagueMatchId, leagueMatchTeamIds);
-        this.createUserLeagueMatchRecord(userId, leagueMatchTeamIds);
-        if (leagueId >= GameConstants.NEW_LEAGUE_LEVEL) {
-            LeaguePrecondition leaguePrecondition = staticDataMapImplement.getLeaguePreconditionMap().get(leagueId);
-            // open new league
-            walletServiceImplment.consumeDiamond(userId, leaguePrecondition.getDiamondCost(),
-                    GameConstants.DIAMOND_CONSUME_TYPE_OPEN_LEAGUE + ", leagueId: " + leaguePrecondition.getLeagueId());
-        }
-
-        // reset current stars
-        List<NpcLeagueTeam> npcTeamList = staticDataMapImplement.getLeagueNpcTeamMap().get(leagueId);
-        for (NpcLeagueTeam npcTeam : npcTeamList) {
-            UserLeagueMatchRecord record = UserLeagueMatchRecordDAOImpl.getDAO().fetchByUserIdAndTeamId(userId,
-                    npcTeam.getTeamId());
-            record.setCurrRecord(0);
-            record.setVsTimes(0);
-            UserLeagueMatchRecordDAOImpl.getDAO().save(record);
-        }
-        UserLeagueMatchRecordDAOImpl.getDAO().flush();
-
-        return (int) walletServiceImplment.getDiamondByUserId(userId);
-    }
-
-    private void createUserLeagueMatchRecord(long userId, List<Long> teamIds) {
-        for (int i = 0, length = teamIds.size(); i < length; i++) {
-            UserLeagueMatchRecord userMatchRecord = UserLeagueMatchRecordDAOImpl.getDAO().fetchByUserIdAndTeamId(
-                    userId, teamIds.get(i));
-            if (userMatchRecord == null) {
-                userMatchRecord = new UserLeagueMatchRecord();
-            }
-            userMatchRecord.setUserId(userId);
-            userMatchRecord.setTeamId(teamIds.get(i));
-            userMatchRecord.setCurrRecord(0);
-            userMatchRecord.setVsTimes(0);
-            UserLeagueMatchRecordDAOImpl.getDAO().save(userMatchRecord);
-        }
-    }
-
-    private List<Long> getLeagueNpcTeamIds(List<NpcLeagueTeam> npcLeagueTeamList) {
-        List<Long> teamIds = new ArrayList<Long>();
-        for (int i = 0, length = npcLeagueTeamList.size(); i < length; i++) {
-            teamIds.add(npcLeagueTeamList.get(i).getTeamId());
-        }
-        return teamIds;
-    }
-
-    private long createNewLeagueMatch(long userId, long leagueId) {
-        LeagueMatch leagueMatch = new LeagueMatch();
-        leagueMatch.setLeagueLevel(LeagueBaseInfoDAOImpl.getDAO().fetchById(leagueId).getLeagueLevel());
-        leagueMatch.setUserId(userId);
-        leagueMatch.setRatingAdjust(0);
-        leagueMatch.setStatus(GameConstants.MATCH_STATUS_LEAGUE_UNDERWAY);
-        leagueMatch.setStartDate(new Date());
-        LeagueMatchDAOImpl.getDAO().save(leagueMatch);
-
-        return leagueMatch.getLeagueMatchId();
-    }
-
-    private void removeOldMatchs(long oldLeagueMatchId) {
-        removeRegularLeagueMatchStandings(oldLeagueMatchId);
-        removeRegularLeagueMatchViewDraw(oldLeagueMatchId);
-        removeRegularLeagueMatch(oldLeagueMatchId);
-    }
-
-    private void removeRegularLeagueMatch(long oldLeagueMatchId) {
-        LeagueMatchDAOImpl.getDAO().remove(oldLeagueMatchId);
-    }
-
-    private void removeRegularLeagueMatchViewDraw(long oldLeagueMatchId) {
-        LeagueMatchViewDrawDAOImpl.getDAO().removeByLeagueMatchId(oldLeagueMatchId);
-    }
-
-    private void removeRegularLeagueMatchStandings(long oldLeagueMatchId) {
-        LeagueMatchStandingsDAOImpl.getDAO().removeByLeagueMatchId(oldLeagueMatchId);
-        PlayoffMatchStandingsDAOImpl.getDAO().removeByLeagueMatchId(oldLeagueMatchId);
-    }
-
-    private void createRegularLeagueMatchStandings(long leagueMatchId, List<Long> leagueTeamIds) {
-        if (!leagueTeamIds.contains(0L)) {
-            leagueTeamIds.add(0L);
-        }
-        for (Long leagueTeamId : leagueTeamIds) {
-            LeagueMatchStandings leagueMatchStandings = new LeagueMatchStandings();
-            leagueMatchStandings.setLeagueMatchId(leagueMatchId);
-            leagueMatchStandings.setTeamId(leagueTeamId);
-            leagueMatchStandings.setPlayed(0);
-            leagueMatchStandings.setWin(0);
-            leagueMatchStandings.setPa(0);
-            leagueMatchStandings.setPf(0);
-            LeagueMatchStandingsDAOImpl.getDAO().merge(leagueMatchStandings);
-        }
-        LeagueMatchStandingsDAOImpl.getDAO().flush();
-    }
-
-    private void createNewUserLeagueInfo(long leagueId, long userId, long leagueMatchId) {
-        LeagueBaseInfo leagueBaseInfo = staticDataMapImplement.getLeagueBaseInfoMap().get(leagueId);
-        UserCurrentLeagueInfo userCurrentLeagueInfo = new UserCurrentLeagueInfo();
-        userCurrentLeagueInfo.setUserId(userId);
-        userCurrentLeagueInfo.setLeagueLevel(leagueBaseInfo.getLeagueLevel());
-        userCurrentLeagueInfo.setLeagueName(leagueBaseInfo.getLeagueName());
-        userCurrentLeagueInfo.setLeagueRound(GameConstants.INIT_LEAGUE_ROUND);
-        userCurrentLeagueInfo.setLeagueType(GameConstants.MATCH_TYPE_LEAGUE);
-        userCurrentLeagueInfo.setLeagueTotalRound(2 * (leagueBaseInfo.getNumOfTeams() - 1));
-        userCurrentLeagueInfo.setLeagueMatchId(leagueMatchId);
-        UserCurrentLeagueInfoDAOImpl.getDAO().save(userCurrentLeagueInfo);
-    }
-
-    private void createLeagueViewDraw(long userId, long leagueMatchId, List<Long> leagueTeamIds) {
-        int teamNum = leagueTeamIds.size();
-        List<Integer> idIndexs = new ArrayList<Integer>();
-        for (int i = 0; i < teamNum; i++) {
-            idIndexs.add(i);
-        }
-        for (int i = 0; i < (idIndexs.size() - 1); i++) {
-            LeagueMatchViewDraw lmvd = new LeagueMatchViewDraw();
-            lmvd.setLeagueMatchId(leagueMatchId);
-            lmvd.setUserId(userId);
-            lmvd.setLeagueType(GameConstants.MATCH_TYPE_LEAGUE);
-            lmvd.setMatchRound(i + 1);
-            String tmpIdsStr = "";
-            for (int j = 0; j < (teamNum / 2); j++) {
-                if (0 != j) {
-                    tmpIdsStr += ",";
-                }
-                tmpIdsStr += leagueTeamIds.get(idIndexs.get(j));
-                tmpIdsStr += ",";
-                tmpIdsStr += leagueTeamIds.get(teamNum - 1 - j);
-            }
-
-            lmvd.setViewDraw(tmpIdsStr);
-            LeagueMatchViewDraw sndLmvd = new LeagueMatchViewDraw();
-            sndLmvd.copyData(lmvd);
-            sndLmvd.setMatchRound(lmvd.getMatchRound() + (teamNum - 1));
-            LeagueMatchViewDrawDAOImpl.getDAO().save(lmvd);
-            LeagueMatchViewDrawDAOImpl.getDAO().save(sndLmvd);
-            Long temp = leagueTeamIds.get(teamNum - 1);
-            leagueTeamIds.remove(teamNum - 1);
-            leagueTeamIds.add(1, temp);
-        }
-        LeagueMatchViewDrawDAOImpl.getDAO().flush();
-    }
-
-    private List<Long> getLeagueTeamIds(Long userId, List<NpcLeagueTeam> npcLeagueTeamList) {
-        List<Long> leagueTeamIds = new ArrayList<Long>();
-        Long userIdInLeague = 0L;
-        leagueTeamIds.add(userIdInLeague);
-
-        for (NpcLeagueTeam npcLeagueTeam : npcLeagueTeamList) {
-            leagueTeamIds.add(npcLeagueTeam.getTeamId());
-        }
-        return leagueTeamIds;
+    public void rewardDiamond(long userId, int diamond, String description) throws NoSuchUserProfileException {
+        assertUserExist(userId);
+        UserProfile userProfile = UserProfileDAOImpl.getDAO().fetchById(userId);
+        long cashWalletId = userProfile.getCashWalletId();
+        //walletEngineProxy.addCash(accountId, cashWalletId, description, diamond);
+        walletBaseServiceImpl.rewardDiamonds(userId, cashWalletId, description, diamond);
     }
 
     @Override
-    public LeagueMapVo getLeagueMapByUserId(long userId) throws NoSuchUserProfileException {
-        int count = UserLeagueMapDAOImpl.getDAO().countByUserId(userId);
-        if (count != LeagueBaseInfoDAOImpl.getDAO().countAll()) {
-//            UserLeagueMapDAOImpl.getDAO().removeByUserId(userId);
-//            UserLeagueMapDAOImpl.getDAO().flush();
-            userLeagueMapServiceImplement.initUserLeagueMap(userId);
-            //            this.startLeague(userId, 1);
-        }
-        LeagueMapVo leagueMapVo = new LeagueMapVo();
-        List<LeagueInfoVo> leagueMapVoList = userLeagueMapServiceImplement.getUserLeagueMap(userId);
-        leagueMapVo.setLeagueInfoVo(leagueMapVoList);
-        leagueMapVo.setPvpGroup(UserUpgradeDAOImpl.getDAO().fetchByUserId(userId).getPvpGroup());
-
-        return leagueMapVo;
+    public long getCoinByUserId(long userId) throws NoSuchUserProfileException {
+        assertUserExist(userId);
+        UserProfile userProfile = UserProfileDAOImpl.getDAO().fetchById(userId);
+        long coinWalletId = userProfile.getCoinWalletId();
+        //long coin = walletEngineProxy.getCoin(userId, coinWalletId);
+        long coin = walletBaseServiceImpl.getUserCoin(coinWalletId);
+        return coin;
     }
+
+    @Override
+    public long getDiamondByUserId(long userId) throws NoSuchUserProfileException {
+        assertUserExist(userId);
+        UserProfile userProfile = UserProfileDAOImpl.getDAO().fetchById(userId);
+        long cashWalletId = userProfile.getCashWalletId();
+        //long cash = walletEngineProxy.getCash(accountId, cashWalletId);
+        long cash = walletBaseServiceImpl.getUserCash(cashWalletId);
+        return cash;
+    }
+
+    @Override
+    public void deductCoins(long userId, int coins, String description)
+            throws NoSuchUserProfileException {
+        assertUserExist(userId);
+        UserProfile userProfile = UserProfileDAOImpl.getDAO().fetchById(userId);
+        long coinWalletId = userProfile.getCoinWalletId();
+        walletBaseServiceImpl.deductCoins(userId, coinWalletId, description, coins);
+    }
+
+    @Override
+    public void addCoins(long userId, int coins, String description)
+            throws NoSuchUserProfileException {
+        assertUserExist(userId);
+        UserProfile userProfile = UserProfileDAOImpl.getDAO().fetchById(userId);
+        long coinWalletId = userProfile.getCoinWalletId();
+        int maxCoins = userUpgradeServiceImplement.getUserUpgradeByUserId(userId).getMaxCoins();
+        int oldCoins = (int) getCoinByUserId(userId);
+        coins = (coins + oldCoins) > maxCoins ? (maxCoins - oldCoins) : coins;
+        walletBaseServiceImpl.addCoins(userId, coinWalletId, description, coins);
+    }
+
 }

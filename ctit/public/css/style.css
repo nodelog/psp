@@ -2,7 +2,7 @@
     background: #e5e5e5;
 }
 .bg-white{
-    background: #ffffff;
+    background: #fefefe;
 }
 .bg-blue{
     background: #357ebd;
@@ -69,8 +69,8 @@
 
 
 #editor {
-    max-height: 250px;
-    height: 250px;
+    max-height: 400px;
+    height: 400px;
     background-color: white;
     border-collapse: separate;
     border: 1px solid rgb(204, 204, 204);

@@ -1,6 +1,6 @@
 exports.authorize = function(req, res, next) {
     if (!req.session.user) {
-        res.render('index',{ title: 'CMS HOME',login:true});
+        res.redirect('/index?login=true');
     } else {
         next();
     }

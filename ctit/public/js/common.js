@@ -8,7 +8,7 @@ function myMsg(_msg, _height, index) {
         shade: [0],
         title: false,
         closeBtn: [1, true],
-        border: [5, 0.3, '#e5e5e5'],
+//        border: [5, 0.3, '#e5e5e5'],
         time: 2,
         offset: [_height, '50%'],
         dialog: {
@@ -23,7 +23,7 @@ function myMsg(_msg, _height, index) {
 }
 
 //my alert dialog
-function myAlert(_msg, callback){
+function myAlert(_msg, callback) {
     index = $.layer({
         time: 0,
         title: "CMS Prompt",
@@ -36,11 +36,11 @@ function myAlert(_msg, callback){
             btns: 2,
             type: -1,
             msg: _msg,
-            yes: function(index){
+            yes: function (index) {
                 layer.close(index);
                 callback();
             },
-            no: function(index){
+            no: function (index) {
                 layer.close(index);
                 return false;
             }
@@ -49,7 +49,7 @@ function myAlert(_msg, callback){
 }
 
 //my page dialog
-function myPage(title,area,html,callback){
+function myPage(title, area, html, callback) {
     index = $.layer({
         type: 1,
         title: title,
@@ -59,10 +59,21 @@ function myPage(title,area,html,callback){
         shift: 'top',
         page: {
             html: html
-        },success: function(obj){
+        }, success: function (obj) {
             callback(obj);
         }
     });
+}
+
+//limit input length
+function limitLength(select, length) {
+    if (select.val().length >= length) {
+        select.val(select.val().substring(0, length));
+    }
+}
+function canInput(select, length) {
+    var _size = select.val().length;
+    return length - _size;
 }
 
 $(function () {//my jquery code
@@ -70,7 +81,7 @@ $(function () {//my jquery code
     var loginHtml = $('.js-login-panel').html();
     $('.js-login-panel').html("");
     $('.js-login-btn').click(function () {
-        myPage('CMS Login',['420px', '260px'],loginHtml,function(obj){
+        myPage('CMS Login', ['420px', '260px'], loginHtml, function (obj) {
             $('.js-login-username').focus();
         });
 
@@ -102,7 +113,7 @@ $(function () {//my jquery code
     var registerHtml = $('.js-register-panel').html();
     $('.js-register-panel').html("");
     $('.js-register-btn').click(function () {
-        myPage('CMS Register',['420px', '260px'],registerHtml,function(obj){
+        myPage('CMS Register', ['420px', '260px'], registerHtml, function (obj) {
             $('.js-register-username').focus();
         });
     });
@@ -128,7 +139,7 @@ $(function () {//my jquery code
             }, function (data) {
                 var result = data.success;
                 var msg = data.msg;
-                if(result) {//success
+                if (result) {//success
                     layer.close(index);
                 }
                 myMsg(data.msg);
@@ -138,19 +149,19 @@ $(function () {//my jquery code
     //sign up event
     $('.js-body').delegate('.js-logout-btn', 'click', function () {
         myAlert("Are you sure exit the system", function () {
-            window.location="/user/logout";
+            window.location = "/user/logout";
         })
     });
 
 
     //delete user
-    $('.js-user-delete').click(function(e){
+    $('.js-user-delete').click(function (e) {
         var $this = $(this);
         var id = $this.attr("data-id");
         $.post("/manager/user/delete", {
             id: id
         }, function (data) {
-            if(data.success){
+            if (data.success) {
                 $this.parent().parent().fadeOut()
             }
             myMsg(data.msg);
@@ -158,48 +169,48 @@ $(function () {//my jquery code
     });
 
     //user status
-    $(".js-user-status").each(function(i,obj){
+    $(".js-user-status").each(function (i, obj) {
         var status = $(this).attr("data-type");
-        if(status==0){
-            $(this).prop('checked',true);
-        }else{
-            $(this).prop('checked',false);
+        if (status == 0) {
+            $(this).prop('checked', true);
+        } else {
+            $(this).prop('checked', false);
         }
-        $(this).bootstrapSwitch({size:'small',onColor:'success',offColor:'danger',onText:'启用',offText:'禁用'});
+        $(this).bootstrapSwitch({size: 'small', onColor: 'success', offColor: 'danger', onText: '启用', offText: '禁用'});
     });
-    $(".js-user-status").on('switchChange.bootstrapSwitch', function(event, status){
+    $(".js-user-status").on('switchChange.bootstrapSwitch', function (event, status) {
 
         var id = $(this).attr("data-id");
         console.log(status);
         $.post("/manager/user/switch", {
-            id:id,
-            status: status?0:1
-        }, function(data){
+            id: id,
+            status: status ? 0 : 1
+        }, function (data) {
         }, "json");
     });
 
     //page
-    $('.js-pre-page').click(function(){
+    $('.js-pre-page').click(function () {
         var $this = $(this);
         var page = $this.attr("data-page");
-        if(page<=1){
+        if (page <= 1) {
             myMsg("this is first page");
             return;
-        }else{
+        } else {
             var url = $this.attr("data-url");
-            window.location="/manager/"+url+"?page="+(parseInt(page)-1);
+            window.location = url + "?page=" + (parseInt(page) - 1);
         }
     });
-    $('.js-next-page').click(function(){
+    $('.js-next-page').click(function () {
         var $this = $(this);
         var page = $this.attr("data-page");
         var totalPage = $this.attr("data-total");
-        if(page>=totalPage){
+        if (page >= totalPage) {
             myMsg("this is last page");
             return;
-        }else{
+        } else {
             var url = $this.attr("data-url");
-            window.location="/manager/"+url+"?page="+(parseInt(page)+1);
+            window.location = url + "?page=" + (parseInt(page) + 1);
         }
     });
 
@@ -216,7 +227,7 @@ $(function () {//my jquery code
     var addCategoryHtml = $('.js-add-category-panel').html();
     $('.js-add-category-panel').html("");
     $('.js-add-category').click(function () {
-        myPage('Add Category',['420px', '200px'],addCategoryHtml,function(obj){
+        myPage('Add Category', ['420px', '200px'], addCategoryHtml, function (obj) {
             $('.js-category-name').focus();
         });
     });
@@ -226,26 +237,26 @@ $(function () {//my jquery code
         var id = $('.js-category-name').attr("data-id");
         if (name == "") {
             myMsg("Category Name is empty");
-        } else if(!id){//add
+        } else if (!id) {//add
             $.post("/manager/category/add", {
                 name: name
             }, function (data) {
                 var result = data.success;
                 var msg = data.msg;
-                if(result) {//success
+                if (result) {//success
                     layer.close(index);
-                    window.location="/manager/category?page=1";
+                    window.location = "/manager/category?page=1";
                 }
                 myMsg(data.msg);
             }, "json");
-        }else{//update
+        } else {//update
             $.post("/manager/category/modify", {
-                id:id,
+                id: id,
                 name: name
             }, function (data) {
                 var result = data.success;
                 var msg = data.msg;
-                if(result) {//success
+                if (result) {//success
                     layer.close(index);
                     $('.js-modify-category-current').text(name);
                 }
@@ -255,13 +266,13 @@ $(function () {//my jquery code
     });
 
     //delete category
-    $('.js-category-delete').click(function(e){
+    $('.js-category-delete').click(function (e) {
         var $this = $(this);
         var id = $this.attr("data-id");
         $.post("/manager/category/delete", {
             id: id
         }, function (data) {
-            if(data.success){
+            if (data.success) {
                 $this.parent().parent().fadeOut()
             }
             myMsg(data.msg);
@@ -274,9 +285,9 @@ $(function () {//my jquery code
         var $this = $(this);
         var value = $this.text();
         var id = $this.attr("data-id");
-        myPage('Add Category',['420px', '200px'],addCategoryHtml,function(obj){
+        myPage('Add Category', ['420px', '200px'], addCategoryHtml, function (obj) {
             $('.js-category-name').val(value);
-            $('.js-category-name').attr("data-id",id);
+            $('.js-category-name').attr("data-id", id);
             $('.js-category-name').focus();
             $('.js-save-category').text("Save Category Modify");
             $this.addClass("js-modify-category-current");
@@ -285,4 +296,75 @@ $(function () {//my jquery code
 
     //remove class
     $('.js-menu-panel .panel-primary').removeClass("panel-primary");
+
+    $('.js-add-content-name').bind('keyup change  focus blur', function () {
+        var $this = $(this);
+        var maxlength = parseInt($this.attr("maxlength"), 10);
+        if ($this.val().length >= maxlength) {
+            limitLength($this, maxlength);
+        }
+        $('.js-content-name-chars').html(canInput($this, maxlength));
+    });
+
+
+    //save content
+    $('.js-save-content ').click(function () {
+        var name = $('.js-add-content-name').val().trim();
+        var id = $('.js-add-content-name').attr("data-id");
+        var content = $('#editor').html();
+        var category = $('.js-category-value').find("option:selected").attr("data-id");
+        if (name === "") {
+            myMsg("title is empty");
+        } else if (content === "") {
+            myMsg("content is empty");
+        } else if (!id) {//add
+            $.post("/content/add", {
+                name: name,
+                content: content,
+                category: category
+            }, function (data) {
+                var result = data.success;
+                var msg = data.msg;
+                myMsg(data.msg);
+                if (result) {//success
+                    myMsg("success");
+                    window.location = "/";
+                }
+            }, "json");
+        } else {//update
+            $.post("/content/modify", {
+                id: id,
+                name: name
+            }, function (data) {
+                var result = data.success;
+                var msg = data.msg;
+                myMsg(data.msg);
+                if (result) {//success
+                    window.location = "/content?page=1";
+                }
+            }, "json");
+        }
+    });
+    $('.js-content-desc').each(function (i, val) {
+        var $this = $(this);
+        if ($this.text().length > 150) {
+            $this.text($this.text().substring(0, 150) + "...");
+        }
+        $this.removeClass("hide");
+    });
+
+    //delete content
+    $('.js-content-delete').click(function (e) {
+        var $this = $(this);
+        var id = $this.attr("data-id");
+        $.post("/manager/content/delete", {
+            id: id
+        }, function (data) {
+            if (data.success) {
+                $this.parent().parent().fadeOut()
+            }
+            myMsg(data.msg);
+        }, "json");
+    });
 });
+

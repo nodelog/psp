@@ -14,8 +14,8 @@
             <div class="clearfix"></div>
             <div class="js-content-desc hide"><%- docs[i].content %></div>
             <div class="media color-gray">
-                <span><i class="glyphicon glyphicon-pencil"></i>&nbsp;<%- docs[i].userName %></span>
-                <span><i class="glyphicon glyphicon-tag col-sm-offset-1"></i>&nbsp;<%- docs[i].categoryName %></span>
+                <span><i class="glyphicon glyphicon-pencil"></i>&nbsp;<%- docs[i].author.userName %></span>
+                <span><i class="glyphicon glyphicon-tag col-sm-offset-1"></i>&nbsp;<%- docs[i].category.name %></span>
                 <span><i class="glyphicon glyphicon-time  col-sm-offset-1"></i>&nbsp;<%- docs[i].createTime %></span>
                 <span><i class="glyphicon glyphicon-eye-open  col-sm-offset-1"></i>&nbsp;<%= docs[i].view %></span>
             </div>
@@ -43,10 +43,4 @@
 </div>
 
 <%- include footer %>
-<% if(login){ %>
-<script>
-    $(function () {
-        $('.js-login-btn').click();
-    });
-</script>
-<% } %>
+

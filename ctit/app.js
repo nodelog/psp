@@ -67,7 +67,7 @@ app.use(function (err, req, res, next) {
 var debug = require('debug')('my-application'); // debug模块
 module.exports = app;
 
-app.set('port', process.env.PORT || 3000); // 设定监听端口
+app.set('port', process.env.PORT || settings.port); // 设定监听端口
 
 // Environment sets...
 

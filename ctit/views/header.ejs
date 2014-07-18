@@ -44,20 +44,16 @@
             <div class="hide">
                 <div class="js-login-panel">
                     <form action="javascript:void(0)" class="form-horizontal l-login-panel" role="form">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">UserName:</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control js-login-username" value="admin" placeholder="UserName">
-                            </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">UserName</span>
+                            <input type="text" class="form-control js-login-username" value="admin" placeholder="UserName" maxlength="20" />
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">Password&nbsp;</span>
+                            <input type="password" class="form-control js-login-password" value="admin" placeholder="Password" maxlength="20" />
                         </div>
                         <div class="form-group">
-                            <label  class="col-sm-3 control-label">Password:</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control js-login-password" value="admin" placeholder="Password">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 l-padding-vertical">
                                 <button type="submit" class="btn btn-primary col-sm-12 js-signIn-btn">Sign in</button>
                             </div>
                         </div>
@@ -65,26 +61,20 @@
                 </div>
                 <div class="container js-register-panel">
                     <form action="javascript:void(0)" class="form-horizontal l-register-panel" role="form">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">UserName:</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control js-register-username" value="wyc"  placeholder="UserName"/>
-                            </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">UserName</span>
+                            <input type="text" class="form-control js-register-username" value="wyc"  placeholder="UserName" maxlength="20" />
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">PassWord</span>
+                            <input type="password" class="form-control js-register-password" value="000000" placeholder="Password" maxlength="20" />
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">Confirm&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <input type="password" class="form-control js-register-password2" value="000000" placeholder="Confirm Password" maxlength="20" />
                         </div>
                         <div class="form-group">
-                            <label  class="col-sm-3 control-label">Password:</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control js-register-password" value="000000" placeholder="Password">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="col-sm-3 control-label">Confirm:</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control js-register-password2" value="000000" placeholder="Confirm Password">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12 l-padding-vertical">
                                 <button type="submit" class="btn btn-primary col-sm-12 js-signUp-btn">Sign Up</button>
                             </div>
                         </div>
