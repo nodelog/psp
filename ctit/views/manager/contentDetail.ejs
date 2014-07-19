@@ -1,0 +1,13 @@
+<%- include header %>
+<ol class="breadcrumb">
+    <li><a href="/manager">Home</a></li>
+    <li><a href="/manager/content?page=1&manager=true">Content Manager</a></li>
+    <li class="active">Content Detail</li>
+</ol>
+
+<%- include footer %>
+<script>
+    $(function(){
+        $('.js-content-manager').addClass("panel-primary");
+    });
+</script>
