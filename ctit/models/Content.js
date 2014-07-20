@@ -44,7 +44,7 @@ ContentDAO.prototype.findByPage = function (page, callback) {
     });
 };
 ContentDAO.prototype.findByCategory = function (page, category, callback) {
-    var query = ContentModel.find({category: {id: category.id, name: category.name}});
+    var query = ContentModel.find({category: category});
     query.sort({'_id': -1});
     query.limit(10);
     query.skip((page - 1) * 10);
@@ -68,12 +68,7 @@ ContentDAO.prototype.getCount = function (callback) {
     });
 };
 ContentDAO.prototype.getCountByCategory = function (category, callback) {
-//    console.log(new ObjectId());
-
-    category = {id: new ObjectId(category.id), name: category.name};
-    console.log(category);
     ContentModel.count({category: category}, function (err, total) {
-        console.log("total:" + total);
         callback(err, total);
     });
 };

@@ -1,5 +1,7 @@
 var mongodb = require('./mongodb');
 var Schema = mongodb.mongoose.Schema;
+var ObjectId = Schema.ObjectId;
+
 var CategorySchema = new Schema({
     name: {type: 'String', required: true},
     createTime: { type: Date, default: Date.now},
@@ -28,6 +30,7 @@ CategoryDAO.prototype.findById = function (id, callback) {
         callback(err, obj);
     });
 };
+
 CategoryDAO.prototype.findByPage = function (page, callback) {
     var query = CategoryModel.find();
     query.sort({'_id': -1});

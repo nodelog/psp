@@ -8,16 +8,16 @@ var getCount = function (callback) {
 exports.findByPage = function (req, res) {
     getCount(function (err, total) {
         var page = req.query.page;
-        var totalPage =  Math.ceil(total/10);
-        if(!err && total>0){
-            page=page<1?1:page;
-            page=page>totalPage?totalPage:page;
-                Category.findByPage(page,function(err, docs){
-                    res.render("manager/category",{docs:docs,title:"Category Manager",page:page,totalPage:totalPage});
-                });
-        }else{
+        var totalPage = Math.ceil(total / 10);
+        if (!err && total > 0) {
+            page = page < 1 ? 1 : page;
+            page = page > totalPage ? totalPage : page;
+            Category.findByPage(page, function (err, docs) {
+                res.render("manager/category", {docs: docs, title: "Category Manager", page: page, totalPage: totalPage});
+            });
+        } else {
             console.log("data error");
-            res.render("manager/category",{docs:{},title:"Category Manager",page:page,totalPage:totalPage});
+            res.render("manager/category", {docs: {}, title: "Category Manager", page: page, totalPage: totalPage});
         }
     });
 }
@@ -25,23 +25,27 @@ exports.findByPage = function (req, res) {
 
 exports.delete = function (req, res) {
     var id = req.body.id;
-    Category.delete(id,function(err){
-        if(!err){
-            res.json({'success':true,'msg':"delete success"});
-        }else{
-            res.json({'success':false,'msg':"delete failure"});
+    Category.delete(id, function (err) {
+        if (!err) {
+            res.json({'success': true, 'msg': "delete success"});
+        } else {
+            res.json({'success': false, 'msg': "delete failure"});
         }
     });
 }
 exports.findAll = function (req, res) {
-    Category.findAll(function(err,docs){
-        if(!err){
-            var view = req.query.view;
-            res.render(view,{docs:docs,title:view});
-        }else{
-            res.redirect("/index");
+    Category.findAll(function (err, docs) {
+        var type = req.query.type;
+        if (type === "json") {
+            res.json({docs: docs});
+        } else {
+            if (!err) {
+                var view = req.query.view;
+                res.render(view, {docs: docs, title: view});
+            } else {
+                res.redirect("/index");
+            }
         }
-
     });
 }
 
@@ -99,7 +103,7 @@ exports.update = function (req, res) {
                 msg = "Category Name is exists";
                 res.json({'success': success, 'msg': msg});
             } else {
-                Category.update(id,name, function (err) {
+                Category.update(id, name, function (err) {
                     if (!err) {
                         success = true;
                         msg = "Modify Category is success";
@@ -131,8 +135,8 @@ exports.login = function (req, res) {
     } else {
         flag = true;
         findCategoryByName(CategoryName, function (err, obj) {
-            if(obj.status==1){
-                obj=null;
+            if (obj.status == 1) {
+                obj = null;
             }
             if (obj != null) {
                 if (obj.password == password) {//success

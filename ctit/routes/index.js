@@ -8,9 +8,9 @@ var route = function (app) {
     app.get('/about', filter.authorize, function (req, res) {
         res.render('about', { title: 'CMS ABOUT US'});
     });
-    app.post('/user/login', user.login);//增加
-    app.post('/user/reg', user.addUser);//提交
-    app.get('/user/logout', user.logout);//提交
+    app.post('/user/login', user.login);
+    app.post('/user/reg', user.addUser);
+    app.get('/user/logout', user.logout);
 
     app.get('/manager',filter.authorize, function (req, res) {
         res.render('manager/index', { title: 'CMS HOME', login: false});

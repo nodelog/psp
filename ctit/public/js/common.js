@@ -311,8 +311,8 @@ $(function () {//my jquery code
     $('.js-save-content ').click(function () {
         var name = $('.js-add-content-name').val().trim();
         var id = $('.js-add-content-name').attr("data-id");
-        var content = $('#editor').html();
-        var category = $('.js-category-value').find("option:selected").attr("data-id");
+        var content = $('.js-editor').html();
+        var category = $('.js-category-value').val();
         if (name === "") {
             myMsg("title is empty");
         } else if (content === "") {
@@ -334,7 +334,9 @@ $(function () {//my jquery code
         } else {//update
             $.post("/content/modify", {
                 id: id,
-                name: name
+                name: name,
+                content: content,
+                category: category
             }, function (data) {
                 var result = data.success;
                 var msg = data.msg;
@@ -366,5 +368,6 @@ $(function () {//my jquery code
             myMsg(data.msg);
         }, "json");
     });
+
 });
 

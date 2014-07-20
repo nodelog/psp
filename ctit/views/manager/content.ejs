@@ -20,7 +20,7 @@
     <% for(var i = 0;i < docs.length;i++){ %>
     <tr>
         <td><%= i + 1 %></td>
-        <td><a href="/manager/content/detail?id=<%= docs[i]._id %>&manager=true"
+        <td><a href="/content/detail?id=<%= docs[i]._id %>&view=manager/contentDetail"
                title="<%= docs[i].name %>"><%= docs[i].name.length > 10 ? docs[i].name.substring(0, 10) + "..." : docs[i].name %></a>
         </td>
         <td><%- docs[i].category.name %></td>

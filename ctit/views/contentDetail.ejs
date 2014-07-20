@@ -1,20 +1,21 @@
 <%- include header %>
-<ol class="breadcrumb">
-    <li><a href="/index">Home</a></li>
-    <li>
-        <a href="/content/category?id=<%= doc.category.id %>&name=<%= doc.category.name %>&page=1"><%= doc.category.name %></a>
-    </li>
-    <li class="active">Content Detail</li>
-</ol>
+
 <div class="row js-panel-row">
 
     <div class="col-sm-9 ">
+        <ol class="breadcrumb">
+            <li><a href="/" title="Go Home">Home</a></li>
+            <li>
+                <a href="/content/category?categoryId=<%= doc.category %>&page=1" title="view by category"><%= doc.categoryName %></a>
+            </li>
+            <li class="active"><%= doc.name %> detail</li>
+        </ol>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>
-                    <a title="<%= doc.name %>"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;<%= doc.name %></a>
-                    <% if(session.user!=null && session.user._id == doc.author.id){ %>
-                    <a href="/" class="btn btn-primary pull-right" role="button">
+                    <a href="/content/detail?id=<%= doc._id %>&view=contentDetail" title="reload <%= doc.name %>"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;<%= doc.name %></a>
+                    <% if(session.user!=null && session.user._id == doc.author){ %>
+                    <a href="/content/detail?id=<%=doc._id%>&view=editContent" class="btn btn-primary pull-right" role="button">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;Edit
                     </a>
                     <% } %>
@@ -25,7 +26,7 @@
                     <span title="ahther"><i
                                 class="glyphicon glyphicon-pencil"></i>&nbsp;<%- doc.userName %></span>
                     <span title="category"><i
-                                class="glyphicon glyphicon-tag col-sm-offset-1"></i>&nbsp;<%- doc.categoryNameame %></span>
+                                class="glyphicon glyphicon-tag col-sm-offset-1"></i>&nbsp;<%- doc.categoryName %></span>
                     <span title="time"><i
                                 class="glyphicon glyphicon-time  col-sm-offset-1"></i>&nbsp;<%- doc.createTime %></span>
                     <span title="view count"><i

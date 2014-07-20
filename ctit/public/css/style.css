@@ -1,8 +1,8 @@
 .bg-gray{
-    background: #e5e5e5;
+    background: #eee;
 }
 .bg-white{
-    background: #fefefe;
+    background: #fff;
 }
 .bg-blue{
     background: #357ebd;
@@ -68,7 +68,7 @@
 /**editor*/
 
 
-#editor {
+.l-editor {
     max-height: 400px;
     height: 400px;
     background-color: white;

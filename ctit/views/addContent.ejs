@@ -19,7 +19,7 @@
         <label>Category</label>
         <select class="form-control js-category-value">
             <% for(var i = 0;i < docs.length;i++){ %>
-                <option value="<%=docs[i].name%>" data-id="<%=docs[i]._id%>"><%=docs[i].name%></option>
+                <option value="<%=docs[i]._id%>"><%=docs[i].name%></option>
             <%}%>
         </select>
     </div>

@@ -1,3 +1,5 @@
+var async = require("async");
+var utils = require("util");
 var Content = require('./../models/Content.js');
 var User = require('./../models/User.js');
 var Category = require('./../models/Category.js');
@@ -8,15 +10,84 @@ var getCount = function (callback) {
     });
 };
 var getCountByCategory = function (category, callback) {
-    Content.getCountByCategory(category,function (err, total) {
+    Content.getCountByCategory(category, function (err, total) {
         callback(err, total);
     });
 };
 
 exports.findByPage = function (req, res) {
-    getCount(function (err, total) {
-        var page = req.query.page;
-        var totalPage = Math.ceil(total / 10);
+    var total = 0, page = 0, totalPage = 0, docs = {};
+    async.auto({
+        totalCount: function (callback, results) {
+            getCount(function (err, count) {
+                total = count;
+                callback(null);
+            });
+        },
+        pageDocs: ["totalCount", function (callback, results) {
+            page = req.query.page;
+            totalPage = Math.ceil(total / 10);
+            if (totalPage > 0) {
+                page = page < 1 ? 1 : page == undefined ? 1 : page;
+                page = page > totalPage ? totalPage : page;
+                Content.findByPage(page, function (err, objects) {
+                    docs = objects;
+                    callback(null);
+                });
+            } else {
+                callback(null);
+            }
+        }],
+        initUser: ["pageDocs", function (callback, results) {
+            var count = 0;
+            async.whilst(//sync floor
+                function () {
+                    return count < docs.length
+                },
+                function (callbackThis) {
+                    var doc = docs[count];
+                    User.findById(doc.author, function (err, obj) {
+                        if (obj != null) {
+                            doc.userName = obj.userName;
+                        } else {
+                            console.log(doc.name + "'s user not found");
+                            doc.userName = "UNKNOWN AUTHOR";//
+                        }
+                        count++;
+                        callbackThis();
+                    });
+                },
+                function (err) {
+                    callback(err);
+                }
+            );
+        }],
+        initCategory: ["initUser", function (callback, results) {
+            var count = 0;
+            async.whilst(//sync floor
+                function () {
+                    return count < docs.length;
+                },
+                function (callbackThis) {
+                    var doc = docs[count];
+                    Category.findById(doc.category, function (err, obj) {
+                        console.log(doc.category+"\t category in content .js ");
+                        if (obj != null) {
+                            doc.categoryName = obj.name;
+                        } else {
+                            console.log(doc.name + "'s user not found");
+                            doc.categoryName = "UNKNOWN CATEGORY";//
+                        }
+                        count++;
+                        callbackThis();
+                    });
+                },
+                function (err) {
+                    callback(err);
+                }
+            );
+        }]
+    }, function (err, results) {
         var login = false;
         if (req.query.login === "true") {
             login = true;
@@ -27,41 +98,10 @@ exports.findByPage = function (req, res) {
             view = "manager/content";
             title = "Content Manager";
         }
-        if (!err && total > 0) {
-            page = page < 1 ? 1 : page == undefined ? 1 : page;
-            page = page > totalPage ? totalPage : page;
-            Content.findByPage(page, function (err, docs) {
-                for (var i = 0; i < docs.length; i ++) {
-                        var doc = docs[i];
-                        console.log(doc.author);
-                        User.findById(doc.author, function (err, obj) {
-                            if (!err && obj != null) {
-                                console.log(obj);
-                                doc.userName = obj.userName;
-                            } else {
-                                console.log(doc.name + "'s user not found");
-                                doc.userName = "UNKNOWN AUTHOR";//
-                            }
-                        });
-                        Category.findById(doc.category, function (err, obj) {
-                            if (!err && obj != null) {
-                                console.log(obj);
-                                doc.categoryName = obj.name;
-                            } else {
-                                console.log(doc.name + "'s user not found");
-                                doc.categoryName = "UNKNOWN CATEGORY";//
-                            }
-                        });
-
-                }
-                res.render(view, {docs: docs, title: title, login: login, page: page, totalPage: totalPage});
-            });
-        } else {
-            console.log("no data");
-            res.render(view, {docs: {}, title: title, login: login, page: page, totalPage: totalPage});
-        }
+        res.render(view, {docs: docs, title: title, login: login, page: page, totalPage: totalPage});
     });
-}
+
+};
 
 
 exports.delete = function (req, res) {
@@ -73,48 +113,137 @@ exports.delete = function (req, res) {
             res.json({'success': false, 'msg': "delete failure"});
         }
     });
-}
+};
 exports.findAllEnable = function (req, res) {
     Content.findAllEnable(function (err, docs) {
         res.render("manager/Content", {docs: docs, title: "Content List"});
     });
-}
+};
 exports.findById = function (req, res) {
     var id = req.query.id;
-    var view = "contentDetail";
-    if (req.query.manager === "true") {
-        view = "manager/contentDetail";
-    }
-    Content.findById(id, function (err, doc) {
-        if(!err){
-            res.render(view, {doc: doc, title: "Content Detail"});
-        }else{
-            console.log("data err");
-            res.redirect('/index');
-        }
-
-    });
-}
-exports.findByCategory = function (req, res) {
-    var id = req.query.id;
-    var name = req.query.name;
-    var category = {id: id, name: name};
-    getCountByCategory(category, function (err, total) {
-        var page = req.query.page;
-        var totalPage = Math.ceil(total / 10);
-        if (!err && total > 0) {
-            page = page < 1 ? 1 : page == undefined ? 1 : page;
-            page = page > totalPage ? totalPage : page;
-            Content.findByCategory(page,category, function (err, docs) {
-                res.render("categoryContent", {docs: docs, title: name + " Content",  page: page, totalPage: totalPage});
+    var view = req.query.view;
+    var doc = {};
+    async.auto({
+        getContent: function (callback, results) {
+            Content.findById(id, function (err, obj) {
+                if (!err) {
+                    doc = obj;
+                } else {
+                    console.log("data err");
+                }
+                callback(null);
             });
-        } else {
-            console.log("data error");
-            res.render("categoryContent", {docs: {}, title: name + " Content",  page: page, totalPage: totalPage});
-        }
+        },
+        initUser: ["getContent", function (callback, results) {
+            User.findById(doc.author, function (err, obj) {
+                if (obj != null) {
+                    doc.userName = obj.userName;
+                } else {
+                    console.log(doc.name + "'s user not found");
+                    doc.userName = "UNKNOWN AUTHOR";//
+                }
+                callback(null);
+            });
+        }],
+        initCategory: ["initUser", function (callback, results) {
+            Category.findById(doc.category, function (err, obj) {
+                if (obj != null) {
+                    doc.categoryName = obj.name;
+                } else {
+                    console.log(doc.name + "'s user not found");
+                    doc.categoryName = "UNKNOWN CATEGORY";//
+                }
+                callback(null);
+            });
+        }]
+    }, function (err, results) {
+        res.render(view, {doc: doc, title: doc.name});
     });
-
-}
+};
+exports.findByCategory = function (req, res) {
+    var category = {}, total = 0, page = 0, totalPage = 0, docs = {};
+    async.auto({
+        getCategoryById: function (callback, results) {
+            var categoryId = req.query.categoryId;
+            Category.findById(categoryId, function (err, obj) {
+                category = obj;
+                callback(null);
+            });
+        },
+        totalCount: ["getCategoryById", function (callback, results) {
+            getCountByCategory(category._id, function (err, count) {
+                total = count;
+                callback(null);
+            });
+        }],
+        getContentByPage: ["totalCount", function (callback, results) {
+                page = req.query.page;
+                totalPage = Math.ceil(total / 10);
+                if (total > 0) {
+                    page = page < 1 ? 1 : page == undefined ? 1 : page;
+                    page = page > totalPage ? totalPage : page;
+                    Content.findByCategory(page, category._id, function (err, objects) {
+                        docs = objects;
+                        callback(null);
+                    });
+                } else {
+                    console.log("data error");
+                    callback(null);
+                }
+        }],
+        initUser: ["getContentByPage", function (callback, results) {
+            var count = 0;
+            async.whilst(//sync floor
+                function () {
+                    return count < docs.length
+                },
+                function (callbackThis) {
+                    var doc = docs[count];
+                    User.findById(doc.author, function (err, obj) {
+                        if (obj != null) {
+                            doc.userName = obj.userName;
+                        } else {
+                            console.log(doc.name + "'s user not found");
+                            doc.userName = "UNKNOWN AUTHOR";//
+                        }
+                        count++;
+                        callbackThis();
+                    });
+                },
+                function (err) {
+                    callback(err);
+                }
+            );
+        }],
+        initCategory: ["initUser", function (callback, results) {
+            var count = 0;
+            async.whilst(//sync floor
+                function () {
+                    return count < docs.length;
+                },
+                function (callbackThis) {
+                    var doc = docs[count];
+                    Category.findById(doc.category, function (err, obj) {
+                        console.log(doc.category+"\t category in content .js ");
+                        if (obj != null) {
+                            doc.categoryName = obj.name;
+                        } else {
+                            console.log(doc.name + "'s user not found");
+                            doc.categoryName = "UNKNOWN CATEGORY";//
+                        }
+                        count++;
+                        callbackThis();
+                    });
+                },
+                function (err) {
+                    callback(err);
+                }
+            );
+        }]
+    }, function (err, results) {
+        res.render("categoryContent", {docs: docs,category:category, title: category.name + " Contents", page: page, totalPage: totalPage});
+    });
+};
 
 var findByName = function (name, callback) {
     Content.findByName(name, function (err, obj) {

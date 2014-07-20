@@ -16,6 +16,7 @@
     "mongodb": "*",
     "mongoose": "*",
     "connect-mongo": "*",
-    "express-session": "*"
+    "express-session": "*",
+    "async": "*"
   }
 }

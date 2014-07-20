@@ -25,9 +25,9 @@
                 overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
             });
             if ("onwebkitspeechchange"  in document.createElement("input")) {
-                var editorOffset = $('#editor').offset();
+                var editorOffset = $('.js-editor').offset();
                 if(editorOffset){
-                    $('#voiceBtn').css('position', 'absolute').offset({top: editorOffset.top, left: editorOffset.left + $('#editor').innerWidth() - 35});
+                    $('#voiceBtn').css('position', 'absolute').offset({top: editorOffset.top, left: editorOffset.left + $('.js-editor').innerWidth() - 35});
                 }
             } else {
                 $('#voiceBtn').hide();
@@ -45,7 +45,7 @@
                     '<strong>File upload error</strong> ' + msg + ' </div>').prependTo('#alerts');
         };
         initToolbarBootstrapBindings();
-        $('#editor').wysiwyg({ fileUploadError: showErrorAlert});
+        $('.js-editor').wysiwyg({ fileUploadError: showErrorAlert});
         window.prettyPrint && prettyPrint();
     });
 
