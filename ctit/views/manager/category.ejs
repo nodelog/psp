@@ -15,7 +15,7 @@
     <thead>
     <tr>
         <th>No.</th>
-        <th>category name</th>
+        <th>name</th>
         <th>create time</th>
         <th>modify time</th>
         <th>operation</th>
@@ -27,8 +27,8 @@
         <td><%= i + 1 %></td>
         <td><a href="javascript:void(0)" data-id="<%= docs[i]._id %>" class="js-modify-category"
                title="click modify category"><%= docs[i].name %></a></td>
-        <td><%= docs[i].createTime %></td>
-        <td><%= docs[i].modifyTime %></td>
+        <td><%=: docs[i].createTime | format %></td>
+        <td><%=: docs[i].modifyTime | format %></td>
         <td><a href="javascript:void(0)" class="js-category-delete" data-id="<%= docs[i]._id %>">删除</a></td>
     </tr>
     <% } %>

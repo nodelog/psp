@@ -9,7 +9,7 @@
     <thead>
     <tr>
         <th>No.</th>
-        <th>user name</th>
+        <th>name</th>
         <th>create time</th>
         <th>modify time</th>
         <th>status</th>
@@ -23,8 +23,8 @@
     <tr>
         <td><%= i + 1 %></td>
         <td><%= docs[i].userName %></td>
-        <td><%= docs[i].createTime %></td>
-        <td><%= docs[i].modifyTime %></td>
+        <td><%=: docs[i].createTime | format %></td>
+        <td><%=: docs[i].modifyTime | format %></td>
         <td>
             <input type="checkbox" data-id="<%= docs[i]._id %>" data-type="<%= docs[i].status %>"
                    class="js-user-status"/></td>

@@ -310,39 +310,32 @@ $(function () {//my jquery code
     //save content
     $('.js-save-content ').click(function () {
         var name = $('.js-add-content-name').val().trim();
+        var oldName = $('.js-add-content-name').attr("data-name");
         var id = $('.js-add-content-name').attr("data-id");
         var content = $('.js-editor').html();
         var category = $('.js-category-value').val();
+        console.log(id);
+        console.log(oldName);
         if (name === "") {
             myMsg("title is empty");
         } else if (content === "") {
             myMsg("content is empty");
-        } else if (!id) {//add
+        } else {
             $.post("/content/add", {
-                name: name,
-                content: content,
-                category: category
-            }, function (data) {
-                var result = data.success;
-                var msg = data.msg;
-                myMsg(data.msg);
-                if (result) {//success
-                    myMsg("success");
-                    window.location = "/";
-                }
-            }, "json");
-        } else {//update
-            $.post("/content/modify", {
                 id: id,
                 name: name,
                 content: content,
-                category: category
+                category: category,
+                oldName: oldName
             }, function (data) {
-                var result = data.success;
-                var msg = data.msg;
                 myMsg(data.msg);
-                if (result) {//success
-                    window.location = "/content?page=1";
+                if (data.success) {//success
+                    if (id != null) {
+                        window.location = "/content/detail?view=contentDetail&id="+id;
+                    }
+                    else {
+                        window.location = "/";
+                    }
                 }
             }, "json");
         }
@@ -369,5 +362,24 @@ $(function () {//my jquery code
         }, "json");
     });
 
+    //menu add
+    $.get("/content/addPage", {
+        type: "json"
+    }, function (data) {
+        var docs = data.docs;
+        var html = "";
+        var url = "";
+        $.each(docs, function (i, tempDoc) {
+            url="/content/category?page=1&categoryId="+tempDoc._id;
+                html += '<li><a href="'+url+'"  class="l-option">' + tempDoc.name + '</a></li>';
+        });
+        $('.js-category-menu').html(html);
+    }, "json");
+
+
+    //goto top
+    $(window).bind('scroll resize', function(){
+        $(".js-goto-top").goToTop();
+    });
 });
 

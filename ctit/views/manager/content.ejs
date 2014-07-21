@@ -9,8 +9,9 @@
     <thead>
     <tr>
         <th>No.</th>
-        <th>Content title</th>
-        <th>Category name</th>
+        <th>title</th>
+        <th>author</th>
+        <th>category</th>
         <th>create time</th>
         <th>modify time</th>
         <th>operation</th>
@@ -23,9 +24,10 @@
         <td><a href="/content/detail?id=<%= docs[i]._id %>&view=manager/contentDetail"
                title="<%= docs[i].name %>"><%= docs[i].name.length > 10 ? docs[i].name.substring(0, 10) + "..." : docs[i].name %></a>
         </td>
-        <td><%- docs[i].category.name %></td>
-        <td><%- docs[i].createTime %></td>
-        <td><%- docs[i].modifyTime %></td>
+        <td><%- docs[i].userName %></td>
+        <td><%- docs[i].categoryName %></td>
+        <td><%=: docs[i].createTime | format %></td>
+        <td><%=: docs[i].modifyTime | format %></td>
         <td><a href="javascript:void(0)" class="js-content-delete" data-id="<%= docs[i]._id %>">删除</a></td>
     </tr>
     <% } %>

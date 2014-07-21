@@ -26,18 +26,6 @@
 .font-normal{
     font-size: 15px!important;
 }
-.backtotop{
-    width: 24px;
-    color: gray;
-    padding: 12px 0 12px 5px;
-    display: none;
-    position: fixed;
-    cursor: pointer;
-    text-align: center;
-    z-index: 20;
-    background-color: #fff;
-    border-radius: 12px 0 0 12px;
-}
 .l-padding-full{
     padding: 30px 15px;
 }
@@ -107,3 +95,42 @@ div[data-role="editor-toolbar"] {
     cursor: pointer;
 }
 
+.l-select{
+    max-height: 300px;
+    overflow: auto;
+}
+.l-option{
+    min-height:40px !important;;
+    line-height: 40px!important;
+ }
+.l-option:hover{
+    background: #5bc0de!important;
+    color: #fff!important;;
+}
+
+a{
+    color: #5bc0de;
+}
+a:hover{
+    color: #5bc0de;
+}
+
+.l-heigh-200{
+    height: 200px!important;
+    resize: none;
+}
+
+.goto-top {
+    width: 50px;
+    height: 50px;
+    background: #eaeaea url(../images/top.png) no-repeat 0 -50px;
+    text-indent: -999em;
+    border: none;
+    cursor: pointer;
+    position: fixed;
+    display: none;
+}
+
+.goto-top:hover {
+    background-position:  0 -50px;
+}

@@ -77,8 +77,8 @@ ContentDAO.prototype.delete = function (id, callback) {
         callback(err);
     });
 };
-ContentDAO.prototype.update = function (id, name, callback) {
-    ContentModel.update({'_id': id}, {$set: {'name': name, 'modifyTime': new Date()}}, function (err) {
+ContentDAO.prototype.update = function (obj, callback) {
+    ContentModel.update({'_id': obj.id}, {$set: {'name': obj.name,'content':obj.content,'category':obj.category, 'modifyTime': new Date()}}, function (err) {
         callback(err);
     });
 };

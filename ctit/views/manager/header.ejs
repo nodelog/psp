@@ -47,11 +47,7 @@
                         <h4 class="panel-title"><a href="/manager/content?page=1&manager=true">Content Management</a></h4>
                     </div>
                 </div>
-                <div class="panel panel-default js-category-manager">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><a href="/manager/category?page=1">Category Management</a></h4>
-                    </div>
-                </div>
+
                 <div class="panel panel-default panel-primary">
                     <div class="panel-heading">
                         <h4 class="panel-title"><a href="#">Comments Management</a></h4>
@@ -64,6 +60,11 @@
                     </div>
                 </div>
                 <%if(session.user.role==0){%>
+                <div class="panel panel-default js-category-manager">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><a href="/manager/category?page=1">Category Management</a></h4>
+                    </div>
+                </div>
                 <div class="panel panel-default js-user-manager">
                     <div class="panel-heading">
                         <h4 class="panel-title"><a href="/manager/user?page=1">User Management</a></h4>

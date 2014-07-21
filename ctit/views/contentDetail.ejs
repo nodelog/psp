@@ -3,19 +3,23 @@
 <div class="row js-panel-row">
 
     <div class="col-sm-9 ">
+        <% if (doc != null) { %>
         <ol class="breadcrumb">
             <li><a href="/" title="Go Home">Home</a></li>
             <li>
-                <a href="/content/category?categoryId=<%= doc.category %>&page=1" title="view by category"><%= doc.categoryName %></a>
+                <a href="/content/category?categoryId=<%= doc.category %>&page=1"
+                   title="view by category"><%= doc.categoryName %></a>
             </li>
             <li class="active"><%= doc.name %> detail</li>
         </ol>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>
-                    <a href="/content/detail?id=<%= doc._id %>&view=contentDetail" title="reload <%= doc.name %>"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;<%= doc.name %></a>
-                    <% if(session.user!=null && session.user._id == doc.author){ %>
-                    <a href="/content/detail?id=<%=doc._id%>&view=editContent" class="btn btn-primary pull-right" role="button">
+                    <a href="/content/detail?id=<%= doc._id %>&view=contentDetail" title="reload <%= doc.name %>"><i
+                                class="glyphicon glyphicon-bookmark"></i>&nbsp;<%= doc.name %></a>
+                    <% if(session.user != null && session.user._id == doc.author){ %>
+                    <a href="/content/detail?id=<%= doc._id %>&view=editContent" class="btn btn-primary pull-right"
+                       role="button">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;Edit
                     </a>
                     <% } %>
@@ -24,11 +28,11 @@
 
                 <div class="media color-gray">
                     <span title="ahther"><i
-                                class="glyphicon glyphicon-pencil"></i>&nbsp;<%- doc.userName %></span>
+                                class="glyphicon glyphicon-user"></i>&nbsp;<%- doc.userName %></span>
                     <span title="category"><i
                                 class="glyphicon glyphicon-tag col-sm-offset-1"></i>&nbsp;<%- doc.categoryName %></span>
                     <span title="time"><i
-                                class="glyphicon glyphicon-time  col-sm-offset-1"></i>&nbsp;<%- doc.createTime %></span>
+                                class="glyphicon glyphicon-time  col-sm-offset-1"></i>&nbsp;<%=: doc.createTime | format %></span>
                     <span title="view count"><i
                                 class="glyphicon glyphicon-eye-open  col-sm-offset-1"></i>&nbsp;<%= doc.view %></span>
                 </div>
@@ -38,14 +42,69 @@
                 <div><%- doc.content %></div>
             </div>
         </div>
+        <!--all comments-->
+        <div class="panel panel-default">
+            <div class="panel-heading">comments</div>
+            <div class="panel-body">
+                <div>
+                    <div class="alert alert-warning" role="alert">No comments!</div>
+                </div>
+            </div>
+        </div>
+        <!--post comment-->
+        <%if(session.user==null || session.user._id != doc.author){%>
+        <div class="panel panel-default">
+            <div class="panel-heading">post comment</div>
+            <div class="panel-body">
+                <div>
+                    <form role="form">
+                        <div class="form-group">
+                            <textarea class="js-comment-input form-control l-heigh-200"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="l-padding-vertical">
+                                <button type="submit" class="btn btn-primary col-sm-12 hide js-post-comment-btn">post</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <% }%>
+        <% } else { %>
+        <div class="alert alert-warning" role="alert">This Content not exists!</div>
+        <% } %>
     </div>
     <div class="col-sm-3">
         <div class="jumbotron js-menu-bar">
-            <p><a href="/content/addPage?view=addContent" class="btn btn-primary btn-lg" role="button">
+            <p>
+                <%if(session.user==null || session.user._id != doc.author){%>
+                <a href="javascript:void(0)" class="btn btn-primary btn-lg js-open-comment-btn" role="button">
+                    <i class="glyphicon glyphicon-pencil"></i>&nbsp;Post comment
+                </a>
+                <%} else{%>
+                <a href="/content/addPage?view=addContent" class="btn btn-primary btn-lg" role="button">
                     <i class="glyphicon glyphicon-pencil"></i>&nbsp;Post content
                 </a>
+                <%}%>
             </p>
         </div>
     </div>
 </div>
 <%- include footer %>
+<script>
+    $(function () {
+        $('.js-open-comment-btn').click(function () {
+            $('.js-comment-input').focus();
+        });
+        $('.js-comment-input').focus(function () {
+            <%if(session.user==null){%>
+            myMsg("please login first");
+            $(this).blur();
+            <%}%>
+        });
+        <%if(session.user!=null && session.user._id != doc.author){%>
+        $('.js-post-comment-btn').removeClass("hide");
+        <%}%>
+    });
+</script>

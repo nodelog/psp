@@ -71,7 +71,7 @@ exports.findByPage = function (req, res) {
                 function (callbackThis) {
                     var doc = docs[count];
                     Category.findById(doc.category, function (err, obj) {
-                        console.log(doc.category+"\t category in content .js ");
+                        console.log(doc.category + "\t category in content .js ");
                         if (obj != null) {
                             doc.categoryName = obj.name;
                         } else {
@@ -122,7 +122,7 @@ exports.findAllEnable = function (req, res) {
 exports.findById = function (req, res) {
     var id = req.query.id;
     var view = req.query.view;
-    var doc = {};
+    var doc = null;
     async.auto({
         getContent: function (callback, results) {
             Content.findById(id, function (err, obj) {
@@ -135,29 +135,37 @@ exports.findById = function (req, res) {
             });
         },
         initUser: ["getContent", function (callback, results) {
-            User.findById(doc.author, function (err, obj) {
-                if (obj != null) {
-                    doc.userName = obj.userName;
-                } else {
-                    console.log(doc.name + "'s user not found");
-                    doc.userName = "UNKNOWN AUTHOR";//
-                }
+            if (doc != null) {
+                User.findById(doc.author, function (err, obj) {
+                    if (obj != null) {
+                        doc.userName = obj.userName;
+                    } else {
+                        console.log(doc.name + "'s user not found");
+                        doc.userName = "UNKNOWN AUTHOR";//
+                    }
+                    callback(null);
+                });
+            } else {
                 callback(null);
-            });
+            }
         }],
         initCategory: ["initUser", function (callback, results) {
-            Category.findById(doc.category, function (err, obj) {
-                if (obj != null) {
-                    doc.categoryName = obj.name;
-                } else {
-                    console.log(doc.name + "'s user not found");
-                    doc.categoryName = "UNKNOWN CATEGORY";//
-                }
+            if (doc != null) {
+                Category.findById(doc.category, function (err, obj) {
+                    if (obj != null) {
+                        doc.categoryName = obj.name;
+                    } else {
+                        console.log(doc.name + "'s user not found");
+                        doc.categoryName = "UNKNOWN CATEGORY";//
+                    }
+                    callback(null);
+                });
+            } else {
                 callback(null);
-            });
+            }
         }]
     }, function (err, results) {
-        res.render(view, {doc: doc, title: doc.name});
+        res.render(view, {doc: doc, title: doc != null ? doc.name : "Content not found"});
     });
 };
 exports.findByCategory = function (req, res) {
@@ -177,19 +185,19 @@ exports.findByCategory = function (req, res) {
             });
         }],
         getContentByPage: ["totalCount", function (callback, results) {
-                page = req.query.page;
-                totalPage = Math.ceil(total / 10);
-                if (total > 0) {
-                    page = page < 1 ? 1 : page == undefined ? 1 : page;
-                    page = page > totalPage ? totalPage : page;
-                    Content.findByCategory(page, category._id, function (err, objects) {
-                        docs = objects;
-                        callback(null);
-                    });
-                } else {
-                    console.log("data error");
+            page = req.query.page;
+            totalPage = Math.ceil(total / 10);
+            if (total > 0) {
+                page = page < 1 ? 1 : page == undefined ? 1 : page;
+                page = page > totalPage ? totalPage : page;
+                Content.findByCategory(page, category._id, function (err, objects) {
+                    docs = objects;
                     callback(null);
-                }
+                });
+            } else {
+                console.log("data error");
+                callback(null);
+            }
         }],
         initUser: ["getContentByPage", function (callback, results) {
             var count = 0;
@@ -224,7 +232,7 @@ exports.findByCategory = function (req, res) {
                 function (callbackThis) {
                     var doc = docs[count];
                     Category.findById(doc.category, function (err, obj) {
-                        console.log(doc.category+"\t category in content .js ");
+                        console.log(doc.category + "\t category in content .js ");
                         if (obj != null) {
                             doc.categoryName = obj.name;
                         } else {
@@ -241,7 +249,7 @@ exports.findByCategory = function (req, res) {
             );
         }]
     }, function (err, results) {
-        res.render("categoryContent", {docs: docs,category:category, title: category.name + " Contents", page: page, totalPage: totalPage});
+        res.render("categoryContent", {docs: docs, category: category, title: category.name + " Contents", page: page, totalPage: totalPage});
     });
 };
 
@@ -252,7 +260,9 @@ var findByName = function (name, callback) {
 };
 //add
 exports.add = function (req, res) {
+    var id = req.body.id;
     var name = req.body.name.trim();
+    var oldName = req.body.oldName;
     var content = req.body.content;
     var category = req.body.category;
     var msg = "";
@@ -265,28 +275,52 @@ exports.add = function (req, res) {
     } else {
         flag = true;
         findByName(name, function (err, obj) {
-            if (obj !== null) {
-                msg = "title is exists";
-                res.json({'success': success, 'msg': msg});
-            } else {
-                var session = req.session;
-                obj = {
-                    "name": name,
-                    "content": content,
-                    "author": session.user._id,
-                    "category": category
-                };
-                Content.save(obj, function (err) {
-                    if (!err) {
-                        success = true;
-                        msg = "Add Content is success";
-                        console.log("success");
-                    } else {
-                        console.log(err.message);
-                        msg = "Add Content is failure";
-                    }
+            if (id == null) {//add
+                if (obj !== null) {
+                    msg = "title is exists";
                     res.json({'success': success, 'msg': msg});
-                });
+                } else {
+                    var session = req.session;
+                    obj = {
+                        "name": name,
+                        "content": content,
+                        "author": session.user._id,
+                        "category": category
+                    };
+                    Content.save(obj, function (err) {
+                        if (!err) {
+                            success = true;
+                            msg = "Add Content is success";
+                        } else {
+                            console.log(err.message);
+                            msg = "Add Content is failure";
+                        }
+                        res.json({'success': success, 'msg': msg});
+                    });
+                }
+            } else {//update
+                if (obj !== null && obj.name != oldName) {
+                    msg = "title is exists";
+                    res.json({'success': success, 'msg': msg});
+                } else {
+                    obj = {
+                        "id": id,
+                        "name": name,
+                        "content": content,
+                        "category": category
+                    };
+                    Content.update(obj, function (err) {
+                        if (!err) {
+                            success = true;
+                            msg = "Edit Content is success";
+                            console.log("success");
+                        } else {
+                            console.log(err.message);
+                            msg = "Edit Content is failure";
+                        }
+                        res.json({'success': success, 'msg': msg, 'id': obj.id});
+                    });
+                }
             }
         });
     }//end else
