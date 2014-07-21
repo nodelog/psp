@@ -42,6 +42,15 @@ CommentDAO.prototype.findByPage = function (page, callback) {
         callback(err, docs);
     });
 };
+CommentDAO.prototype.findByContent = function (page, content, callback) {
+    var query = CommentModel.find({content: content});
+    query.sort({'_id': -1});
+    query.limit(10);
+    query.skip((page - 1) * 10);
+    query.exec(function (err, docs) {
+        callback(err, docs);
+    });
+};
 CommentDAO.prototype.findByCategory = function (page, category, callback) {
     var query = CommentModel.find({category: category});
     query.sort({'_id': -1});
@@ -66,8 +75,8 @@ CommentDAO.prototype.getCount = function (callback) {
         callback(err, total);
     });
 };
-CommentDAO.prototype.getCountByCategory = function (category, callback) {
-    CommentModel.count({category: category}, function (err, total) {
+CommentDAO.prototype.getCountByContent = function (category, callback) {
+    CommentModel.count({content: content}, function (err, total) {
         callback(err, total);
     });
 };

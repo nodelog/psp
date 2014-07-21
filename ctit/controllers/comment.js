@@ -9,23 +9,35 @@ var getCount = function (callback) {
         callback(err, total);
     });
 };
+var getCountByContent = function (content,callback) {
+    Comment.getCount(content,function (err, total) {
+        callback(err, total);
+    });
+};
 
-exports.findByPage = function (req, res) {
-    var total = 0, page = 0, totalPage = 0, docs = {};
+exports.findByPageAndContent = function (req, res) {
+    var contentId, total = 0, page = 0, totalPage = 0, docs = null;
     async.auto({
-        totalCount: function (callback, results) {
-            getCount(function (err, count) {
-                total = count;
+        getContentById: function (callback, results) {
+            var id = req.query.cententId;
+            Content.findById(id, function (err, obj) {
+                cententId = obj._id;
                 callback(null);
             });
         },
+        totalCount: ["getContentById", function (callback, results) {
+                getCountByContent(cententId, function (err, count) {
+                    total = count;
+                    callback(null);
+                });
+        }],
         pageDocs: ["totalCount", function (callback, results) {
             page = req.query.page;
             totalPage = Math.ceil(total / 10);
             if (totalPage > 0) {
                 page = page < 1 ? 1 : page == undefined ? 1 : page;
                 page = page > totalPage ? totalPage : page;
-                Comment.findByPage(page, function (err, objects) {
+                Comment.findByContent(page,cententId, function (err, objects) {
                     docs = objects;
                     callback(null);
                 });
@@ -34,66 +46,35 @@ exports.findByPage = function (req, res) {
             }
         }],
         initUser: ["pageDocs", function (callback, results) {
-            var count = 0;
-            async.whilst(//sync floor
-                function () {
-                    return count < docs.length
-                },
-                function (callbackThis) {
-                    var doc = docs[count];
-                    User.findById(doc.author, function (err, obj) {
-                        if (obj != null) {
-                            doc.userName = obj.userName;
-                        } else {
-                            console.log(doc.name + "'s user not found");
-                            doc.userName = "UNKNOWN AUTHOR";//
-                        }
-                        count++;
-                        callbackThis();
-                    });
-                },
-                function (err) {
-                    callback(err);
-                }
-            );
-        }],
-        initCategory: ["initUser", function (callback, results) {
-            var count = 0;
-            async.whilst(//sync floor
-                function () {
-                    return count < docs.length;
-                },
-                function (callbackThis) {
-                    var doc = docs[count];
-                    Category.findById(doc.category, function (err, obj) {
-                        console.log(doc.category + "\t category in Comment .js ");
-                        if (obj != null) {
-                            doc.categoryName = obj.name;
-                        } else {
-                            console.log(doc.name + "'s user not found");
-                            doc.categoryName = "UNKNOWN CATEGORY";//
-                        }
-                        count++;
-                        callbackThis();
-                    });
-                },
-                function (err) {
-                    callback(err);
-                }
-            );
+            if (docs != null) {
+                var count = 0;
+                async.whilst(//sync floor
+                    function () {
+                        return count < docs.length
+                    },
+                    function (callbackThis) {
+                        var doc = docs[count];
+                        User.findById(doc.commenter, function (err, obj) {
+                            if (obj != null) {
+                                doc.userName = obj.userName;
+                            } else {
+                                console.log(doc.name + "'s user not found");
+                                doc.userName = "UNKNOWN AUTHOR";//
+                            }
+                            count++;
+                            callbackThis();
+                        });
+                    },
+                    function (err) {
+                        callback(err);
+                    }
+                );
+            } else {
+                callback(null);
+            }
         }]
     }, function (err, results) {
-        var login = false;
-        if (req.query.login === "true") {
-            login = true;
-        }
-        var view = "index";
-        var title = "CMS HOME";
-        if (req.query.manager === "true") {
-            view = "manager/Comment";
-            title = "Comment Manager";
-        }
-        res.render(view, {docs: docs, title: title, login: login, page: page, totalPage: totalPage});
+        res.json({docs:docs,result:true});
     });
 
 };
@@ -269,7 +250,7 @@ exports.add = function (req, res) {
             var session = req.session;
             var obj = {
                 "comment": comment,
-                "commenter":session.user._id,
+                "commenter": session.user._id,
                 "content": contentId
             };
             Comment.save(obj, function (err) {
@@ -283,21 +264,21 @@ exports.add = function (req, res) {
                 res.json({'success': success, 'msg': msg});
             });
         } else {//update
-                var obj = {
-                    "id": id,
-                    "comment": comment
-                };
-                Comment.update(obj, function (err) {
-                    if (!err) {
-                        success = true;
-                        msg = "Edit Comment is success";
-                        console.log("success");
-                    } else {
-                        console.log(err.message);
-                        msg = "Edit Comment is failure";
-                    }
-                    res.json({'success': success, 'msg': msg, 'id': obj.id});
-                });
+            var obj = {
+                "id": id,
+                "comment": comment
+            };
+            Comment.update(obj, function (err) {
+                if (!err) {
+                    success = true;
+                    msg = "Edit Comment is success";
+                    console.log("success");
+                } else {
+                    console.log(err.message);
+                    msg = "Edit Comment is failure";
+                }
+                res.json({'success': success, 'msg': msg, 'id': obj.id});
+            });
         }
     }//end else
     if (!flag) {// no callback

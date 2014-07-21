@@ -46,7 +46,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">comments</div>
             <div class="panel-body">
-                <div>
+                <div class="hide js-all-comment">
                     <div class="alert alert-warning" role="alert">No comments!</div>
                 </div>
             </div>
@@ -103,5 +103,11 @@
         <%if(session.user!=null && session.user._id != doc.author){%>
         $('.js-post-comment-btn').removeClass("hide");
         <%}%>
+        $.get("/comment/all",{
+            cententId:"<%=doc._id%>",
+            page:1
+        }, function(date){
+            console.log(date);
+        },"json");
     });
 </script>

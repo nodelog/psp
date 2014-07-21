@@ -31,5 +31,6 @@ var route = function (app) {
     app.get('/content/detail',content.findById);
     app.get('/content/category',content.findByCategory);
     app.post('/comment/add',filter.authorize,comment.add);
+    app.get('/comment/all',filter.authorize,comment.findByPageAndContent);
 };
 exports.route = route;
