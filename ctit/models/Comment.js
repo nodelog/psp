@@ -3,14 +3,14 @@ var Schema = mongodb.mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var CommentSchema = new Schema({
-    Comment: {type: String, required: true},
+    comment: {type: String, required: true},
     commenter: {type: ObjectId},
     content: {type: ObjectId},
     createTime: { type: Date, default: Date.now},
     modifyTime: {type: Date, default: Date.now},
     status: {type: Number, default: 0}
 }, {
-    collection: "Comment"
+    collection: "comment"
 });
 
 var CommentModel = mongodb.mongoose.model("Comment", CommentSchema);
@@ -77,7 +77,7 @@ CommentDAO.prototype.delete = function (id, callback) {
     });
 };
 CommentDAO.prototype.update = function (obj, callback) {
-    CommentModel.update({'_id': obj.id}, {$set: {'name': obj.name,'Comment':obj.Comment,'category':obj.category, 'modifyTime': new Date()}}, function (err) {
+    CommentModel.update({'_id': obj.id}, {$set: {'comment': obj.comment, 'modifyTime': new Date()}}, function (err) {
         callback(err);
     });
 };

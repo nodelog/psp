@@ -2,6 +2,7 @@ var filter = require('./filter');
 var user = require('./../controllers/user');
 var category = require('./../controllers/category');
 var content = require('./../controllers/content');
+var comment = require('./../controllers/comment');
 var route = function (app) {
     app.get('/', content.findByPage);
     app.get('/index', content.findByPage);
@@ -22,13 +23,13 @@ var route = function (app) {
     app.post('/manager/category/add',filter.authorize,filter.authorizeAdmin,category.add);
     app.post('/manager/category/modify',filter.authorize,filter.authorizeAdmin,category.update);
     app.post('/manager/category/delete',filter.authorize,filter.authorizeAdmin,category.delete);
-    app.get('/content/addPage',filter.authorize,category.findAll);
+    app.get('/content/addPage',category.findAll);
     app.post('/content/add',filter.authorize,content.add);
     app.get('/manager/content',filter.authorize,content.findByPage);
     app.post('/manager/content/delete',filter.authorize,content.delete);
     app.get('/manager/content/detail',filter.authorize,content.findById);
     app.get('/content/detail',content.findById);
     app.get('/content/category',content.findByCategory);
-
+    app.post('/comment/add',filter.authorize,comment.add);
 };
 exports.route = route;

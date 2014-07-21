@@ -102,7 +102,7 @@ $(function () {//my jquery code
                 var result = data.success;
                 if (result) {//success
                     layer.close(index);
-                    window.location = "/";
+                    location.reload();
                 }
                 myMsg(data.msg);
             }, "json");
@@ -149,7 +149,9 @@ $(function () {//my jquery code
     //sign up event
     $('.js-body').delegate('.js-logout-btn', 'click', function () {
         myAlert("Are you sure exit the system", function () {
-            window.location = "/user/logout";
+            $.get("/user/logout", {}, function (data) {
+                location.reload();
+            }, "json");
         })
     });
 
@@ -380,6 +382,31 @@ $(function () {//my jquery code
     //goto top
     $(window).bind('scroll resize', function(){
         $(".js-goto-top").goToTop();
+    });
+
+    //detail
+    $('.js-open-comment-btn').click(function () {
+        $('.js-comment-input').focus();
+    });
+    //POST comment
+    $('.js-post-comment-btn').click(function() {
+        var $this = $(this);
+        var id = $this.attr("data-id");
+        var comment = $('.js-comment-input').val().trim();
+        if (comment == "") {
+            myMsg("comment content is empty");
+        } else {
+            $.post("/comment/add", {
+                contentId: id,
+                comment:comment
+            }, function (data) {
+                myMsg(data.msg);
+                if (data.success) {
+                    location.reload();
+                }
+            }, "json");
+        }
+
     });
 });
 

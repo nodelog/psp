@@ -57,13 +57,13 @@
             <div class="panel-heading">post comment</div>
             <div class="panel-body">
                 <div>
-                    <form role="form">
+                    <form role="form" action="javascript:void(0)">
                         <div class="form-group">
                             <textarea class="js-comment-input form-control l-heigh-200"></textarea>
                         </div>
                         <div class="form-group">
                             <div class="l-padding-vertical">
-                                <button type="submit" class="btn btn-primary col-sm-12 hide js-post-comment-btn">post</button>
+                                <button type="submit" class="btn btn-primary col-sm-12 hide js-post-comment-btn" data-id="<%=doc._id%>">post</button>
                             </div>
                         </div>
                     </form>
@@ -94,13 +94,10 @@
 <%- include footer %>
 <script>
     $(function () {
-        $('.js-open-comment-btn').click(function () {
-            $('.js-comment-input').focus();
-        });
         $('.js-comment-input').focus(function () {
             <%if(session.user==null){%>
-            myMsg("please login first");
             $(this).blur();
+            $('.js-login-btn').click();
             <%}%>
         });
         <%if(session.user!=null && session.user._id != doc.author){%>
