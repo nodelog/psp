@@ -119,6 +119,10 @@ a:hover{
     height: 200px!important;
     resize: none;
 }
+.l-no-resize{
+    resize: none;
+}
+
 
 .goto-top {
     width: 50px;

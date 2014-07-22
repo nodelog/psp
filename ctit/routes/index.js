@@ -4,8 +4,8 @@ var category = require('./../controllers/category');
 var content = require('./../controllers/content');
 var comment = require('./../controllers/comment');
 var route = function (app) {
-    app.get('/', content.findByPage);
-    app.get('/index', content.findByPage);
+    app.get('/', filter.createUser, content.findByPage);
+    app.get('/index',filter.createUser, content.findByPage);
     app.get('/about', filter.authorize, function (req, res) {
         res.render('about', { title: 'CMS ABOUT US'});
     });

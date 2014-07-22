@@ -44,33 +44,42 @@
         </div>
         <!--all comments-->
         <div class="panel panel-default">
-            <div class="panel-heading">comments</div>
+            <div class="panel-heading js-comment-title">comments</div>
             <div class="panel-body">
-                <div class="hide js-all-comment">
-                    <div class="alert alert-warning" role="alert">No comments!</div>
+                <div class="">
+                    <div class="alert alert-warning js-all-comment" role="alert">No comments!</div>
+                    <div class="js-comment-panel"></div>
+                    <div class="form-group hide js-more-comment">
+                        <div class="l-padding-vertical">
+                            <button type="submit" class="btn btn-primary col-sm-12 js-more-comment-btn">load more
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <!--post comment-->
-        <%if(session.user==null || session.user._id != doc.author){%>
+        <% if(session.user == null || session.user._id != doc.author){ %>
         <div class="panel panel-default">
             <div class="panel-heading">post comment</div>
             <div class="panel-body">
                 <div>
                     <form role="form" action="javascript:void(0)">
                         <div class="form-group">
-                            <textarea class="js-comment-input form-control l-heigh-200"></textarea>
+                            <textarea class="js-comment-input form-control l-no-resize"></textarea>
                         </div>
                         <div class="form-group">
                             <div class="l-padding-vertical">
-                                <button type="submit" class="btn btn-primary col-sm-12 hide js-post-comment-btn" data-id="<%=doc._id%>">post</button>
+                                <button type="submit" class="btn btn-primary col-sm-12 hide js-post-comment-btn"
+                                        data-id="<%= doc._id %>">post
+                                </button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <% }%>
+        <% } %>
         <% } else { %>
         <div class="alert alert-warning" role="alert">This Content not exists!</div>
         <% } %>
@@ -78,15 +87,15 @@
     <div class="col-sm-3">
         <div class="jumbotron js-menu-bar">
             <p>
-                <%if(session.user==null || session.user._id != doc.author){%>
+                <% if(session.user == null || session.user._id != doc.author){ %>
                 <a href="javascript:void(0)" class="btn btn-primary btn-lg js-open-comment-btn" role="button">
                     <i class="glyphicon glyphicon-pencil"></i>&nbsp;Post comment
                 </a>
-                <%} else{%>
+                <% } else{ %>
                 <a href="/content/addPage?view=addContent" class="btn btn-primary btn-lg" role="button">
                     <i class="glyphicon glyphicon-pencil"></i>&nbsp;Post content
                 </a>
-                <%}%>
+                <% } %>
             </p>
         </div>
     </div>
@@ -103,11 +112,33 @@
         <%if(session.user!=null && session.user._id != doc.author){%>
         $('.js-post-comment-btn').removeClass("hide");
         <%}%>
-        $.get("/comment/all",{
-            cententId:"<%=doc._id%>",
-            page:1
-        }, function(date){
-            console.log(date);
-        },"json");
+        $.get("/comment/all", {
+            cententId: "<%=doc._id%>",
+            page: 1
+        }, function (data) {
+            var docs = data.docs;
+            console.log(docs);
+            if (docs != null) {
+                $('.js-all-comment').addClass("hide");
+                var html = "";
+                var page = data.page;
+                var totalPage = data.totalPage;
+                var total = data.total;
+                $.each(docs, function (i, val) {
+                    html += '<a class="list-group-item"><label>' + val.userName + ':&nbsp;</label>';
+                    html += '<span class="color-gray">' + val.createTime.replace("T", " ").substring(0, 19) + '</span>';
+                    html += '<div>' + val.comment + '</div></a>';
+                });
+                $('.js-comment-title').html($('.js-comment-title').html() + " (" + total + ")");
+                if (totalPage > 1) {
+                    $('.js-more-comment').removeClass("hide");
+                    $('.js-more-comment-btn').attr("data-page", page);
+                    $('.js-more-comment-btn').attr("data-totalPage", totalPage);
+                    $('.js-more-comment-btn').attr("data-id", "<%=doc._id%>");
+                }
+                $('.js-comment-panel').html(html);
+            }
+        }, "json");
+
     });
 </script>

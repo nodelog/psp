@@ -37,10 +37,14 @@ exports.findAll = function (req, res) {
     Category.findAll(function (err, docs) {
         var type = req.query.type;
         if (type === "json") {
+
             res.json({docs: docs});
         } else {
             if (!err) {
                 var view = req.query.view;
+                for (var i=0;i<docs.length;i++){
+                    docs[i].userName= "xxxxxxx";
+                }
                 res.render(view, {docs: docs, title: view});
             } else {
                 res.redirect("/index");

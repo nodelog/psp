@@ -333,7 +333,7 @@ $(function () {//my jquery code
                 myMsg(data.msg);
                 if (data.success) {//success
                     if (id != null) {
-                        window.location = "/content/detail?view=contentDetail&id="+id;
+                        window.location = "/content/detail?view=contentDetail&id=" + id;
                     }
                     else {
                         window.location = "/";
@@ -364,7 +364,7 @@ $(function () {//my jquery code
         }, "json");
     });
 
-    //menu add
+    //menu  add category
     $.get("/content/addPage", {
         type: "json"
     }, function (data) {
@@ -372,15 +372,15 @@ $(function () {//my jquery code
         var html = "";
         var url = "";
         $.each(docs, function (i, tempDoc) {
-            url="/content/category?page=1&categoryId="+tempDoc._id;
-                html += '<li><a href="'+url+'"  class="l-option">' + tempDoc.name + '</a></li>';
+            url = "/content/category?page=1&categoryId=" + tempDoc._id;
+            html += '<li><a href="' + url + '"  class="l-option">' + tempDoc.name + '</a></li>';
         });
         $('.js-category-menu').html(html);
     }, "json");
 
 
     //goto top
-    $(window).bind('scroll resize', function(){
+    $(window).bind('scroll resize', function () {
         $(".js-goto-top").goToTop();
     });
 
@@ -389,7 +389,7 @@ $(function () {//my jquery code
         $('.js-comment-input').focus();
     });
     //POST comment
-    $('.js-post-comment-btn').click(function() {
+    $('.js-post-comment-btn').click(function () {
         var $this = $(this);
         var id = $this.attr("data-id");
         var comment = $('.js-comment-input').val().trim();
@@ -398,7 +398,7 @@ $(function () {//my jquery code
         } else {
             $.post("/comment/add", {
                 contentId: id,
-                comment:comment
+                comment: comment
             }, function (data) {
                 myMsg(data.msg);
                 if (data.success) {
@@ -408,8 +408,37 @@ $(function () {//my jquery code
         }
 
     });
-    //load comment
-
-
+    //load more comment
+    $('.js-more-comment-btn').click(function () {
+        var $this = $(this);
+        var page = parseInt($this.attr("data-page"));
+        var totalPage = parseInt($this.attr("data-totalPage"));
+        var contentId = $this.attr("data-id");
+        if (page >= totalPage) {
+            myMsg("no more comment");
+            return false;
+        }
+        $.get("/comment/all", {
+            cententId: contentId,
+            page: page + 1
+        }, function (data) {
+            var docs = data.docs;
+            var html = "";
+            page = data.page;
+            totalPage = data.totalPage;
+            var total = data.total;
+            $.each(docs, function (i, val) {
+                html += '<a class="list-group-item"><label>' + val.userName + ':&nbsp;</label>';
+                html += '<span class="color-gray">' + val.createTime.replace("T", " ").substring(0, 19) + '</span>';
+                html += '<div>' + val.comment + '</div></a>';
+            });
+            if (totalPage > page) {
+                $this.attr("data-page", page);
+            } else {
+                $('.js-more-comment').addClass("hide");
+            }
+            $('.js-comment-panel').html($('.js-comment-panel').html() + html);
+        }, "json");
+    });
 });
 

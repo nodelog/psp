@@ -8,16 +8,16 @@ var getCount = function (callback) {
 exports.findByPage = function (req, res) {
     getCount(function (err, total) {
         var page = req.query.page;
-        var totalPage =  Math.ceil(total/10);
-        if(!err && total>0){
-            page=page<1?1:page;
-            page=page>totalPage?totalPage:page;
-                User.findByPage(page,function(err, docs){
-                    res.render("manager/user",{docs:docs,title:"User Manager",page:page,totalPage:totalPage});
-                });
-        }else{
+        var totalPage = Math.ceil(total / 10);
+        if (!err && total > 0) {
+            page = page < 1 ? 1 : page;
+            page = page > totalPage ? totalPage : page;
+            User.findByPage(page, function (err, docs) {
+                res.render("manager/user", {docs: docs, title: "User Manager", page: page, totalPage: totalPage});
+            });
+        } else {
             console.log("data error");
-            res.render("manager/user",{docs:{},title:"User Manager",page:page,totalPage:totalPage});
+            res.render("manager/user", {docs: {}, title: "User Manager", page: page, totalPage: totalPage});
         }
     });
 }
@@ -26,25 +26,25 @@ exports.findByPage = function (req, res) {
 exports.switch = function (req, res) {
     var id = req.body.id;
     var status = req.body.status;
-    User.updateStatus(id,status,function(err){
-        if(err){
-           console.log(err.message);
+    User.updateStatus(id, status, function (err) {
+        if (err) {
+            console.log(err.message);
         }
     });
 }
 exports.delete = function (req, res) {
     var id = req.body.id;
-    User.delete(id,function(err){
-        if(!err){
-            res.json({'success':true,'msg':"delete success"});
-        }else{
-            res.json({'success':false,'msg':"delete failure"});
+    User.delete(id, function (err) {
+        if (!err) {
+            res.json({'success': true, 'msg': "delete success"});
+        } else {
+            res.json({'success': false, 'msg': "delete failure"});
         }
     });
 }
 exports.findAll = function (req, res) {
-    User.findAll(function(err,docs){
-        res.render("manager/user",{docs:docs,title:"User List"});
+    User.findAll(function (err, docs) {
+        res.render("manager/user", {docs: docs, title: "User List"});
     });
 }
 
@@ -53,6 +53,7 @@ var findUserByName = function (userName, callback) {
         callback(err, obj);
     });
 };
+
 //register
 exports.addUser = function (req, res) {
     var userName = util.trim(req.body.userName);
@@ -110,8 +111,8 @@ exports.login = function (req, res) {
     } else {
         flag = true;
         findUserByName(userName, function (err, obj) {
-            if(obj.status==1){
-                obj=null;
+            if (obj.status == 1) {
+                obj = null;
             }
             if (obj != null) {
                 if (obj.password == password) {//success
@@ -135,6 +136,6 @@ exports.login = function (req, res) {
 };
 exports.logout = function (req, res) {
     req.session.user = null;
-    res.json({sucess:true});
+    res.json({sucess: true});
 };
 

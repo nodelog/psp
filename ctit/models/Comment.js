@@ -8,7 +8,8 @@ var CommentSchema = new Schema({
     content: {type: ObjectId},
     createTime: { type: Date, default: Date.now},
     modifyTime: {type: Date, default: Date.now},
-    status: {type: Number, default: 0}
+    status: {type: Number, default: 0},
+    userName: {type: String}
 }, {
     collection: "comment"
 });
@@ -44,7 +45,7 @@ CommentDAO.prototype.findByPage = function (page, callback) {
 };
 CommentDAO.prototype.findByContent = function (page, content, callback) {
     var query = CommentModel.find({content: content});
-    query.sort({'_id': -1});
+    query.sort({'_id': 1});
     query.limit(10);
     query.skip((page - 1) * 10);
     query.exec(function (err, docs) {
@@ -75,7 +76,7 @@ CommentDAO.prototype.getCount = function (callback) {
         callback(err, total);
     });
 };
-CommentDAO.prototype.getCountByContent = function (category, callback) {
+CommentDAO.prototype.getCountByContent = function (content, callback) {
     CommentModel.count({content: content}, function (err, total) {
         callback(err, total);
     });

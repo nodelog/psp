@@ -9,8 +9,8 @@ var getCount = function (callback) {
         callback(err, total);
     });
 };
-var getCountByContent = function (content,callback) {
-    Comment.getCount(content,function (err, total) {
+var getCountByContent = function (content, callback) {
+    Comment.getCountByContent(content, function (err, total) {
         callback(err, total);
     });
 };
@@ -26,10 +26,10 @@ exports.findByPageAndContent = function (req, res) {
             });
         },
         totalCount: ["getContentById", function (callback, results) {
-                getCountByContent(cententId, function (err, count) {
-                    total = count;
-                    callback(null);
-                });
+            getCountByContent(cententId, function (err, count) {
+                total = count;
+                callback(null);
+            });
         }],
         pageDocs: ["totalCount", function (callback, results) {
             page = req.query.page;
@@ -37,7 +37,7 @@ exports.findByPageAndContent = function (req, res) {
             if (totalPage > 0) {
                 page = page < 1 ? 1 : page == undefined ? 1 : page;
                 page = page > totalPage ? totalPage : page;
-                Comment.findByContent(page,cententId, function (err, objects) {
+                Comment.findByContent(page, cententId, function (err, objects) {
                     docs = objects;
                     callback(null);
                 });
@@ -74,7 +74,7 @@ exports.findByPageAndContent = function (req, res) {
             }
         }]
     }, function (err, results) {
-        res.json({docs:docs,result:true});
+        res.json({docs: docs, page: page, totalPage: totalPage, total: total, result: true});
     });
 
 };
@@ -142,90 +142,6 @@ exports.findById = function (req, res) {
         }]
     }, function (err, results) {
         res.render(view, {doc: doc, title: doc != null ? doc.name : "Comment not found"});
-    });
-};
-exports.findByCategory = function (req, res) {
-    var category = {}, total = 0, page = 0, totalPage = 0, docs = {};
-    async.auto({
-        getCategoryById: function (callback, results) {
-            var categoryId = req.query.categoryId;
-            Category.findById(categoryId, function (err, obj) {
-                category = obj;
-                callback(null);
-            });
-        },
-        totalCount: ["getCategoryById", function (callback, results) {
-            getCountByCategory(category._id, function (err, count) {
-                total = count;
-                callback(null);
-            });
-        }],
-        getCommentByPage: ["totalCount", function (callback, results) {
-            page = req.query.page;
-            totalPage = Math.ceil(total / 10);
-            if (total > 0) {
-                page = page < 1 ? 1 : page == undefined ? 1 : page;
-                page = page > totalPage ? totalPage : page;
-                Comment.findByCategory(page, category._id, function (err, objects) {
-                    docs = objects;
-                    callback(null);
-                });
-            } else {
-                console.log("data error");
-                callback(null);
-            }
-        }],
-        initUser: ["getCommentByPage", function (callback, results) {
-            var count = 0;
-            async.whilst(//sync floor
-                function () {
-                    return count < docs.length
-                },
-                function (callbackThis) {
-                    var doc = docs[count];
-                    User.findById(doc.author, function (err, obj) {
-                        if (obj != null) {
-                            doc.userName = obj.userName;
-                        } else {
-                            console.log(doc.name + "'s user not found");
-                            doc.userName = "UNKNOWN AUTHOR";//
-                        }
-                        count++;
-                        callbackThis();
-                    });
-                },
-                function (err) {
-                    callback(err);
-                }
-            );
-        }],
-        initCategory: ["initUser", function (callback, results) {
-            var count = 0;
-            async.whilst(//sync floor
-                function () {
-                    return count < docs.length;
-                },
-                function (callbackThis) {
-                    var doc = docs[count];
-                    Category.findById(doc.category, function (err, obj) {
-                        console.log(doc.category + "\t category in Comment .js ");
-                        if (obj != null) {
-                            doc.categoryName = obj.name;
-                        } else {
-                            console.log(doc.name + "'s user not found");
-                            doc.categoryName = "UNKNOWN CATEGORY";//
-                        }
-                        count++;
-                        callbackThis();
-                    });
-                },
-                function (err) {
-                    callback(err);
-                }
-            );
-        }]
-    }, function (err, results) {
-        res.render("categoryComment", {docs: docs, category: category, title: category.name + " Comments", page: page, totalPage: totalPage});
     });
 };
 
