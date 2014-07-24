@@ -309,15 +309,13 @@ $(function () {//my jquery code
     });
 
 
-    //save content
+    //save or edit content
     $('.js-save-content ').click(function () {
         var name = $('.js-add-content-name').val().trim();
         var oldName = $('.js-add-content-name').attr("data-name");
         var id = $('.js-add-content-name').attr("data-id");
         var content = $('.js-editor').html();
         var category = $('.js-category-value').val();
-        console.log(id);
-        console.log(oldName);
         if (name === "") {
             myMsg("title is empty");
         } else if (content === "") {
@@ -365,19 +363,17 @@ $(function () {//my jquery code
     });
 
     //menu  add category
-    $.get("/content/addPage", {
-        type: "json"
-    }, function (data) {
-        var docs = data.docs;
-        var html = "";
-        var url = "";
-        $.each(docs, function (i, tempDoc) {
-            url = "/content/category?page=1&categoryId=" + tempDoc._id;
-            html += '<li><a href="' + url + '"  class="l-option">' + tempDoc.name + '</a></li>';
-        });
-        $('.js-category-menu').html(html);
-    }, "json");
-
+    $.get("/category/all",
+        function (data) {
+            var docs = data.docs;
+            var html = "";
+            var url = "";
+            $.each(docs, function (i, tempDoc) {
+                url = "/content/category?page=1&categoryId=" + tempDoc._id;
+                html += '<li><a href="' + url + '"  class="l-option">' + tempDoc.name + '</a></li>';
+            });
+            $('.js-category-menu').html(html);
+        }, "json");
 
     //goto top
     $(window).bind('scroll resize', function () {
@@ -440,5 +436,106 @@ $(function () {//my jquery code
             $('.js-comment-panel').html($('.js-comment-panel').html() + html);
         }, "json");
     });
-});
+
+    var sessionUser;
+    $.ajax({
+        url: "/session",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            sessionUser = data.user;
+        }
+    });
+    //check before comment
+    $('.js-comment-input').focus(function () {
+        if (sessionUser == null) {
+            $(this).blur();
+            $('.js-login-btn').click();
+        }
+    });
+
+    var url = location.href;
+    if (url.indexOf("view=contentDetail") != -1) {
+        var docId = $('.js-doc-id').val();
+        if (sessionUser != null && sessionUser._id != docId) {
+            $('.js-post-comment-btn').prop("disabled", false);
+            $('.js-comment-input').attr("placeholder", "please input comment");
+        }
+        $.get("/comment/all", {
+            cententId: docId,
+            page: 1
+        }, function (data) {
+            var docs = data.docs;
+            console.log(docs);
+            if (docs != null) {
+                var html = "";
+                var page = data.page;
+                var totalPage = data.totalPage;
+                var total = data.total;
+                $.each(docs, function (i, val) {
+                    html += '<a class="list-group-item"><label>' + val.userName + ':&nbsp;</label>';
+                    html += '<span class="color-gray">' + val.createTime.replace("T", " ").substring(0, 19) + '</span>';
+                    html += '<div>' + val.comment + '</div></a>';
+                });
+                $('.js-comment-title').html($('.js-comment-title').html() + " (" + total + ")");
+                if (totalPage > 1) {
+                    $('.js-more-comment').removeClass("hide");
+                    $('.js-more-comment-btn').attr("data-page", page);
+                    $('.js-more-comment-btn').attr("data-totalPage", totalPage);
+                    $('.js-more-comment-btn').attr("data-id", docId);
+                }
+                $('.js-comment-panel').html(html);
+            } else {
+                $('.js-all-comment').removeClass("hide");
+                $('.js-comment-panel').html("");
+            }
+        }, "json");
+    }
+
+    //添加内容（文章）页面
+    if (url.indexOf("content/addPage") != -1) {
+        $(function () {
+            $.get("/category/all",
+                function (data) {
+                    var docs = data.docs;
+                    var options = "";
+                    $.each(docs, function (i, tempDoc) {
+                        options += '<option class="l-option" value="' + tempDoc._id + '">' + tempDoc.name + '</option>';
+                    });
+                    $('.js-category-value').html(options);
+                }, "json");
+        });
+    }
+
+    //编辑文章
+    if (url.indexOf("view=editContent") != -1) {
+        $('.js-editor').html($('.js-content-hide').html());
+        $.get("/category/all"
+            , function (data) {
+                var docs = data.docs;
+                var options = "";
+                var categoryId = $('.js-edit-content-category').val();
+                $.each(docs, function (i, tempDoc) {
+                    if (tempDoc._id != categoryId) {
+                        options += '<option class="l-option" value="' + tempDoc._id + '">' + tempDoc.name + '</option>';
+                    } else {
+                        options += '<option value="' + tempDoc._id + '" selected>' + tempDoc.name + '</option>';
+                    }
+                });
+                $('.js-category-value').html(options);
+            }, "json");
+    }
+
+    //index open login  check
+    var loginFlag = $('.js-login-flag').val();
+    if (loginFlag == "true") {
+        $('.js-login-btn').click();
+    }
+
+    //页面刷新
+    $('.js-refresh').click(function () {
+        location.reload();
+    });
+})
+;
 

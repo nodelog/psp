@@ -1,4 +1,6 @@
 var mongodb = require('./mongodb');
+var constants = require('./constants');
+
 var Schema = mongodb.mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
@@ -9,7 +11,8 @@ var ContentSchema = new Schema({
     category: {type: ObjectId},
     createTime: { type: Date, default: Date.now},
     modifyTime: {type: Date, default: Date.now},
-    view: {type: Number, default: 1000}
+    view: {type: Number, default: 1000},
+    status: {type: 'Number', default: 0, required: true, min: 0, max: 1}
 }, {
     collection: "content"
 });
@@ -25,18 +28,18 @@ ContentDAO.prototype.save = function (obj, callback) {
     });
 };
 ContentDAO.prototype.findByName = function (name, callback) {
-    ContentModel.findOne({name: name}, function (err, obj) {
+    ContentModel.findOne({"name": name, "status": constants.CONTENT_ENABLE_STATUS}, function (err, obj) {
         callback(err, obj);
     });
 };
 ContentDAO.prototype.findById = function (id, callback) {
-    ContentModel.findOne({_id: id}, function (err, obj) {
+    ContentModel.findOne({"_id": id, "status": constants.CONTENT_ENABLE_STATUS}, function (err, obj) {
         callback(err, obj);
     });
 };
 ContentDAO.prototype.findByPage = function (page, callback) {
-    var query = ContentModel.find();
-    query.sort({'_id': -1});
+    var query = ContentModel.find({"status": constants.CONTENT_ENABLE_STATUS});
+    query.sort({"modifyTime": -1});
     query.limit(10);
     query.skip((page - 1) * 10);
     query.exec(function (err, docs) {
@@ -44,41 +47,31 @@ ContentDAO.prototype.findByPage = function (page, callback) {
     });
 };
 ContentDAO.prototype.findByCategory = function (page, category, callback) {
-    var query = ContentModel.find({category: category});
-    query.sort({'_id': -1});
+    var query = ContentModel.find({"category": category, "status": constants.CONTENT_ENABLE_STATUS});
+    query.sort({"modifyTime": -1});
     query.limit(10);
     query.skip((page - 1) * 10);
     query.exec(function (err, docs) {
         callback(err, docs);
     });
 };
-ContentDAO.prototype.findAll = function (callback) {
-    ContentModel.find({}, function (err, docs) {
-        callback(err, docs);
-    });
-};
-ContentDAO.prototype.findAllEnable = function (callback) {
-    ContentModel.find({status: 0}, function (err, docs) {
-        callback(err, docs);
-    });
-};
 ContentDAO.prototype.getCount = function (callback) {
-    ContentModel.count({}, function (err, total) {
+    ContentModel.count({"status": constants.CONTENT_ENABLE_STATUS}, function (err, total) {
         callback(err, total);
     });
 };
 ContentDAO.prototype.getCountByCategory = function (category, callback) {
-    ContentModel.count({category: category}, function (err, total) {
+    ContentModel.count({"category": category, "status": constants.CONTENT_ENABLE_STATUS}, function (err, total) {
         callback(err, total);
     });
 };
 ContentDAO.prototype.delete = function (id, callback) {
-    ContentModel.remove({'_id': id}, function (err) {
+    ContentModel.update({"_id": id}, {$set: {"status": constants.COMMENT_UNABLE_STATUS }}, function (err) {
         callback(err);
     });
 };
 ContentDAO.prototype.update = function (obj, callback) {
-    ContentModel.update({'_id': obj.id}, {$set: {'name': obj.name, 'content': obj.content, 'category': obj.category, 'modifyTime': new Date()}}, function (err) {
+    ContentModel.update({"_id": obj.id}, {$set: {"name": obj.name, "content": obj.content, "category": obj.category, "modifyTime": new Date()}}, function (err) {
         callback(err);
     });
 };

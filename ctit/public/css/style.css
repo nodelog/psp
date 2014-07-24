@@ -102,6 +102,7 @@ div[data-role="editor-toolbar"] {
 .l-option{
     min-height:40px !important;;
     line-height: 40px!important;
+    border-top: 1px solid #e5e5e5;
  }
 .l-option:hover{
     background: #5bc0de!important;

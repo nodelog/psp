@@ -1,5 +1,5 @@
 var Category = require('./../models/Category.js');
-var util = require('./util.js');
+var cmsUtils = require('./cmsUtils.js');
 var getCount = function (callback) {
     Category.getCount(function (err, total) {
         callback(err, total);
@@ -7,11 +7,10 @@ var getCount = function (callback) {
 };
 exports.findByPage = function (req, res) {
     getCount(function (err, total) {
-        var page = req.query.page;
-        var totalPage = Math.ceil(total / 10);
-        if (!err && total > 0) {
-            page = page < 1 ? 1 : page;
-            page = page > totalPage ? totalPage : page;
+        var pageObj = cmsUtils.page(req.query.page,total);
+        var page = pageObj.page;
+        var totalPage = pageObj.totalPage;
+        if (!err && totalPage > 0) {
             Category.findByPage(page, function (err, docs) {
                 res.render("manager/category", {docs: docs, title: "Category Manager", page: page, totalPage: totalPage});
             });
@@ -35,21 +34,23 @@ exports.delete = function (req, res) {
 }
 exports.findAll = function (req, res) {
     Category.findAll(function (err, docs) {
-        var type = req.query.type;
-        if (type === "json") {
-
+        if (!err) {
             res.json({docs: docs});
         } else {
-            if (!err) {
-                var view = req.query.view;
-                for (var i=0;i<docs.length;i++){
-                    docs[i].userName= "xxxxxxx";
-                }
-                res.render(view, {docs: docs, title: view});
-            } else {
-                res.redirect("/index");
-            }
+            console.log(err.message+"\n category load failure");
+            res.json({docs:{}});
         }
+//        var type = req.query.type;
+//        if (type === "json") {
+//            res.json({docs: docs});
+//        } else {
+//            if (!err) {
+//                var view = req.query.view;
+//                res.render(view, {docs: docs, title: view});
+//            } else {
+//                res.redirect("/index");
+//            }
+//        }
     });
 }
 
@@ -124,42 +125,3 @@ exports.update = function (req, res) {
         res.json({'success': success, 'msg': msg});
     }
 };
-
-//login
-exports.login = function (req, res) {
-    var CategoryName = util.trim(req.body.CategoryName);
-    var password = util.trim(req.body.password);
-    var msg = "";
-    var success = false;
-    var falg = false;//callback
-    if (CategoryName == "") {
-        msg = "CategoryName is empty";
-    } else if (password == "") {
-        msg = "password is empty";
-    } else {
-        flag = true;
-        findCategoryByName(CategoryName, function (err, obj) {
-            if (obj.status == 1) {
-                obj = null;
-            }
-            if (obj != null) {
-                if (obj.password == password) {//success
-                    success = true;
-                    msg = "sign in success";
-                    var session = req.session;
-                    req.session.Category = obj;
-                } else {
-                    msg = "password is error";
-                }
-            } else {
-                msg = "CategoryName is not exists";
-            }
-            res.json({'success': success, 'msg': msg, 'obj': obj});
-        });
-
-    }
-    if (!flag) {// no callback
-        res.json({'success': success, 'msg': msg});
-    }
-};
-

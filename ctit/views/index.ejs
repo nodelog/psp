@@ -47,13 +47,7 @@
         </div>
     </div>
 </div>
-
+<input type="hidden" class="js-login-flag" value="<%=login%>"/>
 <%- include footer %>
-<% if(login){ %>
-<script>
-    $(function () {
-        $('.js-login-btn').click();
-    });
-</script>
-<% } %>
+
 

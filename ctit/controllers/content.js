@@ -3,7 +3,7 @@ var utils = require("util");
 var Content = require('./../models/Content.js');
 var User = require('./../models/User.js');
 var Category = require('./../models/Category.js');
-var util = require('./util.js');
+var cmsUtils = require('./cmsUtils.js');
 var getCount = function (callback) {
     Content.getCount(function (err, total) {
         callback(err, total);
@@ -25,11 +25,12 @@ exports.findByPage = function (req, res) {
             });
         },
         pageDocs: ["totalCount", function (callback, results) {
-            page = req.query.page;
-            totalPage = Math.ceil(total / 10);
+            var pageObj = cmsUtils.page(req.query.page, total);
+            page = pageObj.page;
+            totalPage = pageObj.totalPage;
+            console.log(page + "page");
+            console.log(totalPage + "totalpage");
             if (totalPage > 0) {
-                page = page < 1 ? 1 : page == undefined ? 1 : page;
-                page = page > totalPage ? totalPage : page;
                 Content.findByPage(page, function (err, objects) {
                     docs = objects;
                     callback(null);
@@ -71,7 +72,6 @@ exports.findByPage = function (req, res) {
                 function (callbackThis) {
                     var doc = docs[count];
                     Category.findById(doc.category, function (err, obj) {
-                        console.log(doc.category + "\t category in content .js ");
                         if (obj != null) {
                             doc.categoryName = obj.name;
                         } else {
@@ -112,11 +112,6 @@ exports.delete = function (req, res) {
         } else {
             res.json({'success': false, 'msg': "delete failure"});
         }
-    });
-};
-exports.findAllEnable = function (req, res) {
-    Content.findAllEnable(function (err, docs) {
-        res.render("manager/Content", {docs: docs, title: "Content List"});
     });
 };
 exports.findById = function (req, res) {
@@ -165,7 +160,12 @@ exports.findById = function (req, res) {
             }
         }]
     }, function (err, results) {
-        res.render(view, {doc: doc, title: doc != null ? doc.name : "Content not found"});
+        if (view == "editContent") {
+            if(req.session.user._id != doc.author){
+                res.redirect("/");
+            }
+        }
+        res.render(view, {"doc": doc, "title": doc != null ? doc.name : "Content not found"});
     });
 };
 exports.findByCategory = function (req, res) {
@@ -185,11 +185,10 @@ exports.findByCategory = function (req, res) {
             });
         }],
         getContentByPage: ["totalCount", function (callback, results) {
-            page = req.query.page;
-            totalPage = Math.ceil(total / 10);
-            if (total > 0) {
-                page = page < 1 ? 1 : page == undefined ? 1 : page;
-                page = page > totalPage ? totalPage : page;
+            var pageObj = cmsUtils.page(req.query.page, total);
+            page = pageObj.page;
+            totalPage = pageObj.totalPage;
+            if (totalPage > 0) {
                 Content.findByCategory(page, category._id, function (err, objects) {
                     docs = objects;
                     callback(null);
@@ -232,7 +231,6 @@ exports.findByCategory = function (req, res) {
                 function (callbackThis) {
                     var doc = docs[count];
                     Category.findById(doc.category, function (err, obj) {
-                        console.log(doc.category + "\t category in content .js ");
                         if (obj != null) {
                             doc.categoryName = obj.name;
                         } else {
@@ -362,41 +360,4 @@ exports.update = function (req, res) {
     }
 };
 
-//login
-exports.login = function (req, res) {
-    var ContentName = util.trim(req.body.ContentName);
-    var password = util.trim(req.body.password);
-    var msg = "";
-    var success = false;
-    var falg = false;//callback
-    if (ContentName == "") {
-        msg = "ContentName is empty";
-    } else if (password == "") {
-        msg = "password is empty";
-    } else {
-        flag = true;
-        findContentByName(ContentName, function (err, obj) {
-            if (obj.status == 1) {
-                obj = null;
-            }
-            if (obj != null) {
-                if (obj.password == password) {//success
-                    success = true;
-                    msg = "sign in success";
-//                    var session = req.session;
-//                    req.session.Content = obj;
-                } else {
-                    msg = "password is error";
-                }
-            } else {
-                msg = "ContentName is not exists";
-            }
-            res.json({'success': success, 'msg': msg, 'obj': obj});
-        });
-
-    }
-    if (!flag) {// no callback
-        res.json({'success': success, 'msg': msg});
-    }
-};
 

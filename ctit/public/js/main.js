@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: "js",
+    baseUrl: "/js",
     paths: {
         "jquery": "jquery-1.10.2",
         "bootstrap": "bootstrap-2.3.1.min",
@@ -11,21 +11,31 @@ require.config({
         "wysiwyg": "bootstrap-wysiwyg"
     },
     shim: {
-        'jquery.pin': {
-            deps: ['jquery'],
-            exports: 'jQuery.pin'
+        'pin': {
+            deps: ['jquery']
         },
-        'jquery.scroll': {
-            deps: ['jquery'],
-            exports: 'jQuery.fn.scroll'
+        'bootstrap': {
+            deps: ['jquery']
         },
-        'backbone.layoutmanager': {
-            deps: ['backbone']
-            exports: 'Backbone.LayoutManager'
+        'wysiwyg': {
+            deps: ['bootstrap']
+        },
+        'layer': {
+            deps: ['jquery']
+        },
+        'gotoTop': {
+            deps: ['jquery']
+        },
+        'hotkeys': {
+            deps: ['jquery']
+        },
+        'common': {
+            deps: ['jquery','bootstrap','layer','pin','gotoTop']
+        },
+        'editor': {
+            deps: ['jquery','bootstrap','hotkeys','prettify','wysiwyg','common']
         }
     }
 });
-
-require(['jquery', 'bootstrap', 'pin', 'layer', 'gotoTop', 'common', 'hotkeys', 'prettify', 'wysiwyg', 'editor'], function ($) {
-});
+require(['editor']);
 

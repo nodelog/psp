@@ -3,6 +3,7 @@
 <div class="row js-panel-row">
 
     <div class="col-sm-9 ">
+        <input type="hidden" class="js-doc-id" value="<%-doc._id%>"/>
         <% if (doc != null) { %>
         <ol class="breadcrumb">
             <li><a href="/" title="Go Home">Home</a></li>
@@ -18,7 +19,7 @@
                     <a href="/content/detail?id=<%= doc._id %>&view=contentDetail" title="reload <%= doc.name %>"><i
                                 class="glyphicon glyphicon-bookmark"></i>&nbsp;<%= doc.name %></a>
                     <% if(session.user != null && session.user._id == doc.author){ %>
-                    <a href="/content/detail?id=<%= doc._id %>&view=editContent" class="btn btn-primary pull-right"
+                    <a href="/content/edit?id=<%= doc._id %>&view=editContent" class="btn btn-primary pull-right"
                        role="button">
                         <i class="glyphicon glyphicon-pencil"></i>&nbsp;Edit
                     </a>
@@ -47,8 +48,8 @@
             <div class="panel-heading js-comment-title">comments</div>
             <div class="panel-body">
                 <div class="">
-                    <div class="alert alert-warning js-all-comment" role="alert">No comments!</div>
-                    <div class="js-comment-panel"></div>
+                    <div class="alert alert-warning js-all-comment hide" role="alert">No comments!</div>
+                    <div class="js-comment-panel">loading comment ...</div>
                     <div class="form-group hide js-more-comment">
                         <div class="l-padding-vertical">
                             <button type="submit" class="btn btn-primary col-sm-12 js-more-comment-btn">load more
@@ -66,12 +67,13 @@
                 <div>
                     <form role="form" action="javascript:void(0)">
                         <div class="form-group">
-                            <textarea class="js-comment-input form-control l-no-resize"></textarea>
+                            <textarea class="js-comment-input form-control l-no-resize" placeholder="Logged in to comment on
+"></textarea>
                         </div>
                         <div class="form-group">
                             <div class="l-padding-vertical">
-                                <button type="submit" class="btn btn-primary col-sm-12 hide js-post-comment-btn"
-                                        data-id="<%= doc._id %>">post
+                                <button type="submit" class="btn btn-primary col-sm-12 js-post-comment-btn"
+                                        data-id="<%= doc._id %>" disabled>post
                                 </button>
                             </div>
                         </div>
@@ -89,7 +91,7 @@
             <p>
                 <% if(session.user == null || session.user._id != doc.author){ %>
                 <a href="javascript:void(0)" class="btn btn-primary btn-lg js-open-comment-btn" role="button">
-                    <i class="glyphicon glyphicon-pencil"></i>&nbsp;Post comment
+                    <i class="glyphicon glyphicon-comment"></i>&nbsp;Post comment
                 </a>
                 <% } else{ %>
                 <a href="/content/addPage?view=addContent" class="btn btn-primary btn-lg" role="button">
@@ -101,44 +103,4 @@
     </div>
 </div>
 <%- include footer %>
-<script>
-    $(function () {
-        $('.js-comment-input').focus(function () {
-            <%if(session.user==null){%>
-            $(this).blur();
-            $('.js-login-btn').click();
-            <%}%>
-        });
-        <%if(session.user!=null && session.user._id != doc.author){%>
-        $('.js-post-comment-btn').removeClass("hide");
-        <%}%>
-        $.get("/comment/all", {
-            cententId: "<%=doc._id%>",
-            page: 1
-        }, function (data) {
-            var docs = data.docs;
-            console.log(docs);
-            if (docs != null) {
-                $('.js-all-comment').addClass("hide");
-                var html = "";
-                var page = data.page;
-                var totalPage = data.totalPage;
-                var total = data.total;
-                $.each(docs, function (i, val) {
-                    html += '<a class="list-group-item"><label>' + val.userName + ':&nbsp;</label>';
-                    html += '<span class="color-gray">' + val.createTime.replace("T", " ").substring(0, 19) + '</span>';
-                    html += '<div>' + val.comment + '</div></a>';
-                });
-                $('.js-comment-title').html($('.js-comment-title').html() + " (" + total + ")");
-                if (totalPage > 1) {
-                    $('.js-more-comment').removeClass("hide");
-                    $('.js-more-comment-btn').attr("data-page", page);
-                    $('.js-more-comment-btn').attr("data-totalPage", totalPage);
-                    $('.js-more-comment-btn').attr("data-id", "<%=doc._id%>");
-                }
-                $('.js-comment-panel').html(html);
-            }
-        }, "json");
 
-    });
-</script>

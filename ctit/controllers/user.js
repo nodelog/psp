@@ -1,5 +1,6 @@
 var User = require('./../models/User.js');
-var util = require('./util.js');
+var constants = require('./../models/constants.js');
+var cmsUtils = require('./cmsUtils.js');
 var getCount = function (callback) {
     User.getCount(function (err, total) {
         callback(err, total);
@@ -7,11 +8,10 @@ var getCount = function (callback) {
 };
 exports.findByPage = function (req, res) {
     getCount(function (err, total) {
-        var page = req.query.page;
-        var totalPage = Math.ceil(total / 10);
-        if (!err && total > 0) {
-            page = page < 1 ? 1 : page;
-            page = page > totalPage ? totalPage : page;
+        var pageObj = cmsUtils.page(req.query.page,total);
+        var page = pageObj.page;
+        var totalPage = pageObj.totalPage;
+        if (!err && totalPage > 0) {
             User.findByPage(page, function (err, docs) {
                 res.render("manager/user", {docs: docs, title: "User Manager", page: page, totalPage: totalPage});
             });
@@ -26,11 +26,22 @@ exports.findByPage = function (req, res) {
 exports.switch = function (req, res) {
     var id = req.body.id;
     var status = req.body.status;
-    User.updateStatus(id, status, function (err) {
-        if (err) {
-            console.log(err.message);
+    User.findById(function (err, obj) {
+        if (!err) {
+            if (status != constants.USER_ENABLE_STATUS && status != constants.USER_UNABLE_STATUS) {
+                status = constants.USER_ENABLE_STATUS;// 设置默认为可用。
+            }
+            obj.status = status;
+            User.update(obj, function (err) {
+                if (err) {
+                    console.log(err.message + "\n switch status failure");
+                }
+            });
+        } else {
+            console.log(err.message + "\n user is not exists");
         }
     });
+
 }
 exports.delete = function (req, res) {
     var id = req.body.id;
@@ -42,11 +53,6 @@ exports.delete = function (req, res) {
         }
     });
 }
-exports.findAll = function (req, res) {
-    User.findAll(function (err, docs) {
-        res.render("manager/user", {docs: docs, title: "User List"});
-    });
-}
 
 var findUserByName = function (userName, callback) {
     User.findByName(userName, function (err, obj) {
@@ -56,9 +62,9 @@ var findUserByName = function (userName, callback) {
 
 //register
 exports.addUser = function (req, res) {
-    var userName = util.trim(req.body.userName);
-    var password = util.trim(req.body.password);
-    var password2 = util.trim(req.body.password2);
+    var userName = (req.body.userName).trim();
+    var password = (req.body.password).trim();
+    var password2 = (req.body.password2).trim();
     var msg = "";
     var success = false;
     var falg = false;//callback
@@ -77,7 +83,7 @@ exports.addUser = function (req, res) {
                 msg = "userName is exists";
                 res.json({'success': success, 'msg': msg});
             } else {
-                obj = {"userName": userName, "password": password, "createTime": new Date(), "modifyTime": new Date(), "role": 1, "status": 0};
+                obj = {"userName": userName, "password": password};
                 User.save(obj, function (err) {
                     if (!err) {
                         success = true;
@@ -99,8 +105,8 @@ exports.addUser = function (req, res) {
 
 //login
 exports.login = function (req, res) {
-    var userName = util.trim(req.body.userName);
-    var password = util.trim(req.body.password);
+    var userName = (req.body.userName).trim();
+    var password = (req.body.password).trim();
     var msg = "";
     var success = false;
     var falg = false;//callback
@@ -138,4 +144,9 @@ exports.logout = function (req, res) {
     req.session.user = null;
     res.json({sucess: true});
 };
+
+exports.session = function (req, res) {
+    var user = req.session.user;
+    res.json({user: user});
+}
 

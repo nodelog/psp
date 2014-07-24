@@ -3,7 +3,7 @@ var utils = require("util");
 var Comment = require('./../models/Comment.js');
 var Content = require('./../models/Content.js');
 var User = require('./../models/User.js');
-var util = require('./util.js');
+var cmsUtils = require('./cmsUtils.js');
 var getCount = function (callback) {
     Comment.getCount(function (err, total) {
         callback(err, total);
@@ -32,11 +32,10 @@ exports.findByPageAndContent = function (req, res) {
             });
         }],
         pageDocs: ["totalCount", function (callback, results) {
-            page = req.query.page;
-            totalPage = Math.ceil(total / 10);
+            var pageObj = cmsUtils.page(req.query.page,total);
+            page = pageObj.page;
+            totalPage = pageObj.totalPage;
             if (totalPage > 0) {
-                page = page < 1 ? 1 : page == undefined ? 1 : page;
-                page = page > totalPage ? totalPage : page;
                 Comment.findByContent(page, cententId, function (err, objects) {
                     docs = objects;
                     callback(null);
@@ -90,11 +89,7 @@ exports.delete = function (req, res) {
         }
     });
 };
-exports.findAllEnable = function (req, res) {
-    Comment.findAllEnable(function (err, docs) {
-        res.render("manager/Comment", {docs: docs, title: "Comment List"});
-    });
-};
+
 exports.findById = function (req, res) {
     var id = req.query.id;
     var view = req.query.view;
@@ -235,41 +230,4 @@ exports.update = function (req, res) {
     }
 };
 
-//login
-exports.login = function (req, res) {
-    var CommentName = util.trim(req.body.CommentName);
-    var password = util.trim(req.body.password);
-    var msg = "";
-    var success = false;
-    var falg = false;//callback
-    if (CommentName == "") {
-        msg = "CommentName is empty";
-    } else if (password == "") {
-        msg = "password is empty";
-    } else {
-        flag = true;
-        findCommentByName(CommentName, function (err, obj) {
-            if (obj.status == 1) {
-                obj = null;
-            }
-            if (obj != null) {
-                if (obj.password == password) {//success
-                    success = true;
-                    msg = "sign in success";
-//                    var session = req.session;
-//                    req.session.Comment = obj;
-                } else {
-                    msg = "password is error";
-                }
-            } else {
-                msg = "CommentName is not exists";
-            }
-            res.json({'success': success, 'msg': msg, 'obj': obj});
-        });
-
-    }
-    if (!flag) {// no callback
-        res.json({'success': success, 'msg': msg});
-    }
-};
 
