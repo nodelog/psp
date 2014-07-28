@@ -60,6 +60,8 @@ exports.findByPageAndContent = function (req, res) {
                                 console.log(doc.name + "'s user not found");
                                 doc.userName = "UNKNOWN AUTHOR";//
                             }
+                            doc.createTime = doc.createTime.toLocaleString();
+                            console.log(doc.createTime);
                             count++;
                             callbackThis();
                         });

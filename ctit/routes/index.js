@@ -7,7 +7,7 @@ var route = function (app) {
     app.get('/', filter.createUser, content.findByPage);
     app.get('/index', filter.createUser, content.findByPage);
     app.get('/about', function (req, res) {
-        res.render('about', { title: 'CMS ABOUT US'});
+        res.render('about', { title: 'ABOUT US'});
     });
     app.post('/user/login', user.login);
     app.post('/user/reg', user.addUser);
@@ -18,7 +18,24 @@ var route = function (app) {
     });
     app.get('/manager/user', filter.authorize, filter.authorizeAdmin, user.findByPage);
     app.get('/manager/category', filter.authorize, filter.authorizeAdmin, category.findByPage);
-    app.get('/manager/content', filter.authorize, content.findByPage);
+    app.get('/manager/content', filter.authorize, function (req, res) {
+        var session = req.session;
+        if (session != null) {
+            var user = session.user;
+            if (user != null) {
+                var role = user.role;
+                if (role == 0) {
+                    content.findByPage(req, res);
+                } else {
+                    content.findByUser(req, res);
+                }
+            } else {
+                res.redirect("/");
+            }
+        } else {
+            res.redirect("/");
+        }
+    });
     app.get('/manager/content/detail', filter.authorize, content.findById);
     app.post('/manager/user/delete', filter.authorize, filter.authorizeAdmin, user.delete);
     app.post('/manager/user/switch', filter.authorize, filter.authorizeAdmin, user.switch);
@@ -38,5 +55,6 @@ var route = function (app) {
     app.get('/comment/all', comment.findByPageAndContent);
     app.get('/session', user.session);
     app.post('/session', user.session);
+    app.get('/content/user', filter.authorize, content.findByUser);
 };
 exports.route = route;

@@ -26,7 +26,7 @@ function myMsg(_msg, _height, index) {
 function myAlert(_msg, callback) {
     index = $.layer({
         time: 0,
-        title: "CMS Prompt",
+        title: "System Prompt",
         closeBtn: [0, true],
         border: [5, 0.3, '#e5e5e5'],
         shade: [0.3, '#000'],
@@ -76,12 +76,35 @@ function canInput(select, length) {
     return length - _size;
 }
 
+Date.prototype.format=function(fmt) {
+    if (fmt == null) {
+        fmt = "yyyy-MM-dd hh:mm:ss";
+    }
+    var o = {
+        "M+" : this.getMonth()+1, //月份
+        "d+" : this.getDate(), //日
+        "h+" : this.getHours(), //小时
+        "H+" : this.getHours(), //小时
+        "m+" : this.getMinutes(), //分
+        "s+" : this.getSeconds()//, //秒
+    };
+    if(/(y+)/.test(fmt)){
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    }
+    for(var k in o){
+        if(new RegExp("("+ k +")").test(fmt)){
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        }
+    }
+    return fmt;
+}
+
 $(function () {//my jquery code
     //open login panel
     var loginHtml = $('.js-login-panel').html();
     $('.js-login-panel').html("");
     $('.js-login-btn').click(function () {
-        myPage('CMS Login', ['420px', '260px'], loginHtml, function (obj) {
+        myPage('Login', ['420px', '260px'], loginHtml, function (obj) {
             $('.js-login-username').focus();
         });
 
@@ -113,7 +136,7 @@ $(function () {//my jquery code
     var registerHtml = $('.js-register-panel').html();
     $('.js-register-panel').html("");
     $('.js-register-btn').click(function () {
-        myPage('CMS Register', ['420px', '260px'], registerHtml, function (obj) {
+        myPage('Register', ['420px', '260px'], registerHtml, function (obj) {
             $('.js-register-username').focus();
         });
     });
@@ -311,33 +334,37 @@ $(function () {//my jquery code
 
     //save or edit content
     $('.js-save-content ').click(function () {
-        var name = $('.js-add-content-name').val().trim();
-        var oldName = $('.js-add-content-name').attr("data-name");
-        var id = $('.js-add-content-name').attr("data-id");
-        var content = $('.js-editor').html();
-        var category = $('.js-category-value').val();
-        if (name === "") {
-            myMsg("title is empty");
-        } else if (content === "") {
-            myMsg("content is empty");
+        if (sessionUser == null) {
+            $('.js-login-btn').click();
         } else {
-            $.post("/content/add", {
-                id: id,
-                name: name,
-                content: content,
-                category: category,
-                oldName: oldName
-            }, function (data) {
-                myMsg(data.msg);
-                if (data.success) {//success
-                    if (id != null) {
-                        window.location = "/content/detail?view=contentDetail&id=" + id;
+            var name = $('.js-add-content-name').val().trim();
+            var oldName = $('.js-add-content-name').attr("data-name");
+            var id = $('.js-add-content-name').attr("data-id");
+            var content = $('.js-editor').html();
+            var category = $('.js-category-value').val();
+            if (name === "") {
+                myMsg("title is empty");
+            } else if (content === "") {
+                myMsg("content is empty");
+            } else {
+                $.post("/content/add", {
+                    id: id,
+                    name: name,
+                    content: content,
+                    category: category,
+                    oldName: oldName
+                }, function (data) {
+                    myMsg(data.msg);
+                    if (data.success) {//success
+                        if (id != null) {
+                            window.location = "/content/detail?view=contentDetail&id=" + id;
+                        }
+                        else {
+                            window.location = "/";
+                        }
                     }
-                    else {
-                        window.location = "/";
-                    }
-                }
-            }, "json");
+                }, "json");
+            }
         }
     });
     $('.js-content-desc').each(function (i, val) {
@@ -425,7 +452,7 @@ $(function () {//my jquery code
             var total = data.total;
             $.each(docs, function (i, val) {
                 html += '<a class="list-group-item"><label>' + val.userName + ':&nbsp;</label>';
-                html += '<span class="color-gray">' + val.createTime.replace("T", " ").substring(0, 19) + '</span>';
+                html += '<span class="color-gray">' + new Date(val.createTime.toLocaleString()).format() + '</span>';
                 html += '<div>' + val.comment + '</div></a>';
             });
             if (totalPage > page) {
@@ -466,17 +493,20 @@ $(function () {//my jquery code
             page: 1
         }, function (data) {
             var docs = data.docs;
-            console.log(docs);
             if (docs != null) {
                 var html = "";
                 var page = data.page;
                 var totalPage = data.totalPage;
                 var total = data.total;
                 $.each(docs, function (i, val) {
+                    console.log(val)
                     html += '<a class="list-group-item"><label>' + val.userName + ':&nbsp;</label>';
-                    html += '<span class="color-gray">' + val.createTime.replace("T", " ").substring(0, 19) + '</span>';
+                    html += '<span class="color-gray">' + new Date(val.createTime.toLocaleString()).format() + '</span>';
                     html += '<div>' + val.comment + '</div></a>';
                 });
+                var d = new Date();
+                var n = d.toLocaleDateString();
+                console.log(typeof(n));
                 $('.js-comment-title').html($('.js-comment-title').html() + " (" + total + ")");
                 if (totalPage > 1) {
                     $('.js-more-comment').removeClass("hide");
@@ -505,6 +535,9 @@ $(function () {//my jquery code
                     $('.js-category-value').html(options);
                 }, "json");
         });
+        if (sessionUser == null) {
+            $('.js-login-btn').click();
+        }
     }
 
     //编辑文章
@@ -524,6 +557,9 @@ $(function () {//my jquery code
                 });
                 $('.js-category-value').html(options);
             }, "json");
+        if (sessionUser == null) {
+            $('.js-login-btn').click();
+        }
     }
 
     //index open login  check
@@ -536,6 +572,43 @@ $(function () {//my jquery code
     $('.js-refresh').click(function () {
         location.reload();
     });
+
+    //我的文章
+    $('.js-my-content-menu').click(function () {
+        if (sessionUser == null) {
+            $('.js-login-btn').click();
+        } else {
+            window.location = '/content/user?page=1';
+        }
+    });
+    //我的评论
+    $('.js-my-comment-menu').click(function () {
+        if (sessionUser == null) {
+            $('.js-login-btn').click();
+        } else {
+            $.get('/content/user?page=1');
+        }
+    });
 })
 ;
 
+//一键分享
+window._bd_share_config = {
+    "common": {
+        "bdSnsKey": {},
+        "bdText": document.title+"-NODELOG 前端知道-"+location.href,
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": "",
+        "bdStyle": "0",
+        "bdSize": "16",
+		"bdUrl": location.href
+    },
+    "slide": {
+        "type": "slide",
+        "bdImg": "2",
+        "bdPos": "right",
+        "bdTop": "240"
+    }
+};
+with (document)0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = '/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];

@@ -38,18 +38,18 @@ CommentDAO.prototype.findById = function (id, callback) {
 };
 CommentDAO.prototype.findByPage = function (page, callback) {
     var query = CommentModel.find({"status": constants.COMMENT_ENABLE_STATUS});
-    query.sort({"modifyTime": -1});
-    query.limit(10);
-    query.skip((page - 1) * 10);
+    query.sort({"createTime": -1});
+    query.limit(constants.PER_PAGE_COUNT);
+    query.skip((page - 1) * constants.PER_PAGE_COUNT);
     query.exec(function (err, docs) {
         callback(err, docs);
     });
 };
 CommentDAO.prototype.findByContent = function (page, content, callback) {
     var query = CommentModel.find({"content": content, "status": constants.COMMENT_ENABLE_STATUS});
-    query.sort({"modifyTime": 1});
-    query.limit(10);
-    query.skip((page - 1) * 10);
+    query.sort({"createTime": -1});
+    query.limit(constants.PER_PAGE_COUNT);
+    query.skip((page - 1) * constants.PER_PAGE_COUNT);
     query.exec(function (err, docs) {
         callback(err, docs);
     });

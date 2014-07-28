@@ -37,8 +37,8 @@ CategoryDAO.prototype.findById = function (id, callback) {
 CategoryDAO.prototype.findByPage = function (page, callback) {
     var query = CategoryModel.find({"status": constants.CATEGORY_ENABLE_STATUS});
     query.sort({"modifyTime": -1});
-    query.limit(10);
-    query.skip((page - 1) * 10);
+    query.limit(constants.PER_PAGE_COUNT);
+    query.skip((page - 1) * constants.PER_PAGE_COUNT);
     query.exec(function (err, docs) {
         callback(err, docs);
     });

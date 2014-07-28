@@ -14,6 +14,11 @@ var getCountByCategory = function (category, callback) {
         callback(err, total);
     });
 };
+var getCountByUser = function (author, callback) {
+    Content.getCountByUser(author, function (err, total) {
+        callback(err, total);
+    });
+};
 
 exports.findByPage = function (req, res) {
     var total = 0, page = 0, totalPage = 0, docs = {};
@@ -93,12 +98,12 @@ exports.findByPage = function (req, res) {
             login = true;
         }
         var view = "index";
-        var title = "CMS HOME";
+        var title = "NODELOG";
         if (req.query.manager === "true") {
             view = "manager/content";
             title = "Content Manager";
         }
-        res.render(view, {docs: docs, title: title, login: login, page: page, totalPage: totalPage});
+        res.render(view, {docs: docs, title: title, login: login, page: page, totalPage: totalPage, total: total});
     });
 
 };
@@ -161,11 +166,23 @@ exports.findById = function (req, res) {
         }]
     }, function (err, results) {
         if (view == "editContent") {
-            if(req.session.user._id != doc.author){
+            if (req.session.user._id != doc.author) {
                 res.redirect("/");
             }
         }
-        res.render(view, {"doc": doc, "title": doc != null ? doc.name : "Content not found"});
+        if (view == "contentDetail") {
+            Content.addView(doc, function (err) {
+                if (err) {
+                    console.log("add view failure");
+                }else{
+                    doc.view = (doc.view+1);
+                }
+                res.render(view, {"doc": doc, "title": doc != null ? doc.name : "Content not found"});
+            });
+        } else {
+            res.render(view, {"doc": doc, "title": doc != null ? doc.name : "Content not found"});
+        }
+
     });
 };
 exports.findByCategory = function (req, res) {
@@ -223,6 +240,64 @@ exports.findByCategory = function (req, res) {
             );
         }],
         initCategory: ["initUser", function (callback, results) {
+            for (var i = 0; i < docs.length; i++) {
+                docs[i].categoryName = category.name;
+            }
+            callback(null);
+        }]
+    }, function (err, results) {
+        res.render("categoryContent", {docs: docs, category: category, title: category.name + " Contents", page: page, totalPage: totalPage, total: total});
+    });
+};
+exports.findByUser = function (req, res) {
+    var user = null, total = 0, page = 0, totalPage = 0, docs = {};
+    async.auto({
+        getUserById: function (callback, results) {
+            var userId = req.query.userId;
+            var session = req.session;
+            if (userId == null && session != null) {
+                userId = session.user._id;
+            }
+            if (userId != null) {
+                User.findById(userId, function (err, obj) {
+                    user = obj;
+                    callback(null);
+                });
+            } else {
+                callback(null);
+            }
+        },
+        totalCount: ["getUserById", function (callback, results) {
+            if (user != null) {
+                getCountByUser(user._id, function (err, count) {
+                    total = count;
+                    callback(null);
+                });
+            } else {
+                callback(null);
+            }
+        }],
+        getContentByPage: ["totalCount", function (callback, results) {
+            var pageObj = cmsUtils.page(req.query.page, total);
+            page = pageObj.page;
+            totalPage = pageObj.totalPage;
+            if (totalPage > 0) {
+                Content.findByUser(page, user._id, function (err, objects) {
+                    docs = objects;
+                    callback(null);
+                });
+            } else {
+                console.log("data error");
+                callback(null);
+            }
+        }],
+        initUser: ["getContentByPage", function (callback, results) {
+            for (var i = 0; i < docs.length; i++) {
+                docs[i].userName = user.userName;
+            }
+            callback(null);
+        }],
+        initCategory: ["initUser", function (callback, results) {
             var count = 0;
             async.whilst(//sync floor
                 function () {
@@ -247,7 +322,13 @@ exports.findByCategory = function (req, res) {
             );
         }]
     }, function (err, results) {
-        res.render("categoryContent", {docs: docs, category: category, title: category.name + " Contents", page: page, totalPage: totalPage});
+        var view = "myContent";
+        var title = user.userName + "\'s Contents";
+        if (req.query.manager === "true") {
+            view = "manager/content";
+            title = "Content Manager";
+        }
+        res.render(view, {docs: docs, title: title, page: page, totalPage: totalPage, total: total});
     });
 };
 
@@ -360,4 +441,7 @@ exports.update = function (req, res) {
     }
 };
 
+//exports.findByManager = function (req, res) {
+//
+//}
 
