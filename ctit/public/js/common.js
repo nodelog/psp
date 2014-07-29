@@ -369,10 +369,12 @@ $(function () {//my jquery code
     });
     $('.js-content-desc').each(function (i, val) {
         var $this = $(this);
-        if ($this.text().length > 150) {
-            $this.text($this.text().substring(0, 150) + "...");
+        if ($this.text().length > 100) {
+            $this.text($this.text().substring(0, 100) + "...");
         }
         $this.removeClass("hide");
+		$this.css("max-height","50px");
+		$this.css("overflow","auto");
     });
 
     //delete content

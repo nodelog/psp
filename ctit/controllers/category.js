@@ -104,7 +104,7 @@ exports.update = function (req, res) {
     } else {
         flag = true;
         findByName(name, function (err, obj) {
-            if (obj != null) {
+            if (obj != null && obj.name != name) {
                 msg = "Category Name is exists";
                 res.json({'success': success, 'msg': msg});
             } else {

@@ -96,7 +96,7 @@ div[data-role="editor-toolbar"] {
 }
 
 .l-select{
-    max-height: 300px;
+    max-height: 450px;
     overflow: auto;
 }
 .l-option{
