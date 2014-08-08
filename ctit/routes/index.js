@@ -4,7 +4,7 @@ var category = require('./../controllers/category');
 var content = require('./../controllers/content');
 var comment = require('./../controllers/comment');
 var route = function (app) {
-    app.get('/', filter.createUser, content.findByPage);
+	app.get('/', filter.createUser, content.findByPage);
     app.get('/index', filter.createUser, content.findByPage);
     app.get('/about', function (req, res) {
         res.render('about', { title: 'ABOUT US'});
@@ -36,6 +36,7 @@ var route = function (app) {
             res.redirect("/");
         }
     });
+	app.post('/manager/content/share', filter.authorize, content.share);
     app.get('/manager/content/detail', filter.authorize, content.findById);
     app.post('/manager/user/delete', filter.authorize, filter.authorizeAdmin, user.delete);
     app.post('/manager/user/switch', filter.authorize, filter.authorizeAdmin, user.switch);
@@ -56,5 +57,11 @@ var route = function (app) {
     app.get('/session', user.session);
     app.post('/session', user.session);
     app.get('/content/user', filter.authorize, content.findByUser);
+
+    //日志路由
+    app.get('/log',filter.log);
+
+    // 下面的路由必须放到最后，404页面
+    app.get('*', filter.log, function(req, res){res.render('error', {title: 'No Found'});});
 };
 exports.route = route;

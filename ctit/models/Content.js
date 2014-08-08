@@ -12,7 +12,7 @@ var ContentSchema = new Schema({
     createTime: { type: Date, default: Date.now},
     modifyTime: {type: Date, default: Date.now},
     view: {type: Number, default: 1000},
-    status: {type: 'Number', default: 0, required: true, min: 0, max: 1}
+    status: {type: 'Number', default: 0, required: true, min: 0, max: 2}
 }, {
     collection: "content"
 });
@@ -33,7 +33,7 @@ ContentDAO.prototype.findByName = function (name, callback) {
     });
 };
 ContentDAO.prototype.findById = function (id, callback) {
-    ContentModel.findOne({"_id": id, "status": constants.CONTENT_ENABLE_STATUS}, function (err, obj) {
+    ContentModel.findOne({"_id": id, "status": {$ne: constants.CONTENT_UNABLE_STATUS}}, function (err, obj) {
         callback(err, obj);
     });
 };
@@ -56,7 +56,7 @@ ContentDAO.prototype.findByCategory = function (page, category, callback) {
     });
 };
 ContentDAO.prototype.findByUser = function (page, author, callback) {
-    var query = ContentModel.find({"author": author, "status": constants.CONTENT_ENABLE_STATUS});
+    var query = ContentModel.find({"author": author, "status":{$ne: constants.CONTENT_UNABLE_STATUS}});
     query.sort({"modifyTime": -1});
     query.limit(constants.PER_PAGE_COUNT);
     query.skip((page - 1) * constants.PER_PAGE_COUNT);
@@ -75,7 +75,7 @@ ContentDAO.prototype.getCountByCategory = function (category, callback) {
     });
 };
 ContentDAO.prototype.getCountByUser = function (author, callback) {
-    ContentModel.count({"author": author, "status": constants.CONTENT_ENABLE_STATUS}, function (err, total) {
+    ContentModel.count({"author": author,  $or:[{"status": constants.CONTENT_ENABLE_STATUS},{"status": constants.CONTENT_SELF_STATUS}]}, function (err, total) {
         callback(err, total);
     });
 };
@@ -83,6 +83,22 @@ ContentDAO.prototype.delete = function (id, callback) {
     ContentModel.update({"_id": id}, {$set: {"status": constants.COMMENT_UNABLE_STATUS }}, function (err) {
         callback(err);
     });
+};
+ContentDAO.prototype.share = function (id, status, callback) {
+	var oldStatus = constants.CONTENT_ENABLE_STATUS;
+	if (status == constants.COMMENT_UNABLE_STATUS){
+		callback(err);
+	}else{
+		if (status == constants.CONTENT_ENABLE_STATUS){
+			oldStatus = constants.CONTENT_SELF_STATUS;
+		} else if (status == constants.CONTENT_SELF_STATUS){
+			oldStatus = constants.CONTENT_ENABLE_STATUS;
+		}
+		ContentModel.update({"_id": id, "status": oldStatus}, {$set: {"status": status, "modifyTime": new Date()}}, function (err) {
+			callback(err);
+		});
+	}
+	
 };
 ContentDAO.prototype.update = function (obj, callback) {
     ContentModel.update({"_id": obj.id}, {$set: {"name": obj.name, "content": obj.content, "category": obj.category, "modifyTime": new Date()}}, function (err) {

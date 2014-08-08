@@ -65,6 +65,9 @@ function myPage(title, area, html, callback) {
     });
 }
 
+function loading(){
+    index = layer.load("LOADING...");
+}
 //limit input length
 function limitLength(select, length) {
     if (select.val().length >= length) {
@@ -100,6 +103,21 @@ Date.prototype.format=function(fmt) {
 }
 
 $(function () {//my jquery code
+     var _ipData = {
+        "ip"   : ILData[0],
+        "国家" : remote_ip_info.country,
+        "省份" : remote_ip_info.province,
+        "城市" : remote_ip_info.city,
+        "区"   : remote_ip_info.district,
+        "ISP"  : remote_ip_info.isp,
+        "类型" : remote_ip_info.type,
+        "其他" : remote_ip_info.desc 
+    };
+    console.log(_ipData);
+    $.get("/log", {"_ip":_ipData}, function(){});
+     
+
+
     //open login panel
     var loginHtml = $('.js-login-panel').html();
     $('.js-login-panel').html("");
@@ -118,13 +136,15 @@ $(function () {//my jquery code
         } else if (password == "") {
             myMsg("Password is empty");
         } else {
+            layer.close(index);
+            loading();
             $.post("/user/login", {
                 userName: userName,
                 password: password
             }, function (data) {
+            layer.close(index);
                 var result = data.success;
                 if (result) {//success
-                    layer.close(index);
                     location.reload();
                 }
                 myMsg(data.msg);
@@ -155,16 +175,17 @@ $(function () {//my jquery code
         } else if (password != password2) {
             myMsg("The two passwords don't match");
         } else {
+            layer.close(index);
+            loading();
             $.post("/user/reg", {
                 userName: userName,
                 password: password,
                 password2: password2
             }, function (data) {
-                var result = data.success;
+                
                 var msg = data.msg;
-                if (result) {//success
-                    layer.close(index);
-                }
+                layer.close(index);
+                
                 myMsg(data.msg);
             }, "json");
         }
@@ -172,7 +193,10 @@ $(function () {//my jquery code
     //sign up event
     $('.js-body').delegate('.js-logout-btn', 'click', function () {
         myAlert("Are you sure exit the system", function () {
+            layer.close(index);
+            loading();
             $.get("/user/logout", {}, function (data) {
+                layer.close(index);
                 location.reload();
             }, "json");
         })
@@ -213,7 +237,25 @@ $(function () {//my jquery code
         }, function (data) {
         }, "json");
     });
+$(".js-content-status").each(function (i, obj) {
+        var status = $(this).attr("data-type");
+        if (status == 0) {
+            $(this).prop('checked', true);
+        } else if (status == 2) {
+            $(this).prop('checked', false);
+        }
+        $(this).bootstrapSwitch({size: 'small', onColor: 'success', offColor: 'danger', onText: '共享', offText: '私有'});
+    });
+    $(".js-content-status").on('switchChange.bootstrapSwitch', function (event, status) {
 
+        var id = $(this).attr("data-id");
+        console.log(status);
+        $.post("/manager/content/share", {
+            id: id,
+            status: status ? 0 : 2
+        }, function (data) {
+        }, "json");
+    });
     //page
     $('.js-pre-page').click(function () {
         var $this = $(this);
@@ -222,8 +264,8 @@ $(function () {//my jquery code
             myMsg("this is first page");
             return;
         } else {
-            var url = $this.attr("data-url");
-            window.location = url + "?page=" + (parseInt(page) - 1);
+            var _url = $this.attr("data-url");
+            window.location = _url + "?page=" + (parseInt(page) - 1);
         }
     });
     $('.js-next-page').click(function () {
@@ -234,8 +276,8 @@ $(function () {//my jquery code
             myMsg("this is last page");
             return;
         } else {
-            var url = $this.attr("data-url");
-            window.location = url + "?page=" + (parseInt(page) + 1);
+            var _url = $this.attr("data-url");
+            window.location = _url + "?page=" + (parseInt(page) + 1);
         }
     });
 
@@ -347,6 +389,7 @@ $(function () {//my jquery code
             } else if (content === "") {
                 myMsg("content is empty");
             } else {
+                loading();
                 $.post("/content/add", {
                     id: id,
                     name: name,
@@ -354,6 +397,7 @@ $(function () {//my jquery code
                     category: category,
                     oldName: oldName
                 }, function (data) {
+                    layer.close(index);
                     myMsg(data.msg);
                     if (data.success) {//success
                         if (id != null) {
@@ -367,7 +411,7 @@ $(function () {//my jquery code
             }
         }
     });
-    $('.js-content-desc').each(function (i, val) {
+    /*$('.js-content-desc').each(function (i, val) {
         var $this = $(this);
         if ($this.text().length > 100) {
             $this.text($this.text().substring(0, 100) + "...");
@@ -375,33 +419,53 @@ $(function () {//my jquery code
         $this.removeClass("hide");
 		$this.css("max-height","50px");
 		$this.css("overflow","auto");
-    });
+    });*/
 
     //delete content
     $('.js-content-delete').click(function (e) {
         var $this = $(this);
         var id = $this.attr("data-id");
+        loading();
+        layer.close(index);
         $.post("/manager/content/delete", {
             id: id
         }, function (data) {
+            layer.close(index);
             if (data.success) {
                 $this.parent().parent().fadeOut()
             }
             myMsg(data.msg);
         }, "json");
     });
-
+ var url = location.href;
+    
     //menu  add category
     $.get("/category/all",
         function (data) {
             var docs = data.docs;
             var html = "";
-            var url = "";
+            var _url = "";
             $.each(docs, function (i, tempDoc) {
-                url = "/content/category?page=1&categoryId=" + tempDoc._id;
-                html += '<li><a href="' + url + '"  class="l-option">' + tempDoc.name + '</a></li>';
+                _url = "/content/category?page=1&categoryId=" + tempDoc._id;
+                html += '<li><a href="' + _url + '"  class="l-option">' + tempDoc.name + '</a></li>';
             });
             $('.js-category-menu').html(html);
+            if (url.indexOf("content/category") != -1) {
+                $('.js-category-menu li').each(function(){
+                    $this = $(this).children("a:first");
+                    if(url.indexOf($this.attr("href"))!=-1){
+                        var _html = $this.html();
+                        var _length = _html.length;
+                        for (var i =0; i<(8-_length)*2;i++) {
+                            _html+="&nbsp;";
+                        };
+                        $('.js-category-menu-name').html(_html);
+                        $this.parent().addClass("l-option-current");
+                        $this.addClass("l-option-current");
+                        return false;
+                    }
+                });
+             }
         }, "json");
 
     //goto top
@@ -421,10 +485,13 @@ $(function () {//my jquery code
         if (comment == "") {
             myMsg("comment content is empty");
         } else {
+            loading();
+            layer.close(index);
             $.post("/comment/add", {
                 contentId: id,
                 comment: comment
             }, function (data) {
+                layer.close(index);
                 myMsg(data.msg);
                 if (data.success) {
                     location.reload();
@@ -483,7 +550,7 @@ $(function () {//my jquery code
         }
     });
 
-    var url = location.href;
+   
     if (url.indexOf("view=contentDetail") != -1) {
         var docId = $('.js-doc-id').val();
         if (sessionUser != null && sessionUser._id != docId) {
@@ -591,9 +658,13 @@ $(function () {//my jquery code
             $.get('/content/user?page=1');
         }
     });
-})
-;
 
+    //修改当前菜单背景
+    var current_menu = $('.js-current-menu').val();
+    $('.'+current_menu).addClass("current-menu");
+   
+});//end jquery
+  
 //一键分享
 window._bd_share_config = {
     "common": {

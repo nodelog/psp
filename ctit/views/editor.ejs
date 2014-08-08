@@ -60,10 +60,10 @@
             <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a>
             <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i></a>
         </div>
-        <input type="text" data-edit="inserttext" id="voiceBtn" x-webkit-speech="">
+        <input type="text" data-edit="inserttext" id="voiceBtn" x-webkit-speech="" />
     </div>
 
-    <div class="js-editor l-editor">
+    <div class="js-editor l-editor" id="editor">
         <%- typeof(doc)!="undefined"?doc.content:"" %>
     </div>
 </div>

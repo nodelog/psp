@@ -53,13 +53,14 @@ exports.findByPage = function (req, res) {
                 function (callbackThis) {
                     var doc = docs[count];
                     User.findById(doc.author, function (err, obj) {
+					
                         if (obj != null) {
                             doc.userName = obj.userName;
                         } else {
                             console.log(doc.name + "'s user not found");
                             doc.userName = "UNKNOWN AUTHOR";//
                         }
-                        count++;
+						count++;
                         callbackThis();
                     });
                 },
@@ -80,7 +81,7 @@ exports.findByPage = function (req, res) {
                         if (obj != null) {
                             doc.categoryName = obj.name;
                         } else {
-                            console.log(doc.name + "'s user not found");
+                            console.log(doc.name + "'s category not found");
                             doc.categoryName = "UNKNOWN CATEGORY";//
                         }
                         count++;
@@ -119,6 +120,18 @@ exports.delete = function (req, res) {
         }
     });
 };
+exports.share = function (req, res) {
+	var id = req.body.id;
+	var status = req.body.status;
+    console.log(status);
+    Content.share(id, status, function (err) {
+        if (!err) {
+            res.json({'success': true, 'msg': "success"});
+        } else {
+            res.json({'success': false, 'msg': "failure"});
+        }
+    });
+}
 exports.findById = function (req, res) {
     var id = req.query.id;
     var view = req.query.view;
@@ -271,6 +284,7 @@ exports.findByUser = function (req, res) {
             if (user != null) {
                 getCountByUser(user._id, function (err, count) {
                     total = count;
+                    console.log("total:"+total);
                     callback(null);
                 });
             } else {
@@ -339,6 +353,7 @@ var findByName = function (name, callback) {
 };
 //add
 exports.add = function (req, res) {
+	console.log("add content");
     var id = req.body.id;
     var name = req.body.name.trim();
     var oldName = req.body.oldName;

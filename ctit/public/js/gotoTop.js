@@ -45,10 +45,10 @@
 		pageWidthJg:100,//按钮和页面的间隔距离
 		pageHeightJg:20,//按钮和页面底部的间隔距离
 		startline:200,//出现回到顶部按钮的滚动条scrollTop距离
-		duration:500,//回到顶部的速度时间
-		targetObg:"body"//目标位置
+		duration:100,//回到顶部的速度时间
+		targetObg:"html"//目标位置
 	};
 })(jQuery);
 $(function(){
-	$('<a class="js-goto-top goto-top">Go to top</a>').appendTo("body");
+	$('<a class="js-goto-top goto-top glyphicon glyphicon-send" title="Fly in the blue sky"></a>').appendTo("body");
 });
