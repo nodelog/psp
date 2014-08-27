@@ -1,257 +1,0 @@
-WalletDef(walletTypeId Long primary key auto_increment ,gameId Long not null ,walletName String (50) ,currency String (50) ,state int not null);
-UserWallet(userWalletId Long primary key auto_increment ,walletTypeId Long not null ,accountId Long ,value int ,createDate Date ,lastTransactionDate Date ,state int not null ,version int ,modifiedDate Date ,modifiedBy Long ,ip String (45));
-WalletTransaction(transactionId Long primary key auto_increment ,userWalletId Long not null ,targetUserWalletId Long ,orderId Long ,subject String (200) ,totalSpend int ,balance int ,transactionType String (10) ,state int ,logDate Date ,notes String (500) ,createdBy Long);
-Version(version String primary key ,createdDate Date);
-ExperienceTableOfTeam(level Integer primary key ,requiredXp Long ,totalXp Long);
-ExperienceTableOfPlayer(level Integer primary key ,requiredExp Long ,TotalReqExp Long ,pmrAttGain Integer ,secAttGain Integer);
-ExperienceTableOfPlayerAction(action Integer primary key ,exp Integer ,maxAllowed Integer);
-TierTableOfPlayer(tier Integer primary key ,levelMax Integer ,statMax Integer);
-TextTable(textKey String primary key ,en String (200) ,zhCN String);
-Category(categoryId Long primary key auto_increment ,name String ,parentCategoryId Long);
-SkillType(type Integer primary key auto_increment ,name String);
-SkillName(skillId Integer primary key auto_increment ,name String ,type Integer);
-DrillSkillBonus(skillId Integer primary key ,boostId Long primary key);
-DrillLevelProgression(skillId Integer primary key ,skillLevel Integer primary key ,clicksToComplete Integer ,timeBetweenEachClickSeconds Long ,energyPerClick Integer ,teamLevelNeededToUnlock Integer ,bonusPercent Integer ,bonusDurationMatch Integer ,coinCost Long ,rewardPlayerXP Long ,userClickRewardTypeId Long ,friendClickRewardTypeId Long);
-DrillCost(skillId Integer primary key ,skillLevel Integer primary key ,resourceType Long primary key ,quantity Long);
-PlayerInitSkill(teamPosition Integer primary key ,skillName String primary key ,minValue Integer ,maxValue Integer);
-PlayerInitPosition(teamPosition Integer primary key ,quantity Integer);
-Resource(resourceId Long primary key auto_increment ,name String ,packageQuantity Integer ,cash Integer ,image String (200));
-Item(itemId Long primary key ,itemName String ,coin Integer ,cash Integer ,tier Integer ,type Integer ,baseCardId Long ,subType Integer ,packId Long ,image String ,hidden Integer ,hot Integer ,imageId Integer ,activityMatch Integer ,unlockLevel Integer ,unlockRating Integer ,unlockCash Integer ,resources List);
-ItemResource(itemId Long primary key ,resourceId Long primary key ,quantity Long);
-Pack(packId Long primary key ,name String ,description String (255) ,currencyType Integer ,type Integer ,categoryType Integer ,cost Double ,tier Integer ,packIcon String ,deckSpace Integer ,unLockLevel Integer ,earlyUnlockCyType Integer ,earlyUnlockCost Float ,limitation Integer ,unLockOptionId Long ,available Boolean ,diamond Integer ,coin Integer ,boosts Integer ,energy Integer ,clockResets Integer ,gearCardProbabilitySize Integer ,playerCardProbabilitySize Integer ,gearCardProbability String (1024) ,playerCardProbability String (1024) ,gearCard String (1024) ,playerCard String (1024) ,horn Integer);
-UserLimitItemRecords(recordId Long primary key auto_increment ,userId Long ,packId Long ,limitNum Integer ,bought Integer ,canBuy Boolean ,updateTime Date);
-PackType(typeId Long primary key ,description String (255) ,name String);
-CurrencyType(typeId Long primary key ,description String (255) ,name String);
-UserPack(userPackId Long primary key auto_increment ,userId Long ,packId Long);
-StoreItem(storeItemId Long primary key auto_increment ,packId Long ,cost Double ,orgCost Double ,currencyType Integer ,initType Integer ,isHidden Integer ,index Integer);
-Boost(boostId Long primary key ,name String);
-LeagueLevelInfo(leagueLevel Integer primary key ,leagueName String);
-NpcLeagueTeam(teamId Long primary key ,leagueLevel Integer primary key ,teamName String ,logoId Integer ,jerseyId Integer ,primaryColorId Integer ,secondaryColorId Integer ,level Integer ,rating Integer ,tacticOffense Long ,tacticDefense Long ,aggressiveness Integer);
-AdminUser(adminUserId Long primary key auto_increment ,username String ,password String ,role Integer ,firstName String ,lastName String ,emailAddress String ,createdDate Date);
-UserProfile(userId Long primary key auto_increment ,gpUserId String ,gpUserName String ,channel String ,version String ,device String ,gameServerId Long ,cashWalletId Long ,coinWalletId Long ,mainFteProgress Integer ,subFteProgress Integer ,createdDate Date ,lastLoginDate Date ,lastLoginIP String ,revision Long ,thumbnailUrl String (128) ,isGuest Integer ,countryCode String ,cityCode String ,token String);
-Player(playerId Long primary key auto_increment ,teamId Long ,playerName String ,playerType Integer ,tier Integer ,level Integer ,experience Long ,teamNumber Integer ,expertPosition Integer ,actualPosition Integer ,faceTypeId Integer ,skinColorId Integer ,hairStyleId Integer ,hairColorId Integer ,fatigue Integer ,fatigueUpdatedDate Date ,rating Integer ,freeSkillPoints Integer ,dunk Integer ,shoot2Point Integer ,shoot3Point Integer ,block Integer ,steal Integer ,rebound Integer ,awareness Integer ,speed Integer ,handling Integer ,bandanaItemId Long ,bandanaEquipedMatch Integer ,gogglesItemId Long ,gogglesEquipedMatch Integer ,sweatbandItemId Long ,sweatbandEquipedMatch Integer ,elbowItemId Long ,elbowEquipedMatch Integer ,wristbandItemId Long ,wristbandEquipedMatch Integer ,glovesItemId Long ,glovesEquipedMatch Integer ,feetItemId Long ,feetEquipedMatch Integer ,createdDate Date ,updatedDate Date);
-Drill(drillId Long primary key auto_increment ,userId Long ,skillId Integer ,skillLevel Integer ,skillType Integer ,progress Integer ,status Integer ,startDate Date ,updatedDate Date ,endDate Date);
-LeagueMatch(leagueMatchId Long primary key auto_increment ,userId Long ,leagueLevel Integer ,status Integer ,ratingAdjust Integer ,startDate Date ,endDate Date);
-UserItemUnlock(userId Long primary key ,itemId Long primary key);
-UserItem(userItemId Long primary key auto_increment ,userId Long ,itemId Long ,quantity Integer ,itemType Integer);
-UserResource(userId Long primary key ,resourceId Long primary key ,quantity Long);
-LearnedSkill(userId Long primary key ,skillId Integer primary key ,skillLevel Integer primary key ,skillType Integer ,createdDate Date ,remainingMatch Integer);
-TeamLevelUpBasicReward(level Integer primary key ,coins Integer ,cash Integer ,clockResetItem Integer);
-TeamLevelUpResourceReward(level Integer primary key ,resourceId Long primary key ,quantity Integer);
-TeamLevelUpItemReward(level Integer primary key ,itemId Long primary key ,quantity Integer);
-TeamLevelUpTrainingUnlock(level Integer primary key ,skillId Integer primary key ,skillLevel Integer primary key);
-News(newsId Long primary key auto_increment ,senderId Long ,triggerType Integer ,content String (255) ,createdDate Date ,expiredDate Date);
-NewsRecipient(newsRecipientId Long primary key auto_increment ,newsId Long ,recipientUserId Long ,state Integer);
-NewsAttachedGift(newsId Long primary key ,type Integer ,relatedId Long ,quantity Integer);
-UserFriendStatus(userId Long primary key ,friendUserId Long primary key ,giftingTimes Integer ,lastGiftingTime Date ,helpingTimes Integer ,lastHelpingTime Date);
-Gift(type Integer primary key ,relatedId Long primary key ,quantity Integer primary key ,probability double);
-RewardType(rewardTypeId Long primary key auto_increment ,type Integer ,description String (255));
-RewardQuantity(rewardTypeId Long primary key ,rewardQuantityProbabilityDefId Long primary key);
-RewardEntry(rewardTypeId Long primary key ,rewardEntryProbabilityDefId Long primary key);
-RewardEntryDef(rewardEntryDefId Long primary key auto_increment ,rewardType Integer ,rewardId Long);
-RewardEntryProbabilityDef(rewardEntryProbabilityDefId Long primary key auto_increment ,rewardEntryDefId Long ,probability double ,quantity Integer);
-RewardQuantityProbabilityDef(rewardQuantityProbabilityDefId Long primary key auto_increment ,probability double ,quantity Integer);
-PurchaseOption(cash Integer primary key ,USD Integer primary key ,save Integer);
-BuyCoinOption(coin Integer primary key ,cash Integer primary key);
-Concession(itemId Long primary key ,clearExpiredEnergy Integer);
-ConcessionClearExpiredResource(itemId Long primary key ,resourceId Long primary key ,quantity Integer);
-ConcessionProduction(itemId Long primary key ,timeToProduce Integer ,expireTime Integer);
-ConcessionProductionReward(itemId Long primary key ,type Integer primary key ,relatedId Long primary key ,quantity Integer);
-UserConcession(userId Long primary key ,concessionId Long primary key ,quantity Integer ,concessionProductionId Long ,activeTime Date);
-PVPMatchStats(pvpMatchStatsId Long primary key auto_increment ,initUserId Long ,userId Long ,challengeUserId Long ,userScore Integer ,challengeUserScore Integer ,initializeType Integer ,status Integer ,resultStatus Integer ,rewardsStatus Integer ,notiStatus Integer ,matchDate Date ,updateDate Date);
-PVPMatchResultRecords(pvpMatchStatsId Long primary key ,initUserId Long ,chlgUserId Long ,initUserScore Integer ,chlgUserScore Integer ,initUserLv Integer ,initUserRating Integer ,chlgUserLv Integer ,chlgUserRating Integer ,resultStatus Integer ,matchDate Date ,endMatchDate Date);
-UserChallengeLastNotiTime(userId Long primary key ,lastNotiTime Long);
-UserChallengeInitTimes(userId Long primary key ,times Integer ,lastNotiTime Long ,teamLevel Integer ,lastLogin Long);
-PlayerMatchStats(playerMatchStatsId Long primary key auto_increment ,userCardId Long ,matchType Integer ,dunkAttempted Long ,dunkSucceeded Long ,assists Long ,points Long ,shoot2pAttempted Long ,shoot2pSucceeded Long ,shoot3pAttempted Long ,shoot3pSucceeded Long ,offRebounds Long ,defRebounds Long ,steals Long ,blocks Long ,gamesPlayed Long ,drive Long ,fastBreak Long ,post Long ,oneHandedPass Long ,pick Long ,fadeAway Long ,giveAndGo Long ,doubleUp Long ,hailMary Long ,dunk360 Long ,kickOut Long ,blockTheLane Long ,dribble360 Long ,fakeShot Long ,behindBackPass Long ,dunkTomahawk Long ,alleyOop Long ,skyHookShot Long ,mvp Long);
-UserTrigger(userId Long primary key ,questTriggerId Long primary key ,questId Long primary key ,status Integer ,value String);
-MatchStatistics(userId Long primary key ,totalMatches Long ,pvpMatches Long ,seasonMatches Long ,playoffMatches Long ,pvpWin Long ,seasonWin Long ,playoffWin Long ,pvpPF Long ,seasonPF Long ,playoffPF Long ,pvpPA Long ,seasonPA Long ,playoffPA Long ,streak Integer ,maxStreak Integer);
-PVPMatchRecords(userId Long primary key ,winMatches Long ,lossMatches Long ,drawMatches Long);
-BundleTriggerDefinition(bundleTriggerDefId Long primary key ,description String (255));
-BundlePack(bundlePackId Long primary key ,bundleName String ,icon String ,repeatStatus Integer ,items String ,cash Integer ,coin Integer ,turnOff Integer ,inStore Integer);
-BundleTrigger(bundleTriggerId Long primary key auto_increment ,bundlePackId Long ,bundleTriggerDefId Long ,bundleTriggerVal Integer);
-UserBundleTrigger(userBundleTriggerId Long primary key auto_increment ,userId Long ,bundlePackId Long ,bundleTriggerDefId Long ,status Integer ,value Integer);
-PlayerCard(baseId Long primary key auto_increment ,baseCardId Long ,userCardId Long ,userId Long ,archetype Integer ,cardValue Double ,cardType Integer ,tier Integer ,createDate Date ,firstname String ,lastname String ,jerseyNumber Integer ,generation Integer ,cardSubType Integer ,lineUpPosition Integer ,cardState Integer ,shoot Float ,dunk Float ,defense Float ,rebound Float ,passing Float ,awareness Float ,speed Float ,potrait Integer ,gearSlotSize Integer ,skillSlotSize Integer ,level Integer ,startLevel Integer ,evolveGainLevel Integer ,maxLevel Integer ,exp Long ,contrctLength Long ,faceTypeId Integer ,skinColorId Integer ,hairStyleId Integer ,hairColorId Integer ,rating Integer ,isEnhanced Boolean);
-Archetype(achId Integer primary key ,achName String ,shooting Float ,dunking Float ,def Float ,rebound Float ,passing Float ,awareness Float ,speed Float);
-CardRewardsTypes(rwdTypeId Integer primary key ,name String ,cardType Integer ,tier Integer ,powerLv Integer);
-GearCard(baseId Long primary key auto_increment ,baseCardId Long ,userCardId Long ,userId Long ,cardValue Double ,cardType Integer ,archetype Integer ,scdArchetype Integer ,tier Integer ,cardState Integer ,createDate Date ,playerCardId Long ,name String ,texture String ,generation Integer ,cardSubType Integer ,gearModel Integer ,shoot Integer ,dunk Integer ,defense Integer ,rebound Integer ,passing Integer ,vision Integer ,speed Integer ,iconId String);
-SkillCard(baseId Long primary key auto_increment ,baseCardId Long ,userCardId Long ,userId Long ,cardValue Double ,cardType Integer ,tier Integer ,cardState Integer ,createDate Date ,name String ,playerCardId Long ,generation Integer ,cardSubType Integer ,boostValue Integer ,iconId String);
-ManagementCard(baseId Long primary key auto_increment ,baseCardId Long ,userCardId Long ,playerCardId Long ,userId Long ,cardValue Double ,cardType Integer ,tier Integer ,cardState Integer ,createDate Date ,name String ,generation Integer ,cardSubType Integer ,contractLength Integer);
-UserCard(userCardId Long primary key auto_increment ,userId Long ,cardId Long ,cardType Integer);
-Contract(contractId Long primary key auto_increment ,tier Integer ,contractlength Integer);
-Skill(skillId Long primary key auto_increment ,shoot Integer ,dunk Integer ,defense Integer ,rebound Integer ,awareness Integer ,speed Integer ,passing Integer ,tier Integer ,cardSubType Integer);
-PlayerSkill(baseId Long primary key auto_increment ,cardId Long ,userId Long ,shoot Integer ,dunk Integer ,defense Integer ,rebound Integer ,awareness Integer ,speed Integer ,passing Integer);
-BoostSkill(boostSkillId Long primary key auto_increment ,boostShoot Integer ,boostDunk Integer ,boostDefense Integer ,boostRebound Integer ,boostPassing Integer);
-PlayerBoostSkill(baseId Long primary key auto_increment ,cardId Long ,userId Long ,boostShoot Integer ,boostDunk Integer ,boostDefense Integer ,boostRebound Integer ,boostPassing Integer);
-TypeCardRecycle(typeId Long primary key auto_increment ,baseValue Double ,weighting Double ,twoSame Double ,threeSame Double);
-TierCardRecycle(tierId Long primary key auto_increment ,baseValue Double);
-CardValue(cardValueId Long primary key auto_increment ,tier Integer ,tierValue Double ,evolution Integer ,evolutionValue Double ,cardType Integer);
-StorageCard(storageId Long primary key auto_increment ,cardId Long ,userId Long ,putInTime Date ,putInOrder Integer);
-EvolvingCost(baseId Long primary key auto_increment ,tier Integer ,evolvingStage Integer ,playerCardCost Integer ,gearCardCost Integer ,skillCardCost Integer ,managementCardCost Integer);
-EnhanceCost(baseId Long primary key auto_increment ,tier Integer ,evolvingStage Integer ,tier1Stage1Cost Integer ,tier1Stage2Cost Integer ,tier1Stage3Cost Integer ,tier1Stage4Cost Integer ,tier2Stage1Cost Integer ,tier2Stage2Cost Integer ,tier2Stage3Cost Integer ,tier2Stage4Cost Integer ,tier3Stage1Cost Integer ,tier3Stage2Cost Integer ,tier3Stage3Cost Integer ,tier3Stage4Cost Integer ,tier4Stage1Cost Integer ,tier4Stage2Cost Integer ,tier4Stage3Cost Integer ,tier4Stage4Cost Integer ,tier5Stage1Cost Integer ,tier5Stage2Cost Integer ,tier5Stage3Cost Integer ,tier5Stage4Cost Integer ,tier6Stage1Cost Integer ,tier6Stage2Cost Integer ,tier6Stage3Cost Integer ,tier6Stage4Cost Integer);
-RemoveEnhanceCost(baseId Long primary key auto_increment ,tier Integer ,evolvingStage Integer ,tier1Stage1Cost Integer ,tier1Stage2Cost Integer ,tier1Stage3Cost Integer ,tier1Stage4Cost Integer ,tier2Stage1Cost Integer ,tier2Stage2Cost Integer ,tier2Stage3Cost Integer ,tier2Stage4Cost Integer ,tier3Stage1Cost Integer ,tier3Stage2Cost Integer ,tier3Stage3Cost Integer ,tier3Stage4Cost Integer ,tier4Stage1Cost Integer ,tier4Stage2Cost Integer ,tier4Stage3Cost Integer ,tier4Stage4Cost Integer ,tier5Stage1Cost Integer ,tier5Stage2Cost Integer ,tier5Stage3Cost Integer ,tier5Stage4Cost Integer ,tier6Stage1Cost Integer ,tier6Stage2Cost Integer ,tier6Stage3Cost Integer ,tier6Stage4Cost Integer);
-Team(teamId Long primary key auto_increment ,userId Long ,teamName String ,stadiumName String ,logoId Integer ,jerseyId Integer ,primaryColorId Integer ,secondaryColorId Integer ,level Integer ,experience Long ,rating Integer ,resetGameTimeItem Long ,gameTime Long ,deckSpace Integer ,completedAchievements Integer ,winPercentage Float ,seasonWonTimes Integer ,seasonCompleted Integer ,isFirstLogin Boolean ,maxChSlots Integer ,remChslots Integer ,winFinalSeasons Integer ,skillCD String (2048) ,lastLoginTime Long ,maxEnergy Integer ,remEnergy Integer ,lastAddEnergyTime Long);
-UserMatchCD(userId Long primary key ,facebookId String ,startDate Date ,endDate Date ,matchCode Long ,endTimestamp Long ,isSendNoti Boolean);
-UserCurrentLeagueInfo(userId Long primary key ,leagueLevel Integer ,leagueName String ,leagueType Integer ,leagueRound Integer ,leagueTotalRound Integer ,leagueMatchId Long);
-LeagueBaseInfo(leagueBaseInfoId Long primary key auto_increment ,leagueLevel Integer ,leagueName String ,numOfTeams Integer ,leagueDiamond Integer ,championDiamond Integer);
-TrainingCardRewardAwarded(trainingCardRewardAwardedId Long primary key auto_increment ,lowCardVal Integer ,highCardVal Integer ,tier1 Integer ,tier2 Integer ,tier3 Integer ,tier4 Integer ,trainingType Integer);
-TrainingWithoutBonus(userId Long primary key ,numOfSession Integer);
-SeasonGameCoinReward(SGCRId Long primary key auto_increment ,teamLevel Integer ,regWin Integer ,regLose Integer ,playoffWin Integer ,playoffLose Integer ,championship Integer);
-SeasonGameTeamXpReward(id Long primary key auto_increment ,teamLevel Integer ,regWin Integer ,regLose Integer ,playoffWin Integer);
-SeasonGameXPReward(actionId Integer primary key auto_increment ,action String ,xp Integer ,maxPerGame Integer);
-SeasonGameCardReward(SGcardRId Long primary key auto_increment ,teamLevel Integer ,cardRewardsTypeId Integer ,probability Float ,matchStatus Integer);
-LeagueMatchViewDraw(LMVDrawId Long primary key auto_increment ,leagueMatchId Long ,userId Long ,matchRound Integer ,viewDraw String ,leagueType Integer);
-LeagueMatchStandings(LMStandingId Long primary key auto_increment ,leagueMatchId Long ,teamId Long ,played Integer ,win Integer ,pf Integer ,pa Integer);
-Achievement(achievementId Long primary key ,name String ,description String (255) ,type Integer ,enabled Boolean);
-AchievementDependency(achievementId Long primary key ,achievementDependencyId Long primary key);
-AchievementReward(achievementId Long primary key ,type Integer primary key ,quantity Integer);
-AchievementCriteria(achievementId Long primary key ,criteriaId Long primary key ,value Integer);
-Criteria(criteriaId Long primary key ,type Integer ,description String (255));
-UserAchievement(userId Long primary key ,achievementId Long primary key ,status Integer ,createdDate Date);
-UserAchievementCriteria(userId Long primary key ,achievementId Long primary key ,criteriaId Long primary key ,status Integer ,completedValue Integer ,totalValue Integer ,progress Float);
-PlayoffMatchStandings(PloffMStandingId Long primary key auto_increment ,leagueMatchId Long ,homeTeamId Long ,awayTeamId Long ,homeTeamScore Integer ,awayTeamScore Integer ,playoffRound Integer);
-UserFriend(userId Long primary key ,friendId Long primary key);
-UserMatchRecord(userId Long primary key ,matchesPlayed Long ,matchesWin Long ,totalPf Long ,totalPa Long ,continueWin Long);
-NpcTeamPlayer(playerId Long primary key ,teamId Long ,firstName String ,lastName String ,position Integer ,jerseyNum Integer ,faceTypeId Integer ,skinColorId Integer ,hairStyleId Integer ,hairColorId Integer ,playerHGear Long ,playerAGear Long ,playerFGear Long ,shoot Float ,dunk Float ,defense Float ,rebound Float ,passing Float ,awareness Float ,archetype Integer ,speed Float ,rating Integer);
-UserBaseRating(userId Long primary key ,leagueMatchId Long ,rating Integer);
-UserPlayerBaseSkill(userPlySklId Long primary key auto_increment ,userId Long ,userCardId Long ,shoot Integer ,dunk Integer ,defense Integer ,rebound Integer ,passing Integer ,awareness Integer ,speed Integer ,position Integer ,rating Integer ,leagueMatchId Long);
-TrainingDrill(drillId Long primary key auto_increment ,name String ,success Integer ,shots Integer ,hasOpponent Boolean ,cost Integer);
-PackCard(baseId Long primary key auto_increment ,cardId Long ,baseCardId Long ,packId Long ,cardType Integer);
-UserTransaction(userId Long primary key ,purchaseDate Date primary key ,usd Integer);
-FacebookUser(facebookId String primary key ,paid Boolean ,returned Boolean);
-MetricsDailyUserAmount(id Long primary key auto_increment ,userAmount Long ,activeUser Long ,doubleDayRate Double ,threeDayRate Double ,weekDayRate Double ,mouthDayRate Double ,totalUsd Long ,arpu Double ,metricDate Date ,device String (75) ,channel String (75));
-UserMobageOauth(userId Long primary key ,tmpToken String ,tmpTokenSecret String ,oauthToken String (600) ,updateTime Date);
-UserInPurchaseRecord(recordId Long primary key auto_increment ,userId Long ,invoiceId String ,transId String ,updateTime Date ,storeItemId Long ,cost Double ,currencyType Integer ,state String);
-UserDailyBonusRecord(userId Long primary key ,playedGames Integer ,continueLoginDays Integer);
-DailyBonusRewardType(baseId Long primary key auto_increment ,type String);
-DailyGameBonusCriteria(baseId Long primary key auto_increment ,gamePlayed Long ,teamLevelOver20 Boolean);
-DailyGameBonusReward(gameCritieriaId Long primary key ,rewardId Long primary key ,quantity int);
-SequentialDayBonusCriteria(baseId Long primary key auto_increment ,days Long);
-SequentialDayBonusReward(sequentialDayCriteriaId Long primary key ,rewardId Long ,quantity int);
-FriendPvPRecords(friendPvPRecordsId Long primary key auto_increment ,userId Long ,friendId Long ,playedMatches Long ,win Long ,loss Long ,draw Long ,pf Long ,pa Long ,updateDate Date);
-PVPGameCardReward(PVPCardRewardId Integer primary key auto_increment ,teamLevel Integer ,cardRewardsTypeId Integer ,probability Float ,rewardsStatus Integer);
-PVPGameCoinReward(teamLevel Integer primary key ,coinsWin Integer ,coinsLoss Integer);
-PVPGameXpReward(teamLevel Integer primary key ,xpWin Integer ,xpLoss Integer);
-LvUpUnlockFeature(teamLevel Integer primary key ,chSlots Integer ,boosts Integer);
-AddFriendRequest(userId Long primary key ,requestUserId Long primary key ,requestTime Date ,status Integer);
-LearnedAction(actionId Long primary key ,name String);
-LearnedActionCriteria(actionId Long primary key ,criteriaId Long primary key ,value Integer ,teamLevel Integer ,firstRole String ,secondRole String ,type Integer);
-UserLearnedAction(actionId Long primary key ,userId Long primary key ,learnDate Date);
-PlayerTrainingCosts(id Long primary key auto_increment ,level Integer ,tier Integer ,cost Integer ,xpValue Integer);
-PowerUpCosts(costId Integer primary key auto_increment ,tier Integer ,evoStage Integer ,costs Long ,cardType Integer);
-InitTeamCards(id Integer primary key auto_increment ,groupId Integer ,cardId Long ,cardType Integer);
-FTEProgress(userId Long primary key ,progressString String (255));
-DebugOpts(debugOptId Integer primary key ,optName String ,isEnable Boolean);
-Promotion(pmtId Long primary key auto_increment ,contentId Long ,link Integer ,pmOrder Integer ,src String ,webUrl String (255) ,target String ,description String (100) ,status Integer ,isHidden Integer ,modified Long ,serverVer Integer);
-PromotionLatestUpdate(updateId Integer primary key ,modified Long ,duration Long);
-OneTimeOffer(otoId Long primary key auto_increment ,promoList String ,removeItemList String ,otoType Integer ,otoVal Integer ,expiretion Long ,status Integer ,serverVer Integer);
-OtoAddedItem(otoAILId Long primary key auto_increment ,otoId Long ,storeItemId Long ,limitNum Integer);
-UserOtos(uotoId Long primary key auto_increment ,userId Long ,otoId Long ,finishTime Long ,status Integer);
-UserOtoItemLimit(uoilId Long primary key auto_increment ,userId Long ,uotoId Long ,otoId Long ,storeItemId Long ,remLimit Integer ,unlimited Integer);
-UserScore(userId Long primary key ,score Double ,pvpGameCount Integer ,pvpGameDate Date);
-PVPOpponentGameCount(userId Long primary key ,opponentId Long primary key ,pvpGameCount Integer ,calculateGameCount Integer ,calculate Integer);
-UserGlobalRankRecord(userId Long primary key ,score Double ,facebookName String ,level Integer ,rating Integer ,winMatches Long ,lossMatches Long ,country String ,rank Integer ,socialThumbnail String (255));
-CardSellingValue(csvId Integer primary key auto_increment ,cardTier Integer ,cardStage Integer ,valMulti Float ,valCoin Float ,cardType Integer);
-GameServer(serverId Long primary key auto_increment ,serverName String ,serverURL String ,serverSubURL String ,noticeURL String ,payment Integer ,display Boolean ,status Integer ,description String ,activeCount Long ,device String);
-SensitiveWord(wordId Long primary key auto_increment ,word String ,matchType Integer);
-Message(messageId Long primary key auto_increment ,type String ,sender Long ,title String ,summary String (150) ,content String (1050) ,giftPackId Long ,status Integer ,createdDate Date);
-MessageUserMapping(messageId Long primary key ,userId Long primary key ,giftRecordId Long primary key);
-UserAccountMapping(facebookId String primary key ,facebookName String ,guestId String);
-UserReceiptRecord(receiptId Long primary key auto_increment ,userId Long ,storeItemId Long ,createdDate Date ,receiptData String (65535) ,receipt String (65535) ,transactionId String ,status Integer ,operate Integer ,channel String (75));
-MetricsDailyActiveUser(userId Long primary key ,metricDate Date primary key ,device String (75) ,channel String (75));
-UrlSetting(settingId Long primary key auto_increment ,urlName String ,urlPath String (200) ,status Integer);
-GiftPack(giftId Long primary key auto_increment ,giftName String ,type Integer ,expense Integer ,startDate Date ,endDate Date ,status Integer ,content String (1024) ,description String (255) ,index Integer);
-UserGiftPack(recordId Long primary key auto_increment ,userId Long ,giftId Long ,createdDate Date ,status Integer);
-GiftCodeGroup(groupId Long primary key auto_increment ,giftId Long ,count Integer ,channel String ,createdDate Date ,teamLevel Integer ,startDate Date ,endDate Date ,status Integer ,giftType Integer);
-GiftCode(codeId Long primary key auto_increment ,groupId Long ,codeString String ,userId Long ,receiveDate Date ,receiveServerUrl String);
-UserUpgrade(upgradeId Long primary key auto_increment ,userId Long ,expense Integer ,maxCoins Integer ,energyReturn Integer ,renaming Integer ,maxStorage Integer ,dailyWin Integer ,goldKey Integer ,silverKey Integer ,vipLevel Integer ,vipExp Integer ,cups Integer ,pvpGroup Integer ,offenseWin Integer ,defenseWin Integer ,fans Integer ,maxFans Integer ,blessing Integer ,maxEnergyCount Integer ,deckSpaceCount Integer ,maxCoinCount Integer ,maxFansCount Integer ,interactionRequest Integer ,interactionResponse Integer ,clubContribution Integer);
-FansPerDay(id Long primary key auto_increment ,userId Long ,fans Integer);
-UserTimestamp(stampId Long primary key auto_increment ,userId Long ,defenseTime Date ,messageTime Date ,offenseTime Date ,matchTime String ,interactionTime Date);
-ConsumeMessage(consumeMessageId Long primary key auto_increment ,userId Long ,itemId Long ,itemType Integer ,price Double ,createdDate Date ,status Integer ,content String (255) ,messageType Integer);
-ConsumeMessageTemplate(templateId Long primary key auto_increment ,template String (255) ,templateType Integer);
-OperationEvent(eventId Long primary key auto_increment ,eventName String ,type Integer ,startDate Date ,endDate Date ,status Integer ,description String (255) ,imgUrl String (255));
-OperationEventItem(itemId Long primary key auto_increment ,eventId Long ,eventDate Date ,matches Integer ,teamLevel Integer ,storeItemId Long ,probability Float ,giftId Long);
-AdminOperationRecord(operationId Long primary key auto_increment ,operatorId Long ,operatorName String (255) ,operationTime Date ,description String (65535));
-AdminGiveReword(rewordId Long primary key auto_increment ,operatorId Long ,operatorName String (255) ,rewordNumber Integer ,operationTime Date ,description String (65535));
-Channel(channelId Long primary key auto_increment ,name String (75) ,aliases String (75));
-VipRight(rightId Long primary key auto_increment ,level Integer ,expRequire Integer ,cure Integer ,maxEnergy Integer ,deckSpace Integer ,diamondCard Integer ,orangeCard Integer ,donateTimes Integer ,boothNum Integer);
-CureCost(costId Long primary key auto_increment ,cureTime Integer ,cost Integer);
-UserPlayedGames(recordId Long primary key auto_increment ,userId Long ,datestamp Date ,playedGames Integer);
-UserPurchaseTimes(purchaseId Long primary key auto_increment ,userId Long ,type String (50) ,times Integer ,lastUpdatedTime Long);
-Task(taskId Long primary key auto_increment ,name String (75) ,description String (255) ,level Integer ,typeId Integer ,enabled Integer ,logoId Integer ,requiredTimes Long ,isDaily Integer ,reward Integer);
-TaskProcess(taskProcessId Long primary key auto_increment ,taskId Long ,userId Long ,times Integer ,status Integer ,type Integer ,lastUpdatedTime Long);
-TaskCriteria(taskCriteriaId Long primary key auto_increment ,taskId Long ,criteriaId Long ,value Integer);
-TaskReward(taskRewardId Long primary key auto_increment ,taskId Long ,taskType Integer ,type Integer ,quantity Integer);
-Activity(activityId Long primary key auto_increment ,name String (75) ,description String (255) ,type Integer ,repeatType Integer ,requiredTimes Integer ,enabled Integer);
-ActivityTimeSetting(activityTimeSettingId Long primary key auto_increment ,activityId Long ,startTime Long ,endTime Long);
-TaskEvent(taskEventId Long primary key auto_increment ,eventId Integer ,taskId Long ,type Integer);
-MysteriousCardProbability(id Long primary key auto_increment ,reward Integer ,rewardType Integer ,probability Integer ,type Integer);
-UserMysteriousCard(id Long primary key auto_increment ,userId Long ,totalCardNum Integer ,newCardNum Integer ,lastUpdatedTime Long);
-MysteriousCardOpenTimes(id Long primary key auto_increment ,times Long ,lastUpdatedTime Long);
-MysteriousCardOpenSpecialTimesSetting(id Long primary key auto_increment ,times Integer);
-ScoutCardSetting(scoutCardSettingId Long primary key auto_increment ,cardTier Integer ,signCost Integer ,costType Integer ,dropCost Integer ,probability Integer ,slaveProbability Integer ,coolingTime Integer);
-ScoutTimeSetting(scoutTimeSettingId Long primary key auto_increment ,scoutTime Integer ,vipLevel Integer ,cost Integer ,costType Integer);
-ScoutRecord(scoutRecordId Long primary key auto_increment ,userId Long ,cardId Long ,cardTier Integer ,status Integer ,createdTime Long);
-ScoutTimes(scoutTimesId Long primary key auto_increment ,userId Long ,times Integer ,lastUpdatedTime Long);
-UserLeagueMap(mapId Long primary key auto_increment ,userId Long ,leagueId Long ,status Integer ,bestRecord Integer ,clearance Integer);
-UserLeagueMatchRecord(recordId Long primary key auto_increment ,userId Long ,teamId Long ,currRecord Integer ,vsTimes Integer);
-LeaguePrecondition(conditionId Long primary key auto_increment ,leagueId Long ,rating Integer ,preLeagueId Long ,diamondCost Integer);
-LeagueReward(rewardId Long primary key auto_increment ,leagueId Long ,matchCoins Integer ,matchExp Integer ,championBaseCardId Long ,championBaseCoins Integer);
-LeagueTeamCardReward(rewardId Long primary key auto_increment ,teamId Long ,cardType Integer ,baseCardId Long);
-RateOfCardReward(rateId Long primary key auto_increment ,difficult Integer ,rate Double);
-PlayerCardRanking(rankingId Long primary key auto_increment ,type Integer ,rankOrder Integer ,userId Long ,userCardId Long ,firstName String ,lastName String ,teamLogo Integer ,teamName String ,teamLevel Integer ,rating Integer ,points Integer ,rate Double ,rebounds Integer ,assists Integer ,steals Integer ,blocks Integer ,success3p Integer ,rate3p Double);
-PlayerCardRankingHistory(historyId Long primary key auto_increment ,rankingId Long ,type Integer ,rankOrder Integer ,userId Long ,userCardId Long ,firstName String ,lastName String ,teamLogo Integer ,teamName String ,teamLevel Integer ,rating Integer ,points Integer ,rate Double ,rebounds Integer ,assists Integer ,steals Integer ,blocks Integer ,success3p Integer ,rate3p Double ,createdDate Date);
-PlayerCardSeasonRankingHistory(historyId Long primary key auto_increment ,rankingId Long ,type Integer ,rankOrder Integer ,userId Long ,userCardId Long ,firstName String ,lastName String ,teamLogo Integer ,teamName String ,teamLevel Integer ,rating Integer ,points Integer ,rate Double ,rebounds Integer ,assists Integer ,steals Integer ,blocks Integer ,success3p Integer ,rate3p Double ,createdDate Date);
-TopTeamRanking(topTeamRankingId Long primary key auto_increment ,teamName String ,teamLevel Integer ,cups Integer ,offenseWin Integer ,defenseWin Integer ,champions Integer ,teamLogo Integer);
-RateOfChampionReward(rateId Long primary key auto_increment ,ratio Double ,rate Double);
-UserDailyMatchRecord(recordId Long primary key auto_increment ,userId Long ,createdDate Date ,playedMatches Integer ,winMatches Integer);
-AppChannelVersion(appChannelId Long primary key auto_increment ,channelId Long ,version String (75) ,versionCode String (75) ,url String (256) ,description String (1024));
-LeagueMatchStar(starId Long primary key auto_increment ,leagueId Long ,difficult Integer ,oneStar Integer ,twoStar Integer ,threeStar Integer);
-PvpMatchStar(starId Long primary key auto_increment ,oneStar Integer ,twoStar Integer ,threeStar Integer);
-PvpGroup(groupId Long primary key auto_increment ,cups Integer ,searchCost Integer ,coinBonus Integer ,fansBonus Integer);
-WeightsOfGroup(weightsId Long primary key auto_increment ,offenseGroupId Integer ,defenseGroupId Integer ,weights Double);
-RatingGroup(groupId Long primary key auto_increment ,minRating Integer);
-WeightsOfRating(weightsId Long primary key auto_increment ,offenseRatingId Integer ,defenseRatingId Integer ,weights Double);
-ScoreGroup(groupId Long primary key auto_increment ,minScore Integer);
-WeightsOfScore(weightsId Long primary key auto_increment ,scoreGroupId Integer ,weights Double);
-PvpRecordsCurrentSeason(recordId Long primary key auto_increment ,userId Long primary key ,offenseWin Integer ,defenseWin Integer);
-PvpRecordsHistory(recordId Long primary key auto_increment ,userId Long primary key ,offenseWin Integer ,defenseWin Integer ,fans Integer ,blessing Integer ,createdDate Date);
-PvpMatchCurrentSeason(matchId Long primary key auto_increment ,offenseUserId Long ,defenseUserId Long ,offenseScore Integer ,defenseScore Integer ,cups Integer ,coins Integer ,fans Integer ,useBoost Integer ,revengeMatchId Long ,createdDate Date);
-PvpMatchHistory(recordId Long primary key auto_increment ,matchId Long ,offenseUserId Long ,defenseUserId Long ,offenseScore Integer ,defenseScore Integer ,cups Integer ,coins Integer ,fans Integer ,useBoost Integer ,revengeMatchId Long ,createdDate Date);
-PvpQueue(userId Long primary key ,updatedDate Date);
-PvpSeason(seasonId Long primary key auto_increment ,startDate Date ,stopDate Date);
-InitWallet(id Long primary key auto_increment ,initCoins Integer ,initDiamond Integer);
-UserBoosts(userId Long primary key ,boosts Long);
-TriggerRecord(recordId Long primary key auto_increment ,triggerName String ,triggerTime Date);
-Announcement(announceId Long primary key auto_increment ,title String (50) ,summary String (50) ,content String (2000) ,startDate Date ,endDate Date ,announceIndex Integer ,display Integer (1));
-ProbabilitySetting(probabilitySettingId Long primary key auto_increment ,name String (50) ,probability Integer);
-ServerSettings(settingId Long primary key auto_increment ,settingKey String ,settingValue String (255));
-PlayerCardSeasonRanking(rankingId Long primary key auto_increment ,type Integer ,rankOrder Integer ,userId Long ,userCardId Long ,firstName String ,lastName String ,teamLogo Integer ,teamName String ,teamLevel Integer ,rating Integer ,points Integer ,rate Double ,rebounds Integer ,assists Integer ,steals Integer ,blocks Integer ,success3p Integer ,rate3p Double);
-PlayerMatchSeasonHistoryStats(playerMatchStatsId Long primary key auto_increment ,userCardId Long ,matchType Integer ,dunkAttempted Long ,dunkSucceeded Long ,assists Long ,points Long ,shoot2pAttempted Long ,shoot2pSucceeded Long ,shoot3pAttempted Long ,shoot3pSucceeded Long ,offRebounds Long ,defRebounds Long ,steals Long ,blocks Long ,gamesPlayed Long ,drive Long ,fastBreak Long ,post Long ,oneHandedPass Long ,pick Long ,fadeAway Long ,giveAndGo Long ,doubleUp Long ,hailMary Long ,dunk360 Long ,kickOut Long ,blockTheLane Long ,dribble360 Long ,fakeShot Long ,behindBackPass Long ,dunkTomahawk Long ,alleyOop Long ,skyHookShot Long ,mvp Long);
-PlayerMatchSeasonStats(playerMatchStatsId Long primary key auto_increment ,userCardId Long ,matchType Integer ,dunkAttempted Long ,dunkSucceeded Long ,assists Long ,points Long ,shoot2pAttempted Long ,shoot2pSucceeded Long ,shoot3pAttempted Long ,shoot3pSucceeded Long ,offRebounds Long ,defRebounds Long ,steals Long ,blocks Long ,gamesPlayed Long ,drive Long ,fastBreak Long ,post Long ,oneHandedPass Long ,pick Long ,fadeAway Long ,giveAndGo Long ,doubleUp Long ,hailMary Long ,dunk360 Long ,kickOut Long ,blockTheLane Long ,dribble360 Long ,fakeShot Long ,behindBackPass Long ,dunkTomahawk Long ,alleyOop Long ,skyHookShot Long ,mvp Long);
-PlayerCardSeasonHistoryRanking(rankingId Long primary key auto_increment ,type Integer ,rankOrder Integer ,userId Long ,userCardId Long ,firstName String ,lastName String ,teamLogo Integer ,teamName String ,teamLevel Integer ,rating Integer ,points Integer ,rate Double ,rebounds Integer ,assists Integer ,steals Integer ,blocks Integer ,success3p Integer ,rate3p Double ,createdDate Date);
-UserRechargeBackRecord(userRechargeBackRecordId Long primary key auto_increment ,channelUserName String ,channelUserId String ,vipExp Integer ,returnDiamond Integer ,modifiedDate Date ,returned Integer);
-ClubLevel(level Integer primary key auto_increment ,coin Integer ,popularity Integer ,clubNum Integer ,rewardCoin Integer ,rewardCoinOdds Integer ,rewardDiamond Integer ,rewardDiamondOdds Integer ,rewardContribution Integer ,rewardContributionOdds Integer ,rewardRedCardOdds Integer ,rewardOrangeCardOdds Integer ,rewardDiamondCardOdds Integer ,exchangeNum Integer ,boothNum Integer);
-Club(clubId Long primary key auto_increment ,clubName String ,logoId Long ,admCode String (255) ,admName String (255) ,street String (255) ,createUserId Long ,createUserName String ,createDate Date ,clubLevel Integer ,clubMaxTeamNum Integer ,clubCurrentTeamNum Integer ,clubCoin Integer ,clubCurrentPopularity Integer ,LastIncreasePopularity Integer ,LastIncreasePopularityDate Date);
-UserClubInfo(userClubId Long primary key auto_increment ,clubId Long ,userId Long ,userClubRole Integer ,UserClubRoleName String ,userClubStatus Integer ,userContribution Integer ,createDate Date);
-Donate(donateId Long primary key auto_increment ,coin Integer ,cash Integer ,cashtoMaxcoin Integer ,cashtoMincoin Integer ,contribution Integer);
-UserDonateClub(userDonateClubId Long primary key auto_increment ,userId Long ,clubId Long ,donateId Long ,donatecoin Integer ,donateTimes Integer ,donateDate Date);
-ClubSignIn(clubSignInId Long primary key auto_increment ,times Integer ,rewardType Integer ,rewardValue String (300) ,year Integer ,month Integer);
-UserSignIn(userSignInId Long primary key auto_increment ,userId Long ,clubId Long ,clubLevel Integer ,clubSignInId Long ,relatedId long ,type Integer ,signInDate Date);
-ContributionMarket(marketId Long primary key auto_increment ,itemName String ,itemType Integer ,tier Integer ,clubLevel Integer ,contribution Integer ,sellNum Integer ,content String (255) ,description String);
-ClubContributionMarket(clubMarketId Long primary key auto_increment ,marketId Long ,clubId Long ,clubLevel Integer ,locked Boolean ,sellNum Integer ,remainNum Integer);
-ClubCardMarket(clubMarketId Long primary key auto_increment ,clubId Long ,selluserId Long ,userCardId Long ,sellcoin Integer ,startDate Date ,endDate Date ,state Integer ,isEmpty Boolean ,ownerId Long ,buyUserId Long ,buyCardDate Date);
-CardMarketSellTimes(seconds Integer primary key auto_increment ,coin Integer);
-ClubInteraction(interactionId Long primary key auto_increment ,interactionType Integer ,timeLimit Integer ,contribution Integer ,reward Integer ,rewardType Integer ,popularity Integer ,supportReward Integer ,supportRewardType Integer ,coolDown Integer ,resetCost Integer);
-UserClubInteraction(interactionId Long primary key auto_increment ,userId Long ,interactionType Integer ,times Integer ,interactionDate Date);
-UserClubMessage(messageId Long primary key auto_increment ,clubId Long ,userId Long ,messageType Integer ,interactionType Integer ,content String (500) ,createdDate Date);
-ChatRoomMessage(messageId Long primary key auto_increment ,userId Long ,messageType Integer ,content String (500) ,createdDate Date);
-CpsUser(userId Long primary key auto_increment ,username String ,password String ,channel String);
-CpsServerSetting(settingId Long primary key auto_increment ,channel String ,serverName String ,serverUrl String);
-UserChatroom(userId Long primary key ,status Integer ,loudsperker Long ,nonSpeak Date);
-ChatRoomSpeakerMessage(messageId Long primary key auto_increment ,userId Long ,content String (500) ,createdDate Date);
-UserLocation(locationId Long primary key auto_increment ,userId Long ,street String (255) ,admCode String (255) ,admName String (255));
-UserMatchReward(rewardId Long primary key auto_increment ,userId Long ,rewardType Integer ,value Long ,valueType Integer ,index Integer);
-TierMappingLeagueReward(tier Integer primary key ,mysterious Boolean primary key ,oneReward String (255) ,twoReward String (255) ,threeReward String (255) ,fourReward String (255));
-UserChangeServerRecord(userChangeServerRecordId Long primary key auto_increment ,channelUserName String ,channelUserId String ,teamLevel Integer ,teamRating Integer ,vipLevel Integer ,vipExp Integer ,expense Integer ,modifiedDate Date ,returned Integer);
-ChangeServerReward(changeServerRewardId Long primary key auto_increment ,type Integer ,minValues Integer ,maxValues Integer ,gitfId Long ,returnDiamondOdds Integer);
-
